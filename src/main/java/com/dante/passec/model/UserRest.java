@@ -1,8 +1,6 @@
 package com.dante.passec.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 /**
@@ -11,11 +9,13 @@ import javax.validation.constraints.Size;
  * @version 1.0
  * Created by We on 21.12.2016.
  */
-@Entity(name = "user_rest")
+@Entity
+@Table(name = "user_rest")
 public class UserRest {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @Column(name = "login", nullable = false, length = 30)
