@@ -1,33 +1,25 @@
 package com.dante.passec.config;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 
 /**
  *
  */
-public class Initializer implements WebApplicationInitializer {
-    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-            AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-            // регистрируем конфигурацию созданую высше
-            ctx.register(WebConfig.class);
-            // добавляем в контекст слушателя с нашей конфигурацией
-            servletContext.addListener(new ContextLoaderListener(ctx));
+public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+        @Override
+        protected Class<?>[] getRootConfigClasses() {
+            return new Class[]{WebConfig.class};
+        }
 
-            ctx.setServletContext(servletContext);
+        @Override
+        protected Class<?>[] getServletConfigClasses() {
+            return new Class[]{};
+        }
 
-            // настраиваем маппинг Dispatcher Servlet-а
-            ServletRegistration.Dynamic servlet =
-                    servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(ctx));
-            servlet.addMapping("/");
-            servlet.setLoadOnStartup(1);
+        @Override
+        protected String[] getServletMappings() {
+            return new String[]{"/"};
+        }
     }
-}
+
