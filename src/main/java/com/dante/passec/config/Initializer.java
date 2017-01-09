@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 
 /**
- *
+ * Initializer for api
  */
 public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
         @Override
