@@ -2,6 +2,8 @@ package com.dante.passec.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Model for entity user_rest
@@ -15,7 +17,7 @@ public class UserRest {
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "login", nullable = false, length = 30)
@@ -25,6 +27,17 @@ public class UserRest {
     @Column(name = "password", nullable = false, length = 30)
     @Size(min = 6)
     String password;
+
+    @OneToMany(mappedBy = "user")
+    private Set<ResourceData> resources = new HashSet<>(0);
+
+    public Set<ResourceData> getResources() {
+        return resources;
+    }
+
+    public void setResources(Set<ResourceData> resources) {
+        this.resources = resources;
+    }
 
     public Long getId() {
         return id;
