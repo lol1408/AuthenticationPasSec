@@ -85,14 +85,4 @@ public class AES {
     public static void setSalt(String saltStr) throws Exception{
         salt=saltStr;
     }
-//    private static byte[] getKeyInByte() throws Exception{
-//        String str = salt+key;
-//        byte[] keyBytes = (str).getBytes("UTF-8");
-//        MessageDigest sha = MessageDigest.getInstance("SHA-1");
-//        keyBytes = sha.digest(keyBytes);
-//        return Arrays.copyOf(keyBytes, 16);
-//    }
-//    public static void setPrivetKay(String str) {
-//        key=str;
-//    }
 }

@@ -3,7 +3,7 @@ package com.dante.passec.crypt;
 /**
  * Crypt service impl\
  * @author Dante de Braso
- * @version 1.0
+ * @version 1.1
  */
 public class CryptServiceImpl implements CryptService{
 
