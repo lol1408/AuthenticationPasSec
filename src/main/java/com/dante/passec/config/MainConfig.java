@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
 /**
- * Created by sergey on 12.01.17.
+ * Main config
+ * @author Dante de Braso
+ * @version 0.1
  */
 @Configuration
 @ComponentScan(basePackages = {"com.dante.passec"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})

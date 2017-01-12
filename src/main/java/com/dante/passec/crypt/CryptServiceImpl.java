@@ -8,7 +8,7 @@ package com.dante.passec.crypt;
 public class CryptServiceImpl implements CryptService{
 
     public CryptServiceImpl() throws Exception {
-        AES.getSalt();
+        AES.setSalt("salty avery body");
     }
     @Override
     public String encrypt(String strEncrypt) throws Exception {
@@ -18,5 +18,10 @@ public class CryptServiceImpl implements CryptService{
     @Override
     public String decrypt(String strDecrypt) throws Exception {
         return AES.decrypt(strDecrypt);
+    }
+
+    @Override
+    public String decrypt(String strDecrypt, byte[] bytes) throws Exception {
+        return AES.decrypt(strDecrypt, bytes);
     }
 }

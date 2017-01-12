@@ -17,43 +17,49 @@ import java.security.SecureRandom;
  */
 public class AES {
     private static String salt;
-    private static int iterations = 65536  ;
-    private static int keySize = 256;
+//    private static String key;
     private static byte[] ivBytes;
+    private static int iterations = 65536;
+    private static int keySize = 256;
     private static SecretKey secretKey;
-
+    public static byte[] memory;
     /**
      * @param strToEncrypt
      * @return encrypt String when set secret key was after
      */
     public static String encrypt(String strToEncrypt) throws Exception{
         byte[] saltBytes = salt.getBytes();
-        char[] plaintext = strToEncrypt.toCharArray();
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        PBEKeySpec spec = new PBEKeySpec(plaintext, saltBytes, iterations, keySize);
+        PBEKeySpec spec = new PBEKeySpec(strToEncrypt.toCharArray(), saltBytes, iterations, keySize);
+        char[] plaintext = strToEncrypt.toCharArray();
         secretKey = skf.generateSecret(spec);
         SecretKeySpec secretSpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secretSpec);
+        /** В ЭТОМ МЕСТЕ НУЖНО ИСКАТЬ **/
         AlgorithmParameters params = cipher.getParameters();
         ivBytes = params.getParameterSpec(IvParameterSpec.class).getIV();
         byte[] encryptedTextBytes = cipher.doFinal(String.valueOf(plaintext).getBytes("UTF-8"));
-
         return DatatypeConverter.printBase64Binary(encryptedTextBytes);
     }
-
+    public static void copy(){
+        memory=ivBytes;
+    }
     /**
      * @param strToDecrypt
      * @return decrypt String when set secret key was after
      */
     public static String decrypt(String strToDecrypt) throws Exception{
+        return decrypt(strToDecrypt, ivBytes);
+    }
+    public static String decrypt(String strToDecrypt, byte[] arr) throws Exception{
+
         byte[] encryptedTextBytes = DatatypeConverter.parseBase64Binary(strToDecrypt);
         SecretKeySpec secretSpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, secretSpec, new IvParameterSpec(ivBytes));
-
+        cipher.init(Cipher.DECRYPT_MODE, secretSpec, new IvParameterSpec(arr));
         byte[] decryptedTextBytes = null;
 
         try {
@@ -66,12 +72,27 @@ public class AES {
 
         return new String(decryptedTextBytes);
     }
+
+
     public static void getSalt() throws Exception {
 
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         byte[] saltByte = new byte[20];
         sr.nextBytes(saltByte);
         salt = new String(saltByte);
-    }
 
+    }
+    public static void setSalt(String saltStr) throws Exception{
+        salt=saltStr;
+    }
+//    private static byte[] getKeyInByte() throws Exception{
+//        String str = salt+key;
+//        byte[] keyBytes = (str).getBytes("UTF-8");
+//        MessageDigest sha = MessageDigest.getInstance("SHA-1");
+//        keyBytes = sha.digest(keyBytes);
+//        return Arrays.copyOf(keyBytes, 16);
+//    }
+//    public static void setPrivetKay(String str) {
+//        key=str;
+//    }
 }
