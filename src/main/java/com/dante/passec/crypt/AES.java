@@ -6,6 +6,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.AlgorithmParameters;
+import java.security.SecureRandom;
 
 
 /**
@@ -25,10 +26,10 @@ public class AES {
      * @param strToEncrypt
      * @return encrypt String when set secret key was after
      */
-    public static String encrypt(String strToEncrypt, String key) throws Exception{
+    public static String encrypt(String strToEncrypt) throws Exception{
         byte[] saltBytes = salt.getBytes();
         char[] plaintext = strToEncrypt.toCharArray();
-        SecretKeyFactory skf = SecretKeyFactory.getInstance(key);
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         PBEKeySpec spec = new PBEKeySpec(plaintext, saltBytes, iterations, keySize);
         secretKey = skf.generateSecret(spec);
         SecretKeySpec secretSpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
@@ -64,6 +65,13 @@ public class AES {
         }
 
         return new String(decryptedTextBytes);
+    }
+    public static void getSalt() throws Exception {
+
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] saltByte = new byte[20];
+        sr.nextBytes(saltByte);
+        salt = new String(saltByte);
     }
 
 }

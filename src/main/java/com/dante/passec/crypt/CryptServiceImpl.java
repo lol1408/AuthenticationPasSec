@@ -6,19 +6,17 @@ package com.dante.passec.crypt;
  * @version 1.0
  */
 public class CryptServiceImpl implements CryptService{
-    String key = "hvy#%|ONlZ79Vhff}9hN2cx";
 
-    public CryptServiceImpl(){
-        AES.setKey(key);
+    public CryptServiceImpl() throws Exception {
+        AES.getSalt();
+    }
+    @Override
+    public String encrypt(String strEncrypt) throws Exception {
+        return AES.encrypt(strEncrypt);
     }
 
     @Override
-    public String encrypt(String strEncrypt) {
-        return AES.encrypt(key);
-    }
-
-    @Override
-    public String decrypt(String strDecrypt) {
-        return AES.decrypt(key);
+    public String decrypt(String strDecrypt) throws Exception {
+        return AES.decrypt(strDecrypt);
     }
 }

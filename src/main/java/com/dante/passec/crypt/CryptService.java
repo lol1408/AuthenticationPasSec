@@ -6,6 +6,6 @@ package com.dante.passec.crypt;
  * @version 1.1
  */
 public interface CryptService {
-    String encrypt(String strEncrypt);
-    String decrypt(String strDecrypt);
+    String encrypt(String strEncrypt) throws Exception;
+    String decrypt(String strDecrypt) throws Exception;
 }
