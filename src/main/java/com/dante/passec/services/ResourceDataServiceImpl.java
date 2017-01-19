@@ -4,6 +4,7 @@ import com.dante.passec.dao.ResourceDataDao;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author MakarenkoSergey
  * @version 1.0
  */
+@Service
 public class ResourceDataServiceImpl implements ResourceDataService {
 
     @Autowired
