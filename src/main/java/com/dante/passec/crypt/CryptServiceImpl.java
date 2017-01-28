@@ -1,10 +1,13 @@
 package com.dante.passec.crypt;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Crypt service impl\
  * @author Dante de Braso
  * @version 1.1
  */
+@Service
 public class CryptServiceImpl implements CryptService{
 
     public CryptServiceImpl() throws Exception {

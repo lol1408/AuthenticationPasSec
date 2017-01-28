@@ -16,7 +16,7 @@ import java.util.Set;
 public class UserRest {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
@@ -83,11 +83,4 @@ public class UserRest {
         return password.equals(userRest.password);
     }
 
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + login.hashCode();
-        result = 31 * result + password.hashCode();
-        return result;
-    }
 }

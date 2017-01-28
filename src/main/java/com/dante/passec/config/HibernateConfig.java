@@ -22,7 +22,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.dante.passec.config"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 @PropertySource({"classpath:app.properties"})
-@EnableJpaRepositories("com.dante.passec.dao.")
+@EnableJpaRepositories("com.dante.passec.dao")
 public class HibernateConfig {
     private static final String PROP_DATABASE_DRIVER = "db.driver";
     private static final String PROP_DATABASE_PASSWORD = "db.password";
@@ -83,7 +83,7 @@ public class HibernateConfig {
      */
     public Properties hibernateProperties(){
         Properties properties = new Properties();
-        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_DATABASE_USERNAME));
+        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
         properties.put(PROP_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROP_HIBERNATE_HBM2DDL_AUTO));
         properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
         return properties;

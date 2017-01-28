@@ -4,13 +4,18 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -20,16 +25,17 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.dante.passec.services"})
+@EnableJpaRepositories("com.dante.passec.dao")
 public class HibernateConfigT {
 
     private static final String PROP_DATABASE_DRIVER = "org.postgresql.Driver";
     private static final String PROP_DATABASE_PASSWORD = "0000";
-    private static final String PROP_DATABASE_URL = "jdbc:postgresql://localhost:5432/passec";
+    private static final String PROP_DATABASE_URL = "jdbc:postgresql://localhost:5432/test";
     private static final String PROP_DATABASE_USERNAME = "postgres";
-    private static final String PROP_HIBERNATE_DIALECT = "db.hibernate.dialect";
-    private static final String PROP_HIBERNATE_SHOW_SQL = "db.hibernate.show_sql";
-    private static final String PROP_ENTITYMANAGER_PACKEGES_TO_SCAN = "db.entitymanager.packages.to.scan";
-    private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "db.hibernate.hbm2ddl.auto";
+    private static final String PROP_HIBERNATE_DIALECT = "org.hibernate.dialect.PostgreSQL92Dialect";
+    private static final String PROP_HIBERNATE_SHOW_SQL = "true";
+    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "com.dante.passec.model";
+    private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "create-drop";
     @Resource
     private Environment env;
 
@@ -40,10 +46,10 @@ public class HibernateConfigT {
     @Bean
     DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty(PROP_DATABASE_DRIVER));
-        dataSource.setUrl(env.getProperty(PROP_DATABASE_URL));
-        dataSource.setPassword(env.getProperty(PROP_DATABASE_PASSWORD));
-        dataSource.setUsername(env.getProperty(PROP_DATABASE_USERNAME));
+        dataSource.setDriverClassName(PROP_DATABASE_DRIVER);
+        dataSource.setUrl(PROP_DATABASE_URL);
+        dataSource.setPassword(PROP_DATABASE_PASSWORD);
+        dataSource.setUsername(PROP_DATABASE_USERNAME);
         return dataSource;
     }
 
@@ -59,33 +65,31 @@ public class HibernateConfigT {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource());
         entityManager.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        entityManager.setPackagesToScan(env.getRequiredProperty(PROP_ENTITYMANAGER_PACKEGES_TO_SCAN));
+        entityManager.setPackagesToScan(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN);
+//        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        entityManager.setJpaVendorAdapter(vendorAdapter);
         entityManager.setJpaProperties(hibernateProperties());
         return entityManager;
     }
-
     /**
      * @return JpaTransactionManager for JpaRepository
      * It take been entityManagerFactory
      */
-    @Bean
+    @Bean(name = "transactionManager")
     public JpaTransactionManager jpaTransactionManager(){
         JpaTransactionManager jpaTransaction = new JpaTransactionManager();
         jpaTransaction.setEntityManagerFactory(entityManagerFactory().getObject());
         return jpaTransaction;
     }
-
     /**
      * @return  Properties for hibernate
      * it takes properties for hibernate from 'app.properties' file
      */
     public Properties hibernateProperties(){
         Properties properties = new Properties();
-        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_DATABASE_USERNAME));
-        properties.put(PROP_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROP_HIBERNATE_HBM2DDL_AUTO));
-        properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
+        properties.put("hibernate.dialect" , PROP_HIBERNATE_DIALECT);
+        properties.put("hibernate.hbm2ddl.auto", PROP_HIBERNATE_HBM2DDL_AUTO);
+        properties.put("hibernate.show_sql", PROP_HIBERNATE_SHOW_SQL);
         return properties;
     }
-
-
 }
