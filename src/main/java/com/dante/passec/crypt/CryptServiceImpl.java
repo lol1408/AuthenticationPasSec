@@ -8,23 +8,17 @@ import org.springframework.stereotype.Service;
  * @version 1.1
  */
 @Service
-public class CryptServiceImpl implements CryptService{
+public class CryptServiceImpl implements CryptService {
 
-    public CryptServiceImpl() throws Exception {
-        AES.setSalt("salty avery body");
-    }
+    CryptDao cryptDao = new CryptDao();
+
     @Override
     public String encrypt(String strEncrypt) throws Exception {
-        return AES.encrypt(strEncrypt);
+        return cryptDao.encrypt(strEncrypt);
     }
 
     @Override
     public String decrypt(String strDecrypt) throws Exception {
-        return AES.decrypt(strDecrypt);
-    }
-
-    @Override
-    public String decrypt(String strDecrypt, byte[] bytes) throws Exception {
-        return AES.decrypt(strDecrypt, bytes);
+        return cryptDao.decrypt(strDecrypt);
     }
 }

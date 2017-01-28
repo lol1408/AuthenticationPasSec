@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import javax.crypto.SecretKey;
 
 /**
  * Test for CryptService
@@ -47,6 +48,28 @@ public class TestCrypt extends Assert{
         assertEquals(decryptString, decryptString2);
         assertEquals(decryptString, passwrod);
         System.out.println(encryptString + "\n" + decryptString);
+    }
+
+    @Test
+    public void testTwoEncrypt() throws Exception {
+
+        String encryptString1, encryptString2;
+        System.out.println(encryptString1 = cryptService.encrypt(passwrod));
+        AES.copy();
+        System.out.println(AES.memory);
+        System.out.println(encryptString2 = cryptService.encrypt(passwrod));
+
+    }
+
+    @Test
+    public void testKeyGeneration() throws Exception {
+        SecretKey rawKey = CryptUtils.getRawKey();
+        byte[] encoded = rawKey.getEncoded();
+        CryptDao cryptDao = new CryptDao();
+        String hello = cryptDao.encrypt("hello");
+        String hello2 = cryptDao.encrypt("hello");
+        System.out.print(hello + " " + hello2);
+        assertEquals(cryptDao.decrypt(hello),cryptDao.decrypt(hello2));
     }
 
     @Test(expected = NullPointerException.class)
