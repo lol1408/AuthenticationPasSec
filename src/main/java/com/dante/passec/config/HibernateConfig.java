@@ -70,7 +70,7 @@ public class HibernateConfig {
      * @return JpaTransactionManager for JpaRepository
      * It take been entityManagerFactory
      */
-    @Bean
+    @Bean(name = "transactionManager")
     public JpaTransactionManager jpaTransactionManager(){
         JpaTransactionManager jpaTransaction = new JpaTransactionManager();
         jpaTransaction.setEntityManagerFactory(entityManagerFactory().getObject());
