@@ -20,7 +20,7 @@ public class UserRest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "login", nullable = false, length = 30)
+    @Column(name = "login", nullable = false, length = 30, unique = true)
     @Size(min = 6)
     String login;
 
