@@ -3,9 +3,15 @@ package com.dante.passec.utils;
 import com.dante.passec.model.UserRest;
 
 /**
- * FactoryMethod for create object's Class UserRest
+ * Class for managing UserRest classes for create object's Class UserRest
  */
-public class UserRestFactory {
+public class UserRestManager {
+    /**
+     * It's factory method for UserRest class
+     * @param login
+     * @param password
+     * @return UserRest object
+     */
     public static UserRest createUser(String login, String password){
         UserRest userRest = new UserRest();
         userRest.setLogin(login);
