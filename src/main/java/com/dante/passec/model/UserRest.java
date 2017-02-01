@@ -83,4 +83,13 @@ public class UserRest {
         return password.equals(userRest.password);
     }
 
+    public UserRest() {
+    }
+
+    public UserRest(String login, String password, Set<ResourceData> resources) {
+        this.login = login;
+        this.password = password;
+        this.resources = resources;
+    }
 }
+

@@ -2,7 +2,7 @@ package com.dante.passec.services;
 
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.utils.UserRestFactory;
+import com.dante.passec.utils.UserRestManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class UserRestServiceTest extends Assert {
     public void setUp(){
         em = emf.createEntityManager();
         userRests = new ArrayList<>();
-        userRests.add(UserRestFactory.createUser("hello world", "worldes"));
+        userRests.add(UserRestManager.createUser("hello world", "worldes"));
     }
 
     @Test
@@ -51,14 +51,19 @@ public class UserRestServiceTest extends Assert {
     }
     @Test(expected = JpaSystemException.class)
     public void testInsertWithNullLogin(){
-        userRests.add(UserRestFactory.createUser(null, "Hello null"));
+        userRests.add(UserRestManager.createUser(null, "Hello null"));
         userService.addUser(userRests.get(1));
     }
     @Test(expected = JpaSystemException.class)
     public void testInsertWithNullPassword(){
-        userRests.add(UserRestFactory.createUser("Hello null pass", null));
+        userRests.add(UserRestManager.createUser("Hello null pass", null));
         userService.addUser(userRests.get(1));
     }
-
+    @Test(expected = JpaSystemException.class)
+    public void testInsertTwoCopyLogin(){
+        userRests.add(UserRestManager.createUser("hello world", "password"));
+        userService.addUser(userRests.get(0));
+        userService.addUser(userRests.get(1));
+    }
 
 }

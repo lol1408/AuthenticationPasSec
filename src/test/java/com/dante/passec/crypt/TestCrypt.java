@@ -43,8 +43,7 @@ public class TestCrypt extends Assert{
         String decryptString2;
         encryptString = cryptService.encrypt(passwrod);
         decryptString = cryptService.decrypt(encryptString);
-        AES.copy();
-        decryptString2 = cryptService.decrypt(encryptString, AES.memory);
+        decryptString2 = cryptService.decrypt(encryptString);
         assertEquals(decryptString, decryptString2);
         assertEquals(decryptString, passwrod);
         System.out.println(encryptString + "\n" + decryptString);
@@ -58,7 +57,6 @@ public class TestCrypt extends Assert{
         AES.copy();
         System.out.println(AES.memory);
         System.out.println(encryptString2 = cryptService.encrypt(passwrod));
-
     }
 
     @Test

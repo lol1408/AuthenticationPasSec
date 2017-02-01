@@ -20,7 +20,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.dante.passec.services"})
+@ComponentScan(basePackages = {"com.dante.passec.services", "com.dante.passec.crypt"})
 @EnableJpaRepositories("com.dante.passec.dao")
 public class HibernateConfigT {
 

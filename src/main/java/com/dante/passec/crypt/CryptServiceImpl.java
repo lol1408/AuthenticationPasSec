@@ -1,5 +1,6 @@
 package com.dante.passec.crypt;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,10 +8,11 @@ import org.springframework.stereotype.Service;
  * @author Dante de Braso
  * @version 1.1
  */
-@Service
+@Service("cryptService")
 public class CryptServiceImpl implements CryptService {
 
-    CryptDao cryptDao = new CryptDao();
+    @Autowired
+    CryptDao cryptDao;
 
     @Override
     public String encrypt(String strEncrypt) throws Exception {
