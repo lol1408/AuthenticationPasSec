@@ -4,6 +4,7 @@ import com.dante.passec.model.UserRest;
 
 /**
  * Class for managing UserRest classes for create object's Class UserRest
+ * @author Dante de Braso
  */
 public class UserRestManager {
     /**
