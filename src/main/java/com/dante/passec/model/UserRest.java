@@ -78,9 +78,19 @@ public class UserRest {
 
         UserRest userRest = (UserRest) o;
 
-        if (!id.equals(userRest.id)) return false;
-        if (!login.equals(userRest.login)) return false;
-        return password.equals(userRest.password);
+        if (id != null ? !id.equals(userRest.id) : userRest.id != null) return false;
+        if (login != null ? !login.equals(userRest.login) : userRest.login != null) return false;
+        if (password != null ? !password.equals(userRest.password) : userRest.password != null) return false;
+        return resources != null ? resources.equals(userRest.resources) : userRest.resources == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (resources != null ? resources.hashCode() : 0);
+        return result;
     }
 
     public UserRest() {
