@@ -4,10 +4,8 @@ import com.dante.passec.model.AjaxResponseBody;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,18 +27,18 @@ public class ControllerRestUser {
         return userRestService.userById(id);
     }
 
-    @RequestMapping(value = "/{login}", method = RequestMethod.GET)
-    public UserRest getUserByLogin(@PathVariable("login") String login){
-        return userRestService.userByLogin(login);
-    }
+//    @RequestMapping(value = "/{login}", method = RequestMethod.GET)
+//    public UserRest getUserByLogin(@PathVariable("login") String login){
+//        return userRestService.userByLogin(login);
+//    }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<UserRest> getAllUsers(){
         return userRestService.allUsers();
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public AjaxResponseBody<UserRest> saveUser(UserRest user){
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public AjaxResponseBody<UserRest> saveUser(@RequestBody UserRest user){
         AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
         try {
             userRestService.addUser(user);
@@ -54,13 +52,12 @@ public class ControllerRestUser {
         }
         return result;
     }
-    @RequestMapping(value = "/change", method = RequestMethod.PUT)
-    public AjaxResponseBody<UserRest> updateUser(UserRest user)
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    public AjaxResponseBody<UserRest> updateUser(@RequestBody UserRest user)
     {
         AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
         try {
-            UserRest userRest = userRestService.userByLogin(user.getLogin());
-            userRestService.updateUser(userRest);
+            userRestService.updateUser(user);
             result.setOneResult(user);
             result.setCode("200");
             result.setMsg("Пользователь успешно изменен");

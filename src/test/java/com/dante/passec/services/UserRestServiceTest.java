@@ -65,5 +65,15 @@ public class UserRestServiceTest extends Assert {
         userService.addUser(userRests.get(0));
         userService.addUser(userRests.get(1));
     }
+    @Test
+    public void getById(){
+        userService.addUser(userRests.get(0));
+        System.out.println(userService.userById(1L));
+    }
+    @Test
+    public void getByLogin(){
+        userService.addUser(userRests.get(0));
+        System.out.println(userService.userByLogin("hello world"));
+    }
 
 }

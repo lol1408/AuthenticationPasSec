@@ -1,5 +1,8 @@
 package com.dante.passec.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -29,7 +32,9 @@ public class UserRest {
     String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<ResourceData> resources = new HashSet<>(0);
+
 
     public Set<ResourceData> getResources() {
         return resources;
@@ -100,6 +105,7 @@ public class UserRest {
         this.login = login;
         this.password = password;
         this.resources = resources;
+
     }
 }
 

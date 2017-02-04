@@ -4,6 +4,7 @@ import com.dante.passec.dao.UserRestDao;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public UserRest userById(Long id) {
-        return userRestDao.getOne(id);
+        return userRestDao.findOne(id);
     }
 
     @Override
@@ -45,6 +46,6 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public void deleteUser(Long id) {
-
+        userRestDao.delete(id);
     }
 }
