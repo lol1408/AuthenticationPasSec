@@ -27,11 +27,6 @@ public class ControllerRestUser {
         return userRestService.userById(id);
     }
 
-//    @RequestMapping(value = "/{login}", method = RequestMethod.GET)
-//    public UserRest getUserByLogin(@PathVariable("login") String login){
-//        return userRestService.userByLogin(login);
-//    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<UserRest> getAllUsers(){
         return userRestService.allUsers();
