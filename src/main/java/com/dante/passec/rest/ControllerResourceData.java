@@ -19,7 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 
 @RestController
-@RequestMapping(value = "/resource")
+@RequestMapping(value = "/resources")
 public class ControllerResourceData {
 
     @Autowired

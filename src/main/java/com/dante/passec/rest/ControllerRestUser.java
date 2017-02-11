@@ -18,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * Created by We on 22.12.2016.
  */
 @RestController
-@RequestMapping(value = "/restusers")
+@RequestMapping(value = "/users")
 public class ControllerRestUser {
 
     @Autowired
