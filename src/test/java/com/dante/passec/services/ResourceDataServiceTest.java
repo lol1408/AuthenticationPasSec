@@ -47,7 +47,7 @@ public class ResourceDataServiceTest extends Assert{
         userRests = new ArrayList<>();
         resourceDatas = new ArrayList<>();
         userRests.add(UserRestManager.createUser("hello world", "worldes"));
-        resourceDatas.add(ResourceDataManager.createResourceData("mama", "I love you"));
+        resourceDatas.add(ResourceDataManager.createResourceData("mama", "I love you", userRests.get(0)));
     }
 
     @Test

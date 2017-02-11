@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.GenerationType.*;
+
 /**
  * Model for entity user_rest
  * @author Dante de Braso
@@ -19,8 +21,8 @@ import java.util.Set;
 public class UserRest {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = IDENTITY)
     Long id;
 
     @Column(name = "login", nullable = false, length = 30, unique = true)

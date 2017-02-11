@@ -11,24 +11,13 @@ public class AjaxResponseBody<T> {
     String code;
     T oneResult;
 
-    public T getOneResult() {
-        return oneResult;
-    }
 
     public void setOneResult(T oneResult) {
         this.oneResult = oneResult;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public void setCode(String code) {

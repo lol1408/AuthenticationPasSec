@@ -1,6 +1,11 @@
 package com.dante.passec.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+
+import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.*;
 
 /**
  * @model for Users' resources. It save id->long, login->String, password-> String, user->UserRest
@@ -13,7 +18,7 @@ public class ResourceData
 {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     Long id;
 
     @Column(name = "login", nullable = false)
@@ -22,7 +27,9 @@ public class ResourceData
     @Column(name = "password", nullable = false)
     String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     UserRest user;
 
     public ResourceData() {

@@ -27,12 +27,10 @@ import java.util.List;
 @ComponentScan(basePackages = {"com.dante.passec"})
 public class WebConfig extends WebMvcConfigurationSupport{
 
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resource/**").addResourceLocations("/WEB-INF/resource/");
     }
 
-    @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
@@ -44,9 +42,9 @@ public class WebConfig extends WebMvcConfigurationSupport{
         mappingJackson2HttpMessageConverter.setObjectMapper(mapper);
         return mappingJackson2HttpMessageConverter;
     }
-    @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(mappingJackson2HttpMessageConverter());
         super.configureMessageConverters(converters);
     }
+
 }

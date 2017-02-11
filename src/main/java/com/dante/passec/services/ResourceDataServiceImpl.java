@@ -24,10 +24,6 @@ public class ResourceDataServiceImpl implements ResourceDataService {
     @Autowired
     CryptService cryptService;
 
-    /**
-     * @param resourceData
-     * function decrypt all passwords in List
-     */
     private void decryptPasswords(List<ResourceData> resourceData){
         ResourceData resource;
         for (int i=0; i<resourceData.size(); i++){
@@ -39,32 +35,19 @@ public class ResourceDataServiceImpl implements ResourceDataService {
             }
         }
     }
-    /**
-     * @return allResources which is in database
-     */
-    @Override
+
     public List<ResourceData> allResources() {
         List<ResourceData> resourcesByUser = resourceDataDao.findAll();
         decryptPasswords(resourcesByUser);
         return resourcesByUser;
     }
-    /**
-     * @param user
-     * @return resources by user which pass in param
-     */
-    @Override
-    public List<ResourceData> getResourcesByUser(UserRest user) {
 
+    public List<ResourceData> getResourcesByUser(UserRest user) {
         List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUser(user);
         decryptPasswords(resourcesByUser);
         return resourcesByUser;
     }
 
-    /**
-     * @param id
-     * @return resource by id
-     */
-    @Override
     public ResourceData getResourceById(Long id) {
         ResourceData one = resourceDataDao.findOne(id);
         try {
@@ -75,7 +58,6 @@ public class ResourceDataServiceImpl implements ResourceDataService {
         return one;
     }
 
-    @Override
     public ResourceData addResource(ResourceData resourceData) {
         try {
             resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
@@ -85,7 +67,6 @@ public class ResourceDataServiceImpl implements ResourceDataService {
         return resourceDataDao.save(resourceData);
     }
 
-    @Override
     public ResourceData update(ResourceData resourceData) {
         try {
             resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
@@ -95,7 +76,6 @@ public class ResourceDataServiceImpl implements ResourceDataService {
         return resourceDataDao.saveAndFlush(resourceData);
     }
 
-    @Override
     public void deleteResource(Long id) {
         resourceDataDao.delete(id);
     }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 /**
  * RestController for RestUser
  * @author Makarenko Sergey
@@ -22,17 +24,17 @@ public class ControllerRestUser {
     @Autowired
     UserRestService userRestService;
 
-    @RequestMapping(value = "/{idUser}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{idUser}", method = GET)
     public UserRest getUserById(@PathVariable("idUser") Long id){
         return userRestService.userById(id);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = GET)
     public List<UserRest> getAllUsers(){
         return userRestService.allUsers();
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = POST)
     public AjaxResponseBody<UserRest> saveUser(@RequestBody UserRest user){
         AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
         try {
@@ -47,7 +49,7 @@ public class ControllerRestUser {
         }
         return result;
     }
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/", method = PUT)
     public AjaxResponseBody<UserRest> updateUser(@RequestBody UserRest user)
     {
         AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
@@ -63,7 +65,7 @@ public class ControllerRestUser {
         }
         return result;
     }
-    @RequestMapping(value = "/{idUser}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{idUser}", method = DELETE)
     public AjaxResponseBody<UserRest> deleteUser(@PathVariable("idUser") Long id)
     {
         AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();

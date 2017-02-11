@@ -6,13 +6,10 @@ import com.dante.passec.model.UserRest;
 import com.dante.passec.services.ResourceDataService;
 import com.dante.passec.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * RestController for ResourceData
@@ -20,6 +17,7 @@ import java.util.List;
  * @version 1.0
  * Created by We on 01.30.2016.
  */
+
 @RestController
 @RequestMapping(value = "/resource")
 public class ControllerResourceData {
@@ -29,17 +27,17 @@ public class ControllerResourceData {
     @Autowired
     UserRestService userRestService;
 
-    @RequestMapping(value = "/byuser/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/byuser/{userId}", method = GET)
     public List<ResourceData> getResourcesByUser(@PathVariable("userId") Long id){
         UserRest user = userRestService.userById(id);
         return resourceDataService.getResourcesByUser(user);
     }
-    @RequestMapping(value = "/byid/{idResource}", method = RequestMethod.GET)
-    public ResourceData getReurceById(@PathVariable("idResource") Long id){
+    @RequestMapping(value = "/{id}", method = GET)
+    public ResourceData getResourceById(@PathVariable("id") Long id){
         return resourceDataService.getResourceById(id);
     }
-    @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
-    public AjaxResponseBody<ResourceData> saveResourceData(ResourceData resourceData, @PathVariable("id") Long id)
+    @RequestMapping(value = "/{id}", method = POST)
+    public AjaxResponseBody<ResourceData> saveResourceData(@RequestBody ResourceData resourceData, @PathVariable("id") Long id)
     {
         AjaxResponseBody<ResourceData> result = new AjaxResponseBody<>();
         try {
@@ -55,8 +53,8 @@ public class ControllerResourceData {
         }
         return result;
     }
-    @RequestMapping(value = "/change/{id}", method = RequestMethod.PUT)
-    public AjaxResponseBody<ResourceData> changeResourceData(ResourceData resourceData, @PathVariable("id") Long id)
+    @RequestMapping(value = "/{id}", method = PUT)
+    public AjaxResponseBody<ResourceData> changeResourceData(@RequestBody ResourceData resourceData, @PathVariable("id") Long id)
     {
         AjaxResponseBody<ResourceData> result = new AjaxResponseBody<>();
         try {
@@ -73,7 +71,7 @@ public class ControllerResourceData {
         }
         return result;
     }
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = DELETE)
     public AjaxResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id){
         AjaxResponseBody<ResourceData> result = new AjaxResponseBody<>();
         try {
@@ -88,5 +86,4 @@ public class ControllerResourceData {
         }
         return result;
     }
-
 }

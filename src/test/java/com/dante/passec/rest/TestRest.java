@@ -115,7 +115,6 @@ public class TestRest {
         UserRest user = UserRestManager.createUser("Hello world", "123456");
         user.setId(1L);
         String json = toJson(user);
-        when(userRestService.updateUser(user)).thenReturn(user);
         mockMvc.perform(put("/restusers/").contentType(MediaType.APPLICATION_JSON).
         content(json)).andExpect(status().isOk());
         verify(userRestService, times(1)).updateUser(user);

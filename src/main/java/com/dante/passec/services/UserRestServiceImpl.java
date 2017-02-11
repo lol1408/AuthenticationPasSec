@@ -19,32 +19,26 @@ public class UserRestServiceImpl implements UserRestService {
     @Autowired
     UserRestDao userRestDao;
 
-    @Override
     public List<UserRest> allUsers() {
         return userRestDao.findAll();
     }
 
-    @Override
     public UserRest userByLogin(String login) {
         return userRestDao.getUserByLogin(login);
     }
 
-    @Override
     public UserRest userById(Long id) {
         return userRestDao.findOne(id);
     }
 
-    @Override
     public UserRest addUser(UserRest user) {
         return userRestDao.save(user);
     }
 
-    @Override
     public UserRest updateUser(UserRest user) {
         return userRestDao.saveAndFlush(user);
     }
 
-    @Override
     public void deleteUser(Long id) {
         userRestDao.delete(id);
     }

@@ -26,7 +26,7 @@ public class TestCrypt extends Assert{
 
     @Before
     public void setPassword(){
-        passwrod = "05051995DanteS";
+        passwrod = "password";
     }
 
     @Test
