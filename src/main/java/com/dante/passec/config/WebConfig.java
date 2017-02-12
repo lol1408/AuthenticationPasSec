@@ -2,6 +2,7 @@ package com.dante.passec.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.List;
 
@@ -46,5 +48,4 @@ public class WebConfig extends WebMvcConfigurationSupport{
         converters.add(mappingJackson2HttpMessageConverter());
         super.configureMessageConverters(converters);
     }
-
 }

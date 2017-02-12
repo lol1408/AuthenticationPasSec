@@ -70,6 +70,14 @@
             <version>${jetty.version}</version>
         </dependency>
 
+        <!--Spring boot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>1.5.1.RELEASE</version>
+        </dependency>
+
+
         <!--Spring framework context and tests core and jpa-->
         <dependency>
             <groupId>org.springframework</groupId>
