@@ -42,4 +42,9 @@ public class UserRestServiceImpl implements UserRestService {
     public void deleteUser(Long id) {
         userRestDao.delete(id);
     }
+
+    public boolean userIsReal(String login, String password) {
+        UserRest user = userRestDao.getUserByLogin(login);
+        return user.getPassword().equals(password);
+    }
 }

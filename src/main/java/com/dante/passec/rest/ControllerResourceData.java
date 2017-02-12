@@ -19,7 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 
 @RestController
-@RequestMapping(value = "/resources")
+@RequestMapping(value = "/resources/")
 public class ControllerResourceData {
 
     @Autowired
@@ -27,22 +27,24 @@ public class ControllerResourceData {
     @Autowired
     UserRestService userRestService;
 
-    @RequestMapping(value = "/byuser/{userId}", method = GET)
-    public List<ResourceData> getResourcesByUser(@PathVariable("userId") Long id){
-        UserRest user = userRestService.userById(id);
-        return resourceDataService.getResourcesByUser(user);
+    @RequestMapping(method = GET)
+    public List<ResourceData> getResourcesByUser(@RequestHeader(value = "login") String login,
+                                                 @RequestHeader(value = "password") String password) throws Exception {
+        if(userRestService.userIsReal(login, password))
+        return resourceDataService.getResourcesByUser(userRestService.userByLogin(login));
+        else throw new Exception();
     }
-    @RequestMapping(value = "/{id}", method = GET)
-    public ResourceData getResourceById(@PathVariable("id") Long id){
-        return resourceDataService.getResourceById(id);
-    }
-    @RequestMapping(value = "/{id}", method = POST)
-    public AjaxResponseBody<ResourceData> saveResourceData(@RequestBody ResourceData resourceData, @PathVariable("id") Long id)
+
+    @RequestMapping(method = POST)
+    public AjaxResponseBody<ResourceData> saveResourceData(@RequestBody ResourceData resourceData,
+                                                           @RequestHeader(value = "login") String login,
+                                                           @RequestHeader(value = "password") String password)
     {
         AjaxResponseBody<ResourceData> result = new AjaxResponseBody<>();
         try {
-            UserRest userRest = userRestService.userById(id);
-            resourceData.setUser(userRest);
+            if(userRestService.userIsReal(login, password));
+            else throw new Exception();
+            resourceData.setUser(userRestService.userByLogin(login));
             resourceDataService.addResource(resourceData);
             result.setCode("200");
             result.setMsg("Запись успешно добавлена");
@@ -53,12 +55,14 @@ public class ControllerResourceData {
         }
         return result;
     }
-    @RequestMapping(value = "/{id}", method = PUT)
-    public AjaxResponseBody<ResourceData> changeResourceData(@RequestBody ResourceData resourceData, @PathVariable("id") Long id)
+    @RequestMapping(method = PUT)
+    public AjaxResponseBody<ResourceData> changeResourceData(@RequestBody ResourceData resourceData,
+                                                             @RequestHeader(value = "login") String login,
+                                                             @RequestHeader(value = "password") String password)
     {
         AjaxResponseBody<ResourceData> result = new AjaxResponseBody<>();
         try {
-            UserRest userRest = userRestService.userById(id);
+            UserRest userRest = userRestService.userByLogin(login);
             resourceData.setUser(userRest);
             resourceDataService.update(resourceData);
             result.setOneResult(resourceData);
@@ -86,4 +90,5 @@ public class ControllerResourceData {
         }
         return result;
     }
+
 }

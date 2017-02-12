@@ -77,7 +77,7 @@ public class TestResourceRest {
     public void findAllResourcesByUser_should_be_success() throws Exception {
         when(userRestService.userById(userRest.getId())).thenReturn(userRest);
         when(resourceDataService.getResourcesByUser(userRest)).thenReturn(resources);
-        mockMvc.perform(get("/resource/byuser/{userId}", userRest.getId())).
+        mockMvc.perform(get("/resource/", userRest.getId())).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
                 andDo(print()).

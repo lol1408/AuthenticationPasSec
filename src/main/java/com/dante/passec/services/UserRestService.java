@@ -15,5 +15,6 @@ public interface UserRestService {
     UserRest addUser(UserRest user);
     UserRest updateUser(UserRest user);
     void deleteUser(Long id);
+    boolean userIsReal(String login, String  password);
 
 }
