@@ -9,8 +9,8 @@
     </database>
     <schema id="3" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-02-07.15:48:09.209</IntrospectionTimestamp>
-      <IntrospectionStateNumber>1862</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2017-02-20.00:54:54.855</IntrospectionTimestamp>
+      <IntrospectionStateNumber>2210</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -34,97 +34,149 @@
       <StateNumber>1365</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
     </sequence>
-    <sequence id="10" parent="3" name="user_rest_id_seq">
+    <sequence id="10" parent="3" name="session_id_seq">
+      <ObjectId>21279</ObjectId>
+      <StateNumber>2209</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="11" parent="3" name="user_rest_id_seq">
       <ObjectId>18781</ObjectId>
       <StateNumber>1366</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
     </sequence>
-    <table id="11" parent="3" name="resource_data">
+    <table id="12" parent="3" name="resource_data">
       <ObjectId>18772</ObjectId>
       <StateNumber>1368</StateNumber>
     </table>
-    <table id="12" parent="3" name="user_rest">
-      <ObjectId>18783</ObjectId>
-      <StateNumber>1368</StateNumber>
+    <table id="13" parent="3" name="session">
+      <ObjectId>21281</ObjectId>
+      <StateNumber>2210</StateNumber>
     </table>
-    <column id="13" parent="11" name="id">
+    <table id="14" parent="3" name="user_rest">
+      <ObjectId>18783</ObjectId>
+      <StateNumber>2210</StateNumber>
+    </table>
+    <column id="15" parent="12" name="id">
       <Position>1</Position>
       <DataType>bigint|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1365</StateNumber>
       <DefaultExpression>nextval(&apos;resource_data_id_seq&apos;::regclass)</DefaultExpression>
     </column>
-    <column id="14" parent="11" name="login">
+    <column id="16" parent="12" name="login">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1365</StateNumber>
     </column>
-    <column id="15" parent="11" name="password">
+    <column id="17" parent="12" name="password">
       <Position>3</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1365</StateNumber>
     </column>
-    <column id="16" parent="11" name="user_id">
+    <column id="18" parent="12" name="user_id">
       <Position>4</Position>
       <DataType>bigint|0</DataType>
       <StateNumber>1365</StateNumber>
     </column>
-    <index id="17" parent="11" name="resource_data_pkey">
+    <index id="19" parent="12" name="resource_data_pkey">
       <ObjectId>18779</ObjectId>
       <ColNames>id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="18" parent="11" name="resource_data_pkey">
+    <key id="20" parent="12" name="resource_data_pkey">
       <ObjectId>18780</ObjectId>
       <ColNames>id</ColNames>
       <UnderlyingIndexName>resource_data_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="19" parent="11" name="fkomt55edjtp0br5w75ce3c39ko">
+    <foreign-key id="21" parent="12" name="fkomt55edjtp0br5w75ce3c39ko">
       <ObjectId>18791</ObjectId>
       <ColNames>user_id</ColNames>
       <RefTableName>user_rest</RefTableName>
       <RefKeyName>user_rest_pkey</RefKeyName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="20" parent="12" name="user_id">
+    <column id="22" parent="13" name="id">
+      <Position>1</Position>
+      <DataType>bigint|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>2209</StateNumber>
+      <DefaultExpression>nextval(&apos;session_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="23" parent="13" name="date">
+      <Position>2</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>2209</StateNumber>
+    </column>
+    <column id="24" parent="13" name="token">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>2209</StateNumber>
+    </column>
+    <column id="25" parent="13" name="user_id">
+      <Position>4</Position>
+      <DataType>bigint|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>2209</StateNumber>
+    </column>
+    <index id="26" parent="13" name="session_pkey">
+      <ObjectId>21285</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="27" parent="13" name="session_pkey">
+      <ObjectId>21286</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>session_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="28" parent="13" name="fk1q46ho0ng3du2rr2j505cclm3">
+      <ObjectId>21287</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableName>user_rest</RefTableName>
+      <RefKeyName>user_rest_pkey</RefKeyName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <column id="29" parent="14" name="user_id">
       <Position>1</Position>
       <DataType>bigint|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1862</StateNumber>
       <DefaultExpression>nextval(&apos;user_rest_id_seq&apos;::regclass)</DefaultExpression>
     </column>
-    <column id="21" parent="12" name="login">
+    <column id="30" parent="14" name="login">
       <Position>2</Position>
       <DataType>varchar(30)|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1366</StateNumber>
     </column>
-    <column id="22" parent="12" name="password">
+    <column id="31" parent="14" name="password">
       <Position>3</Position>
       <DataType>varchar(30)|0</DataType>
       <NotNull>1</NotNull>
       <StateNumber>1366</StateNumber>
     </column>
-    <index id="23" parent="12" name="user_rest_pkey">
+    <index id="32" parent="14" name="user_rest_pkey">
       <ObjectId>18787</ObjectId>
       <ColNames>user_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="24" parent="12" name="uk_p6ej96xif1vrmw5sc4ggw7n8b">
+    <index id="33" parent="14" name="uk_p6ej96xif1vrmw5sc4ggw7n8b">
       <ObjectId>18789</ObjectId>
       <ColNames>login</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="25" parent="12" name="user_rest_pkey">
+    <key id="34" parent="14" name="user_rest_pkey">
       <ObjectId>18788</ObjectId>
       <ColNames>user_id</ColNames>
       <UnderlyingIndexName>user_rest_pkey</UnderlyingIndexName>
       <Primary>1</Primary>
     </key>
-    <key id="26" parent="12" name="uk_p6ej96xif1vrmw5sc4ggw7n8b">
+    <key id="35" parent="14" name="uk_p6ej96xif1vrmw5sc4ggw7n8b">
       <ObjectId>18790</ObjectId>
       <ColNames>login</ColNames>
       <UnderlyingIndexName>uk_p6ej96xif1vrmw5sc4ggw7n8b</UnderlyingIndexName>

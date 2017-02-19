@@ -41,11 +41,10 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         return resolver;
 
     }
-    @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-    @Override
+
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/");
     }
