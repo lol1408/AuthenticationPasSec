@@ -1,5 +1,6 @@
 package com.dante.passec.rest;
 
+import com.dante.passec.db.services.SessionService;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
@@ -22,12 +23,14 @@ public class AuthenticationController {
 
     @Autowired
     UserRestService userService;
+    @Autowired
+    SessionService sessionService;
 
     @RequestMapping(method = GET)
-    public UserRest login(@RequestHeader(value = "login") String login,
-                          @RequestHeader(value = "password") String password){
+    public Integer login(@RequestHeader(value = "login") String login,
+                         @RequestHeader(value = "password") String password){
         if(userService.userIsReal(login, password))
-            return userService.userByLogin(login);
+            return sessionService.addSession(userService.userByLogin(login)).getToken();
         else throw new UserNotFoundException();
     }
 
