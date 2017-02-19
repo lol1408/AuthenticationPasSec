@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Class customer response.
  */
-public class AjaxResponseBody<T> {
+public class ResponseBody<T> {
 
     String msg;
     String code;
@@ -24,7 +24,8 @@ public class AjaxResponseBody<T> {
         this.code = code;
     }
 
-    @Override
+    public void setResponse(String msg, String code) {this.msg=msg; this.code=code;}
+
     public String toString() {
         return "AjaxResponseResult [msg=" + msg + ", code=" + code + ", result=" + oneResult + "]";
     }

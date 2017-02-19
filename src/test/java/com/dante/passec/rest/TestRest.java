@@ -3,7 +3,7 @@ package com.dante.passec.rest;
 import com.dante.passec.config.WebConfig;
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.services.UserRestService;
+import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.utils.UserRestManager;
 import org.junit.Before;
 import org.junit.Test;

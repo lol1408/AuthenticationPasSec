@@ -1,10 +1,9 @@
-package com.dante.passec.services;
+package com.dante.passec.db.services;
 
-import com.dante.passec.dao.UserRestDao;
+import com.dante.passec.db.dao.UserRestDao;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,6 +44,7 @@ public class UserRestServiceImpl implements UserRestService {
 
     public boolean userIsReal(String login, String password) {
         UserRest user = userRestDao.getUserByLogin(login);
-        return user.getPassword().equals(password);
+        if(user==null) return false;
+        else return user.getPassword().equals(password);
     }
 }

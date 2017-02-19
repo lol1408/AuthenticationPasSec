@@ -4,11 +4,10 @@ import com.dante.passec.config.WebConfig;
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.services.ResourceDataService;
-import com.dante.passec.services.UserRestService;
+import com.dante.passec.db.services.ResourceDataService;
+import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.utils.ResourceDataManager;
 import com.dante.passec.utils.UserRestManager;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static com.dante.passec.utils.Converter.*;
 /**
  * Test class for restController

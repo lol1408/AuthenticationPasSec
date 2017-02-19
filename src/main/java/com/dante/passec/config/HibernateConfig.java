@@ -22,7 +22,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.dante.passec.config"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 @PropertySource({"classpath:app.properties"})
-@EnableJpaRepositories("com.dante.passec.dao")
+@EnableJpaRepositories("com.dante.passec.db.dao")
 public class HibernateConfig {
     private static final String PROP_DATABASE_DRIVER = "db.driver";
     private static final String PROP_DATABASE_PASSWORD = "db.password";

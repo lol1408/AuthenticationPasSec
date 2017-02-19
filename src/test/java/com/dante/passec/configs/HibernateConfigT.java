@@ -20,8 +20,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.dante.passec.services", "com.dante.passec.crypt"})
-@EnableJpaRepositories("com.dante.passec.dao")
+@ComponentScan(basePackages = {"com.dante.passec.db.services", "com.dante.passec.crypt"})
+@EnableJpaRepositories("com.dante.passec.db.dao")
 public class HibernateConfigT {
 
     private static final String PROP_DATABASE_DRIVER = "org.postgresql.Driver";

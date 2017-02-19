@@ -1,4 +1,4 @@
-package com.dante.passec.services;
+package com.dante.passec.db.services;
 
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.ResourceData;

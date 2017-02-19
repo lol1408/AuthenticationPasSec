@@ -1,14 +1,11 @@
 package com.dante.passec.rest;
 
-import com.dante.passec.model.AjaxResponseBody;
+import com.dante.passec.excaption.UserNotFoundException;
+import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.services.UserRestService;
-import jdk.nashorn.internal.ir.RuntimeNode;
+import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -19,64 +16,67 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * Created by We on 22.12.2016.
  */
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/users/")
 public class ControllerRestUser {
 
     @Autowired
-    UserRestService userRestService;
+    UserRestService userService;
 
-    @RequestMapping(value = "/{idUser}", method = GET)
-    public UserRest getUserById(@PathVariable("idUser") Long id){
-        return userRestService.userById(id);
+    @RequestMapping(method = GET)
+    public UserRest getUserCurrentUser(@RequestHeader("login") String login,
+                                       @RequestHeader("password") String password){
+        if(userService.userIsReal(login, password))
+            return userService.userByLogin(login);
+        else throw new UserNotFoundException();
     }
 
-    @RequestMapping(value = "/", method = GET)
-    public List<UserRest> getAllUsers(){
-        return userRestService.allUsers();
-    }
-
-    @RequestMapping(value = "/", method = POST)
-    public AjaxResponseBody<UserRest> saveUser(@RequestBody UserRest user){
-        AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
+    @RequestMapping(method = POST)
+    public ResponseBody<UserRest> registration(@RequestBody UserRest user){
+        ResponseBody<UserRest> result = new ResponseBody<>();
         try {
-            userRestService.addUser(user);
-            result.setCode("200");
+            userService.addUser(user);
+            result.setResponse("200", "Пользователь успешно добавлен");
             result.setOneResult(user);
-            result.setMsg("Пользователь успешно добавлен");
         }catch (Exception e){
-            result.setCode("202");
-            result.setMsg("Не удалось добавить пользователя");
+            result.setResponse("202", "Не удалось добавить пользователя");
             e.printStackTrace();
         }
         return result;
     }
-    @RequestMapping(value = "/", method = PUT)
-    public AjaxResponseBody<UserRest> updateUser(@RequestBody UserRest user)
+    @RequestMapping(method = PUT)
+    public ResponseBody<UserRest> updateUser(@RequestBody UserRest user,
+                                             @RequestHeader(value = "login") String login,
+                                             @RequestHeader(value = "password") String password )
     {
-        AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
+        ResponseBody<UserRest> result = new ResponseBody<>();
+        UserRest userInBase;
         try {
-            userRestService.updateUser(user);
-            result.setOneResult(user);
-            result.setCode("200");
-            result.setMsg("Пользователь успешно изменен");
+            if(userService.userIsReal(login, password))
+                userInBase = userService.userByLogin(login);
+            else throw new UserNotFoundException();
+            userInBase.setLogin(user.getLogin());
+            userInBase.setPassword(user.getPassword());
+            userService.updateUser(userInBase);
+            result.setOneResult(userInBase);
+            result.setResponse("200", "Пользователь успешно изменен");
         }catch (Exception e){
-            result.setCode("202");
-            result.setMsg("Не удалось изменить учутную запись пользователя");
+            result.setResponse("202", "Не удалось изменить учутную запись пользователя");
             e.printStackTrace();
         }
         return result;
     }
-    @RequestMapping(value = "/{idUser}", method = DELETE)
-    public AjaxResponseBody<UserRest> deleteUser(@PathVariable("idUser") Long id)
+    @RequestMapping(method = DELETE)
+    public ResponseBody<UserRest> deleteUser(@RequestHeader(value = "login") String login,
+                                             @RequestHeader(value = "password") String password)
     {
-        AjaxResponseBody<UserRest> result = new AjaxResponseBody<>();
+        ResponseBody<UserRest> result = new ResponseBody<>();
         try {
-            userRestService.deleteUser(id);
-            result.setCode("200");
-            result.setMsg("Пользователь успешно удален");
+            if(userService.userIsReal(login, password))
+                userService.deleteUser(userService.userByLogin(login).getId());
+            else throw new UserNotFoundException();
+            result.setResponse("200", "Учетная запись удалена");
         }catch (Exception e){
-            result.setCode("202");
-            result.setMsg("Не удалось учетную запись пользователя");
+            result.setResponse("202", "Не удалось учетную запись пользователя");
             e.printStackTrace();
         }
         return result;
