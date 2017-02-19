@@ -81,6 +81,13 @@ public class SessionServiceTest extends Assert{
         System.out.println(d);
         assertTrue(time.getTime()>d.getTime());
     }
+    @Test
+    public void deleteSessionByToken(){
+        Session session = sessionService.addSession(users.get(0));
+        sessionService.deleteSessionByToken(session.getToken());
+        assertNull(sessionService.findByToken(session.getToken()));
+
+    }
 
 
 }

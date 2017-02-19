@@ -19,5 +19,6 @@ public interface SessionService {
     void deleteSession(Long id);
     boolean sessionIsActual(Integer token);
     boolean sessionIsActual(Integer token, Date currentDate);
+    void deleteSessionByToken(Integer token);
 
 }

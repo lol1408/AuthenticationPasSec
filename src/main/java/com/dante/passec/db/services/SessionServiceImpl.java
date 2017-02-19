@@ -51,4 +51,8 @@ public class SessionServiceImpl implements SessionService {
         Date date1 = currentDate;
         return date1.getTime() < byToken.getDate().getTime();
     }
+
+    public void deleteSessionByToken(Integer token) {
+        dao.deleteByToken(token);
+    }
 }
