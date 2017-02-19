@@ -8,6 +8,6 @@ import static org.springframework.http.HttpStatus.*;
  * Generating when user is not real
  **/
 
-@ResponseStatus(value = NOT_FOUND, reason = "user is not real")
+@ResponseStatus(value = UNAUTHORIZED, reason = "user is not real")
 public class UserNotFoundException extends RuntimeException {
 }

@@ -1,5 +1,7 @@
 package com.dante.passec.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 /**
@@ -9,6 +11,7 @@ public class ResponseBody<T> {
 
     String msg;
     String code;
+    @JsonIgnore
     T oneResult;
 
 
