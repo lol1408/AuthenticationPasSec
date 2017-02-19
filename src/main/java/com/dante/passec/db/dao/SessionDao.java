@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0
  */
 public interface SessionDao extends JpaRepository<Session, Long>{
-    Session findByToken(String token);
+    Session findByToken(Integer token);
 }

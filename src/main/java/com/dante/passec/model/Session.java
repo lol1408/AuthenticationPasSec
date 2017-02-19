@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
 
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
@@ -23,7 +24,7 @@ public class Session {
     Long id;
 
     @Column(nullable = false)
-    String token;
+    Integer token;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -34,13 +35,32 @@ public class Session {
     @JsonIgnore
     UserRest user;
 
+    public Session(UserRest user) {
+        this.user = user;
+/*------Генерируем дату на 2 часа позже от текущей---------------------------*/
+        Calendar rightNow = Calendar.getInstance();
+        Date currentDate = new Date();
+        rightNow.setTime(currentDate);
+        rightNow.add(Calendar.HOUR, 2);
+        Date newDate = rightNow.getTime();
+/*---------------------------------------------------------------------------*/
+        this.date = newDate;
+        generateToken();
+    }
+
+    public Session() {
+    }
+    public void setToken(){
+        this.token = token;
+    }
+
     public Long getId() {return id;}
 
     public void setId(Long id) {this.id = id;}
 
-    public String getToken() {return token;}
+    private void generateToken(){this.token = this.hashCode();}
 
-    public void setToken(String token) {this.token = token;}
+    public Integer getToken(){return this.token;}
 
     public Date getDate() {return date;}
 
@@ -50,7 +70,6 @@ public class Session {
 
     public void setUser(UserRest user) {this.user = user;}
 
-    @Override
     public String toString() {
         return "Session{" +
                 "id=" + id +
@@ -60,7 +79,6 @@ public class Session {
                 '}';
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -73,12 +91,11 @@ public class Session {
         return user.equals(session.user);
     }
 
-    @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + token.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + user.hashCode();
         return result;
     }
+
 }
