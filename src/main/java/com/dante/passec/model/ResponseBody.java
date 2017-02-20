@@ -1,9 +1,5 @@
 package com.dante.passec.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.List;
-
 /**
  * Class customer response.
  */
@@ -11,7 +7,6 @@ public class ResponseBody<T> {
 
     String msg;
     String code;
-    @JsonIgnore
     T oneResult;
 
 

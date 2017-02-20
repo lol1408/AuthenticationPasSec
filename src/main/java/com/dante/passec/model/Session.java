@@ -9,6 +9,7 @@ import java.util.Date;
 
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
+import static javax.persistence.TemporalType.*;
 
 /**
  *  Model for session
@@ -26,7 +27,7 @@ public class Session {
     @Column(nullable = false)
     Integer token;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TIMESTAMP)
     @Column(nullable = false)
     Date date;
 
@@ -35,8 +36,20 @@ public class Session {
     @JsonIgnore
     UserRest user;
 
+    @Column
+    Boolean including;
+
+    public Boolean isIncluding() {
+        return including;
+    }
+
+    public void setIncluding(Boolean including) {
+        this.including = including;
+    }
+
     public Session(UserRest user) {
         this.user = user;
+        this.including = true;
 /*------Генерируем дату на 2 часа позже от текущей---------------------------*/
         Calendar rightNow = Calendar.getInstance();
         Date currentDate = new Date();

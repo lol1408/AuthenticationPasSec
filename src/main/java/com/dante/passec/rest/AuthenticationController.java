@@ -4,6 +4,7 @@ import com.dante.passec.db.services.SessionService;
 import com.dante.passec.excaption.UnauthorizedException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
+import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,10 @@ public class AuthenticationController {
         else throw new UserNotFoundException();
     }
     @RequestMapping(path = "logout", method = GET)
-    public ResponseBody logout(@RequestHeader(value = "token") Integer token){
-        ResponseBody responseBody = new ResponseBody();
+    public ResponseBody<Session> logout(@RequestHeader(value = "token") Integer token){
+        ResponseBody<Session> responseBody = new ResponseBody<>();
         if(sessionService.sessionIsActual(token)) {
-            sessionService.deleteSessionByToken(token);
+            sessionService.setNotIncluding(sessionService.findByToken(token));
             responseBody.setResponse("Вы успешно вышли", "200");
             return responseBody;
         }else throw new UnauthorizedException();

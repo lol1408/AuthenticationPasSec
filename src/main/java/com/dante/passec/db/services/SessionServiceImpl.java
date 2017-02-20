@@ -6,7 +6,6 @@ import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
 
@@ -33,7 +32,8 @@ public class SessionServiceImpl implements SessionService {
         return dao.save(session);
     }
 
-    public Session updateSession(Session session) {
+    public Session setNotIncluding(Session session) {
+        session.setIncluding(false);
         return dao.saveAndFlush(session);
     }
 
@@ -44,12 +44,12 @@ public class SessionServiceImpl implements SessionService {
     public boolean sessionIsActual(Integer token) {
         Session byToken = dao.findByToken(token);
         Date date1 = new Date();
-        return date1.getTime() < byToken.getDate().getTime();
+        return date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding();
     }
     public boolean sessionIsActual(Integer token, Date currentDate){
         Session byToken = dao.findByToken(token);
         Date date1 = currentDate;
-        return date1.getTime() < byToken.getDate().getTime();
+        return date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding();
     }
 
     public void deleteSessionByToken(Integer token) {

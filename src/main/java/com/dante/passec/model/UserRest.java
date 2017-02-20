@@ -96,7 +96,7 @@ public class UserRest {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (resources != null ? resources.hashCode() : 0);
+//        result = 31 * result + (resources != null ? resources.hashCode() : 0);
         return result;
     }
 

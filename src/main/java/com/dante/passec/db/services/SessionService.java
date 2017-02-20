@@ -15,7 +15,7 @@ public interface SessionService {
     Session findById(Long id);
     Session findByToken(Integer token);
     Session addSession(UserRest user);
-    Session updateSession(Session session);
+    Session setNotIncluding(Session session);
     void deleteSession(Long id);
     boolean sessionIsActual(Integer token);
     boolean sessionIsActual(Integer token, Date currentDate);
