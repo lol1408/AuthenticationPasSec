@@ -27,4 +27,16 @@ public class ResponseBody<T> {
     public String toString() {
         return "AjaxResponseResult [msg=" + msg + ", code=" + code + ", result=" + oneResult + "]";
     }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public T getOneResult() {
+        return oneResult;
+    }
 }
