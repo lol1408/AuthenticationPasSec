@@ -31,7 +31,7 @@ public class Session {
     @Column(nullable = false)
     Date date;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     UserRest user;

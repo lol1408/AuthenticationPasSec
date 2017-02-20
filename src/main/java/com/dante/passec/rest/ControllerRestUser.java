@@ -1,7 +1,10 @@
 package com.dante.passec.rest;
 
+import com.dante.passec.db.services.SessionService;
+import com.dante.passec.excaption.UnauthorizedException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
+import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +24,16 @@ public class ControllerRestUser {
 
     @Autowired
     UserRestService userService;
+    @Autowired
+    SessionService sessionService;
 
     @RequestMapping(method = GET)
-    public UserRest getUserCurrentUser(@RequestHeader("login") String login,
-                                       @RequestHeader("password") String password){
-        if(userService.userIsReal(login, password))
-            return userService.userByLogin(login);
-        else throw new UserNotFoundException();
+    public UserRest getUserCurrentUser(@RequestHeader("token") Integer token){
+        if(sessionService.sessionIsActual(token)){
+            Session session = sessionService.findByToken(token);
+            return session.getUser();
+        }
+        else throw new UnauthorizedException();
     }
 
     @RequestMapping(method = POST)
@@ -45,15 +51,17 @@ public class ControllerRestUser {
     }
     @RequestMapping(method = PUT)
     public ResponseBody<UserRest> updateUser(@RequestBody UserRest user,
-                                             @RequestHeader(value = "login") String login,
-                                             @RequestHeader(value = "password") String password )
+                                             @RequestHeader(value = "token") Integer token)
     {
         ResponseBody<UserRest> result = new ResponseBody<>();
         UserRest userInBase;
         try {
-            if(userService.userIsReal(login, password))
-                userInBase = userService.userByLogin(login);
-            else throw new UserNotFoundException();
+            if(sessionService.sessionIsActual(token))
+            {
+                Session session = sessionService.findByToken(token);
+                userInBase = session.getUser();
+            }
+            else throw new UnauthorizedException();
             userInBase.setLogin(user.getLogin());
             userInBase.setPassword(user.getPassword());
             userService.updateUser(userInBase);
@@ -66,13 +74,15 @@ public class ControllerRestUser {
         return result;
     }
     @RequestMapping(method = DELETE)
-    public ResponseBody<UserRest> deleteUser(@RequestHeader(value = "login") String login,
-                                             @RequestHeader(value = "password") String password)
+    public ResponseBody<UserRest> deleteUser(@RequestHeader(value = "token") Integer token)
     {
         ResponseBody<UserRest> result = new ResponseBody<>();
         try {
-            if(userService.userIsReal(login, password))
-                userService.deleteUser(userService.userByLogin(login).getId());
+            if(sessionService.sessionIsActual(token))
+            {
+                Session session = sessionService.findByToken(token);
+                userService.deleteUser(session.getUser().getId());
+            }
             else throw new UserNotFoundException();
             result.setResponse("200", "Учетная запись удалена");
         }catch (Exception e){
