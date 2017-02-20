@@ -88,6 +88,13 @@ public class SessionServiceTest extends Assert{
         assertNull(sessionService.findByToken(session.getToken()));
 
     }
+    @Test
+    public void getUserBySession(){
+        Session session = sessionService.addSession(users.get(0));
+        Session byToken = sessionService.findByToken(session.getToken());
+        UserRest user = byToken.getUser();
+        System.out.println("user = " + user);
+    }
 
 
 }
