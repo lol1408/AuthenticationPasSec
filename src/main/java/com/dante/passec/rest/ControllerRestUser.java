@@ -2,6 +2,7 @@ package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.excaption.UnauthorizedException;
+import com.dante.passec.excaption.UserAlradyExistException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.Session;
@@ -39,6 +40,8 @@ public class ControllerRestUser {
     @RequestMapping(method = POST)
     public ResponseBody<UserRest> registration(@RequestBody UserRest user){
         ResponseBody<UserRest> result = new ResponseBody<>();
+        //Проверяем существует ли пользователь
+        if(userService.checkAlreadyExist(user.getLogin())) throw new UserAlradyExistException();
         try {
             userService.addUser(user);
             result.setResponse("200", "Пользователь успешно добавлен");

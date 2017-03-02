@@ -15,4 +15,10 @@ public class MainController {
     public String homePage(){
         return "index";
     }
+    @RequestMapping(value = {"/registration"}, method = GET)
+    public String regPage(){
+        return "registration";
+    }
+    @RequestMapping(value = {"res"}, method = GET)
+    public String resPage(){return "resources";}
 }

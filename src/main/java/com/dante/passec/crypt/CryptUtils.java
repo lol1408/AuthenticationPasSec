@@ -30,8 +30,8 @@ public class CryptUtils {
         return skf.generateSecret(spec);
     }
     public static Cipher getCipher(int i) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance("AES");
-        SecretKeySpec secretKeySpec = new SecretKeySpec(getRawKey().getEncoded(), "AES");
+        Cipher cipher = Cipher.getInstance(KEY_TYPE);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(getRawKey().getEncoded(), KEY_TYPE);
         if(i==Cipher.ENCRYPT_MODE) {
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
         }else if(i==Cipher.DECRYPT_MODE){

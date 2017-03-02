@@ -5,7 +5,6 @@ import com.dante.passec.excaption.UnauthorizedException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.Session;
-import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;

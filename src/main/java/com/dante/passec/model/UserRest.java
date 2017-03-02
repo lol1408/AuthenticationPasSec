@@ -29,7 +29,7 @@ public class UserRest {
     @Size(min = 6)
     String login;
 
-    @Column(name = "password", nullable = false, length = 30)
+    @Column(name = "password", nullable = false, length = 100)
     @Size(min = 6)
     String password;
 

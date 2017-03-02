@@ -3,6 +3,7 @@ package com.dante.passec.db.services;
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.UserRestManager;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,11 +43,15 @@ public class UserRestServiceTest extends Assert {
         userRests = new ArrayList<>();
         userRests.add(UserRestManager.createUser("hello world", "worldes"));
     }
+    @After
+    public void drop(){
+
+    }
 
     @Test
     public void testInsert(){
         userService.addUser(userRests.get(0));
-        UserRest userRest = userService.userById(new Long(1));
+        UserRest userRest = userService.userByLogin(userRests.get(0).getLogin());
         assertEquals(userRest.getLogin(), userRests.get(0).getLogin());
     }
     @Test(expected = JpaSystemException.class)

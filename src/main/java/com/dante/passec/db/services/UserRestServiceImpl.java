@@ -47,4 +47,8 @@ public class UserRestServiceImpl implements UserRestService {
         if(user==null) return false;
         else return user.getPassword().equals(password);
     }
+    public boolean checkAlreadyExist(String login){
+        if(userRestDao.getUserByLogin(login)!=null) return true;
+        else return false;
+    }
 }
