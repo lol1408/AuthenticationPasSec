@@ -18,6 +18,7 @@ class Resource{
     }
     toStringJson(){
         var json = {
+            id: this.id,
             login: this.login,
             password: this.password
         };

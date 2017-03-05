@@ -42,7 +42,7 @@ function addResource(resource) {
             // location.href = "/";
         })
         .catch(function (error) {
-            alert("user already exist");
+            alert("error, resource cannot be added");
         });
 }
 function deleteResource(id) {
@@ -56,5 +56,25 @@ function deleteResource(id) {
             console.log("delete is success");
         }).catch(function (error) {
             alert("delete is failed");
+        });
+}
+function updateResource(resource) {
+    var resourceJson = resource.toStringJson();
+    return fetch("/resources/", {
+        method: "PUT",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token':getCookie("token")
+        },
+        body: resourceJson
+    })
+        .then(status)
+        .then(json)
+        .then(function (data) {
+            console.log("Request success");
+        })
+        .catch(function (error) {
+            alert("error, resource cannot be updated");
         });
 }

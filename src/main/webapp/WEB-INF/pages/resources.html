@@ -13,6 +13,7 @@
     <script src="/resources/js/service/resource.service.js"></script>
 
     <script src="/resources/js/resources.js"></script>
+    <link rel="stylesheet" type="text/css" href="/resources/css/popup.css">
 </head>
 <body onload="fillTable();">
 <table id="res_table">
@@ -27,5 +28,14 @@
 </br>
 </br>
 <input type="button" value="logout" onclick="logout()">
+<div class="popup" id="popupForMessage">
+    <div class="popup-content">
+        <input type="text" id="popup-login">
+        <input type="text" id="popup-password">
+        <input type="button" value="Изменить;)" onclick="changeResources()">
+        <input type="button" value="Отменить" onclick="closePopup();">
+        <input type="hidden" id="idPopupHidden">
+    </div>
+</div>
 </body>
 </html>
