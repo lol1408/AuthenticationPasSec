@@ -41,10 +41,15 @@ public class SessionServiceImpl implements SessionService {
         dao.delete(id);
     }
 
-    public boolean sessionIsActual(Integer token) {
+    public UserRest sessionIsActual(Integer token) {
+        long start = System.nanoTime();
         Session byToken = dao.findByToken(token);
+        long end = System.nanoTime();
+        System.out.println("is actual time: " + (end-start));
         Date date1 = new Date();
-        return date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding();
+        if(date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding())
+            return byToken.getUser();
+        else return null;
     }
     public boolean sessionIsActual(Integer token, Date currentDate){
         Session byToken = dao.findByToken(token);

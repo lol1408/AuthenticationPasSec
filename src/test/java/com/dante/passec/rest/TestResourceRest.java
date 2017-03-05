@@ -74,7 +74,7 @@ public class TestResourceRest {
     @Test
     public void findAllResourcesByUser_should_be_success() throws Exception {
         when(userRestService.userById(userRest.getId())).thenReturn(userRest);
-        when(resourceDataService.getResourcesByUser(userRest)).thenReturn(resources);
+        when(resourceDataService.getResourcesByUserId(userRest.getId())).thenReturn(resources);
         mockMvc.perform(get("/resource/", userRest.getId())).
                 andExpect(status().isOk()).
                 andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
@@ -86,7 +86,7 @@ public class TestResourceRest {
         andExpect(jsonPath("$[1].login", is("login2"))).
         andExpect(jsonPath("$[1].password", is("password2")));
         verify(userRestService, times(1)).userById(userRest.getId());
-        verify(resourceDataService, times(1)).getResourcesByUser(userRest);
+        verify(resourceDataService, times(1)).getResourcesByUserId(userRest.getId());
         verifyNoMoreInteractions(userRestService, resourceDataService);
     }
     @Test

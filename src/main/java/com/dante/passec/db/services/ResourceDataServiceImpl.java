@@ -40,9 +40,12 @@ public class ResourceDataServiceImpl implements ResourceDataService {
         return resourcesByUser;
     }
 
-    public List<ResourceData> getResourcesByUser(UserRest user) {
-        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUser(user);
+    public List<ResourceData> getResourcesByUserId(Long id) {
+        long start = System.nanoTime();
+        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUserId(id);
         decryptPasswords(resourcesByUser);
+        long end = System.nanoTime();
+        System.out.println("get resources by user: " + (end-start));
         return resourcesByUser;
     }
 
@@ -57,12 +60,16 @@ public class ResourceDataServiceImpl implements ResourceDataService {
     }
 
     public ResourceData addResource(ResourceData resourceData) {
+        long start = System.nanoTime();
         try {
             resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return resourceDataDao.save(resourceData);
+        ResourceData save = resourceDataDao.save(resourceData);
+        long end = System.nanoTime();
+        System.out.println("add resource: " + (end-start));
+        return save;
     }
 
     public ResourceData update(ResourceData resourceData) {

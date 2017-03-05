@@ -2,10 +2,9 @@ package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.excaption.UnauthorizedException;
-import com.dante.passec.excaption.UserAlradyExistException;
+import com.dante.passec.excaption.UserAlreadyExistException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
-import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,9 @@ public class ControllerRestUser {
 
     @RequestMapping(method = GET)
     public UserRest getUserCurrentUser(@RequestHeader("token") Integer token){
-        if(sessionService.sessionIsActual(token)){
-            Session session = sessionService.findByToken(token);
-            return session.getUser();
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null) {
+            return user;
         }
         else throw new UnauthorizedException();
     }
@@ -41,7 +40,7 @@ public class ControllerRestUser {
     public ResponseBody<UserRest> registration(@RequestBody UserRest user){
         ResponseBody<UserRest> result = new ResponseBody<>();
         //Проверяем существует ли пользователь
-        if(userService.checkAlreadyExist(user.getLogin())) throw new UserAlradyExistException();
+        if(userService.checkAlreadyExist(user.getLogin())) throw new UserAlreadyExistException();
         try {
             userService.addUser(user);
             result.setResponse("200", "Пользователь успешно добавлен");
@@ -59,17 +58,14 @@ public class ControllerRestUser {
         ResponseBody<UserRest> result = new ResponseBody<>();
         UserRest userInBase;
         try {
-            if(sessionService.sessionIsActual(token))
-            {
-                Session session = sessionService.findByToken(token);
-                userInBase = session.getUser();
+            if((userInBase=sessionService.sessionIsActual(token))!=null){
+                userInBase.setLogin(user.getLogin());
+                userInBase.setPassword(user.getPassword());
+                userService.updateUser(userInBase);
+                result.setOneResult(userInBase);
+                result.setResponse("200", "Пользователь успешно изменен");
             }
             else throw new UnauthorizedException();
-            userInBase.setLogin(user.getLogin());
-            userInBase.setPassword(user.getPassword());
-            userService.updateUser(userInBase);
-            result.setOneResult(userInBase);
-            result.setResponse("200", "Пользователь успешно изменен");
         }catch (Exception e){
             result.setResponse("202", "Не удалось изменить учутную запись пользователя");
             e.printStackTrace();
@@ -81,10 +77,10 @@ public class ControllerRestUser {
     {
         ResponseBody<UserRest> result = new ResponseBody<>();
         try {
-            if(sessionService.sessionIsActual(token))
+            UserRest user;
+            if((user=sessionService.sessionIsActual(token))!=null)
             {
-                Session session = sessionService.findByToken(token);
-                userService.deleteUser(session.getUser().getId());
+                userService.deleteUser(user.getId());
             }
             else throw new UserNotFoundException();
             result.setResponse("200", "Учетная запись удалена");

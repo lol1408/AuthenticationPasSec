@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 /**
@@ -33,7 +34,7 @@ public class UserRest {
     @Size(min = 6)
     String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = LAZY)
     @JsonIgnore
     private Set<ResourceData> resources = new HashSet<>(0);
 

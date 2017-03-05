@@ -1,6 +1,7 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
+import com.dante.passec.excaption.ForbiddenExceprion;
 import com.dante.passec.excaption.UnauthorizedException;
 import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import static java.lang.System.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -35,60 +37,53 @@ public class ControllerResourceData {
 
     @RequestMapping(method = GET)
     public List<ResourceData> getResourcesByUser(@RequestHeader("token") Integer token) throws Exception {
-        if(sessionService.sessionIsActual(token)) {
-            Session session = sessionService.findByToken(token);
-            return resourceDataService.getResourcesByUser(session.getUser());
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null){
+            return resourceDataService.getResourcesByUserId(user.getId());
         }
         else throw new UnauthorizedException();
     }
 
     @RequestMapping(method = POST)
-    public ResponseBody<ResourceData> saveResourceData(@RequestBody ResourceData resourceData,
+    public ResourceData saveResourceData(@RequestBody ResourceData resourceData,
                                                        @RequestHeader(value = "token") Integer token)
     {
         ResponseBody<ResourceData> result = new ResponseBody<>();
         try {
-            if(sessionService.sessionIsActual(token)){
-                UserRest user = sessionService.findByToken(token).getUser();
+            UserRest user;
+            if((user=sessionService.sessionIsActual(token))!=null){
                 resourceData.setUser(user);
             }
             else throw new UnauthorizedException();
-            resourceDataService.addResource(resourceData);
-            result.setOneResult(resourceData);
-            result.setResponse("200", "Запись успешно добавлена");
+            return resourceDataService.addResource(resourceData);
         }catch (Exception e){
-            result.setResponse("202", "Не удалось добавить запись");
-            e.printStackTrace();
+            throw new ForbiddenExceprion();
         }
-        return result;
     }
     @RequestMapping(method = PUT)
-    public ResponseBody<ResourceData> changeResourceData(@RequestBody ResourceData resourceData,
+    public ResourceData changeResourceData(@RequestBody ResourceData resourceData,
                                                          @RequestHeader(value = "token") Integer token)
     {
         ResponseBody<ResourceData> result = new ResponseBody<>();
         try {
-            if(sessionService.sessionIsActual(token)){
-                Session session = sessionService.findByToken(token);
-                resourceData.setUser(session.getUser());
+            UserRest user;
+            if((user=sessionService.sessionIsActual(token))!=null){
+                resourceData.setUser(user);
             }
             else throw new UnauthorizedException();
-            resourceDataService.update(resourceData);
-            result.setOneResult(resourceData);
-            result.setResponse("200", "Изменения приняты");
+            return resourceDataService.update(resourceData);
         }catch (Exception e){
-            result.setResponse("202", "Не удалось изменить запись");
-            e.printStackTrace();
+            throw new ForbiddenExceprion();
         }
-        return result;
     }
     @RequestMapping(value = "/{id}", method = DELETE)
     public ResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id,
                                                      @RequestHeader(value = "token") Integer token){
         ResponseBody<ResourceData> result = new ResponseBody<>();
         try {
-            if(sessionService.sessionIsActual(token))
+            if(sessionService.sessionIsActual(token)!=null){
                 resourceDataService.deleteResource(id);
+            }
             else throw new UnauthorizedException();
             result.setResponse("200", "Удаление прошло успешно");
         }catch (Exception e){

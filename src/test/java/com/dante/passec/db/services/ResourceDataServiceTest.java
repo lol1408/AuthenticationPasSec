@@ -63,7 +63,7 @@ public class ResourceDataServiceTest extends Assert{
         UserRest user = userService.userByLogin("hello world");
         resourceDatas.get(0).setUser(user);
         resourceDataService.addResource(resourceDatas.get(0));
-        List<ResourceData> resourcesByUser = resourceDataService.getResourcesByUser(user);
+        List<ResourceData> resourcesByUser = resourceDataService.getResourcesByUserId(user.getId());
         resourceDataService.deleteResource(resourcesByUser.get(0).getId());
     }
 

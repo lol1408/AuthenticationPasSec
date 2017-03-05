@@ -1,8 +1,7 @@
 
 
-function getAllResources() {
-    var arr = [];
-    fetch("/resources/",{
+function getAllResources(arr) {
+    return fetch("/resources/",{
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -16,17 +15,17 @@ function getAllResources() {
         console.log('Request success');
         data.forEach(function (item, i, data) {
             arr[i] = new Resource(item.login, item.password);
+            arr[i].setId(item.id);
             console.log(item.login + " " + item.password)
         });
     }).catch(function (error) {
         console.log('Request failed', error);
     });
-    return arr;
 }
 
 function addResource(resource) {
     var resourceJson = resource.toStringJson();
-    fetch("/resources/", {
+    return fetch("/resources/", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -36,9 +35,11 @@ function addResource(resource) {
         body: resourceJson
     })
         .then(status)
-        .then(function () {
+        .then(json)
+        .then(function (data) {
             console.log("Request success");
-            location.href = "/";
+            resource.setId(data.id);
+            // location.href = "/";
         })
         .catch(function (error) {
             alert("user already exist");

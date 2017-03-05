@@ -38,7 +38,8 @@ public class AuthenticationController {
     @RequestMapping(path = "logout", method = GET)
     public ResponseBody<Session> logout(@RequestHeader(value = "token") Integer token){
         ResponseBody<Session> responseBody = new ResponseBody<>();
-        if(sessionService.sessionIsActual(token)) {
+        if(sessionService.sessionIsActual(token)!=null)
+        {
             sessionService.setNotIncluding(sessionService.findByToken(token));
             responseBody.setResponse("Вы успешно вышли", "200");
             return responseBody;
