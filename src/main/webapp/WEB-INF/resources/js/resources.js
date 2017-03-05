@@ -1,3 +1,7 @@
+const DELETE_METHOD = 3;
+const UPDATE_METHOD = 2;
+const ADD_METHOD = 1;
+var mapResources = [];
 if(getCookie("token")==undefined) {
     alert("Сессия учетной записи не активна");
     location.href = "/";
@@ -23,12 +27,13 @@ function fillTable() {
                 var password = row.insertCell(1);
                 var change = row.insertCell(2);
                 var deleteMess = row.insertCell(3);
-                console.log(item);
                 login.innerHTML = item.login;
                 password.innerHTML = item.password;
                 change.innerHTML = "<input type='button' id='chen"+item.id+"' value='Изменить' onclick='changeById("+item.id+");'>";
                 deleteMess.innerHTML = "<input type='button' id='del"+item.id+ "' value='Удалить' onclick='deleteById("+item.id+");'>";
+                mapResources[item.id] = i+1;
             });
+        console.log(mapResources);
     });
 }
 
@@ -38,16 +43,31 @@ function addRes(){
     let resource = new Resource(login, password);
     //Отправляем на сервер и добавляем запись в таблицу
     addResource(resource).then(function () {
-        var table = document.getElementById("res_table");
+        refresh(ADD_METHOD, resource)
+    });
+}
+function refresh(method, resource) {
+    var table = document.getElementById("res_table");
+    if(method==ADD_METHOD){
         var row = table.insertRow(table.rows.length);
         var login = row.insertCell(0);
         var password = row.insertCell(1);
         var change = row.insertCell(2);
         var deleteMess = row.insertCell(3);
-        console.log(resource);
         login.innerHTML = resource.login;
         password.innerHTML = resource.password;
-        change.innerHTML = "<input type='button' id='chen"+resource.id+"' value='Изменить' onclick='changeById("+resource.id+");'>";
-        deleteMess.innerHTML = "<input type='button' id='del"+resource.id+ "' value='Удалить' onclick='deleteById("+resource.id+");'>";
-    });
+        change.innerHTML = "<input type='button' id='"+resource.id+"' value='Изменить' onclick='changeById("+resource.id+");'>";
+        deleteMess.innerHTML = "<input type='button' id='"+resource.id+"' value='Удалить' onclick='deleteById("+resource.id+");'>";
+        mapResources[resource.id] = table.rows.length-1;
+    }else if(method==DELETE_METHOD){
+        table.deleteRow(mapResources[resource.id]);
+        console.log(resource);
+    }
+    console.log(mapResources);
+}
+function deleteById(id){
+    deleteResource(id);
+    let res = new Resource(null, null);
+    res.setId(id);
+    refresh(DELETE_METHOD, res);
 }

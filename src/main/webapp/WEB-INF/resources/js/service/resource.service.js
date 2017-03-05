@@ -45,3 +45,16 @@ function addResource(resource) {
             alert("user already exist");
         });
 }
+function deleteResource(id) {
+    return fetch("/resources/"+id,{
+        method: "DELETE",
+        headers: {
+            'token':getCookie("token")
+        }
+    }).then(status)
+        .then(function () {
+            console.log("delete is success");
+        }).catch(function (error) {
+            alert("delete is failed");
+        });
+}
