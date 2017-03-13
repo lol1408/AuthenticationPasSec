@@ -20,6 +20,8 @@
         <jackson.ver>2.8.4</jackson.ver>
         <slf4j.ver>1.7.21</slf4j.ver>
         <jetty.version>9.3.15.v20161220</jetty.version>
+        <h2.version>1.4.192</h2.version>
+
     </properties>
 
     <dependencies>
@@ -56,6 +58,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.ver}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
 
         <!--Jetty for fast start-->

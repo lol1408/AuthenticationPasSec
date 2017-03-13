@@ -5,6 +5,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -20,7 +22,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.dante.passec.config"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
+@ComponentScan(basePackages = {"com.dante.passec.db"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 @PropertySource({"classpath:app.properties"})
 @EnableJpaRepositories("com.dante.passec.db.dao")
 public class HibernateConfig {
@@ -32,6 +34,8 @@ public class HibernateConfig {
     private static final String PROP_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
     private static final String PROP_ENTITYMANAGER_PACKEGES_TO_SCAN = "db.entitymanager.packages.to.scan";
     private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+    private static final String PROP_DEMO_DB = "h2.db";
+
     @Resource
     private Environment env;
 
@@ -41,12 +45,17 @@ public class HibernateConfig {
      */
     @Bean
     DataSource dataSource(){
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-            dataSource.setDriverClassName(env.getProperty(PROP_DATABASE_DRIVER));
-            dataSource.setUrl(env.getProperty(PROP_DATABASE_URL));
-            dataSource.setPassword(env.getProperty(PROP_DATABASE_PASSWORD));
-            dataSource.setUsername(env.getProperty(PROP_DATABASE_USERNAME));
-        return dataSource;
+        Boolean aBoolean = new Boolean(env.getProperty(PROP_DEMO_DB));
+        if(aBoolean){
+            return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
+        }else {
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+                dataSource.setDriverClassName(env.getProperty(PROP_DATABASE_DRIVER));
+                dataSource.setUrl(env.getProperty(PROP_DATABASE_URL));
+                dataSource.setPassword(env.getProperty(PROP_DATABASE_PASSWORD));
+                dataSource.setUsername(env.getProperty(PROP_DATABASE_USERNAME));
+            return dataSource;
+        }
     }
 
     /**

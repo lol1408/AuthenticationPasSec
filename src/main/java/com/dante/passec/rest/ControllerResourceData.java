@@ -1,20 +1,17 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.excaption.ForbiddenExceprion;
+import com.dante.passec.excaption.ForbiddenExcepion;
 import com.dante.passec.excaption.UnauthorizedException;
-import com.dante.passec.excaption.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import static java.lang.System.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -57,7 +54,7 @@ public class ControllerResourceData {
             else throw new UnauthorizedException();
             return resourceDataService.addResource(resourceData);
         }catch (Exception e){
-            throw new ForbiddenExceprion();
+            throw new ForbiddenExcepion();
         }
     }
     @RequestMapping(method = PUT)
@@ -73,7 +70,7 @@ public class ControllerResourceData {
             else throw new UnauthorizedException();
             return resourceDataService.update(resourceData);
         }catch (Exception e){
-            throw new ForbiddenExceprion();
+            throw new ForbiddenExcepion();
         }
     }
     @RequestMapping(value = "/{id}", method = DELETE)

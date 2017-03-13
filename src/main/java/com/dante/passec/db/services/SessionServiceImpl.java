@@ -47,7 +47,7 @@ public class SessionServiceImpl implements SessionService {
         long end = System.nanoTime();
         System.out.println("is actual time: " + (end-start));
         Date date1 = new Date();
-        if(date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding())
+        if(byToken!=null && date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding())
             return byToken.getUser();
         else return null;
     }

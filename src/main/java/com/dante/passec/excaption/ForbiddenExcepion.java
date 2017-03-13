@@ -9,5 +9,5 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
  * Created by sergey on 04.03.17.
  */
 @ResponseStatus(value = FORBIDDEN, reason = "user already exist")
-public class ForbiddenExceprion extends RuntimeException {
+public class ForbiddenExcepion extends RuntimeException {
 }

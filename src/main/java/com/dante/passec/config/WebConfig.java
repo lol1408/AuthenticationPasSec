@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.dante.passec"})
+@ComponentScan(basePackages = {"com.dante.passec.rest","com.dante.passec.controllers"})
 public class WebConfig extends WebMvcConfigurerAdapter{
 
     @Bean
@@ -60,9 +60,5 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         converters.add(mappingJackson2HttpMessageConverter());
         super.configureMessageConverters(converters);
     }
-
-
-
-
 
 }

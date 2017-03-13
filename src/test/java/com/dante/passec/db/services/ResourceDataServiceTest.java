@@ -1,5 +1,6 @@
 package com.dante.passec.db.services;
 
+import com.dante.passec.config.HibernateConfig;
 import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
@@ -21,13 +22,14 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
+
 /**
  * Tests for DataService
  */
-@DirtiesContext
+@DirtiesContext(classMode = AFTER_CLASS)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfigT.class})
-@Transactional
+@ContextConfiguration(classes = {HibernateConfig.class})
 public class ResourceDataServiceTest extends Assert{
     @Resource
     private EntityManagerFactory emf;

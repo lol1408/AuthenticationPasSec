@@ -4,6 +4,7 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -20,7 +21,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.dante.passec.db.services", "com.dante.passec.crypt"})
+@ComponentScan(basePackages = {"com.dante.passec.db.services", "com.dante.passec.crypt"},
+        excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 @EnableJpaRepositories("com.dante.passec.db.dao")
 public class HibernateConfigT {
 
@@ -32,8 +34,6 @@ public class HibernateConfigT {
     private static final String PROP_HIBERNATE_SHOW_SQL = "true";
     private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "com.dante.passec.model";
     private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "create-drop";
-    @Resource
-    private Environment env;
 
     /**
      * @return DataSource for hibernate.
