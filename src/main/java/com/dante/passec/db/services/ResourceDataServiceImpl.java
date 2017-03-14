@@ -7,6 +7,7 @@ import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -51,6 +52,7 @@ public class ResourceDataServiceImpl implements ResourceDataService {
 
     public ResourceData getResourceById(Long id) {
         ResourceData one = resourceDataDao.findOne(id);
+        if(one==null) return null;
         try {
             one.setPassword(cryptService.decrypt(one.getPassword()));
         } catch (Exception e) {
@@ -60,25 +62,31 @@ public class ResourceDataServiceImpl implements ResourceDataService {
     }
 
     public ResourceData addResource(ResourceData resourceData) {
-        long start = System.nanoTime();
+        //Копируем переданный ресурс
+        ResourceData tempResource = new ResourceData(resourceData);
+        //Пытаемся зашифровать пароль и записать в базу
         try {
-            resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
+            tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        ResourceData save = resourceDataDao.save(resourceData);
-        long end = System.nanoTime();
-        System.out.println("add resource: " + (end-start));
-        return save;
+        resourceDataDao.save(tempResource);
+        resourceData.setId(tempResource.getId());
+        return resourceData;
     }
 
     public ResourceData update(ResourceData resourceData) {
+        //Копируем переданный ресурс
+        ResourceData tempResource = new ResourceData(resourceData);
+        //Пытаемся зашифровать пароль и записать в базу
         try {
-            resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
+            tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resourceDataDao.saveAndFlush(resourceData);
+        resourceDataDao.saveAndFlush(tempResource);
+        resourceData.setId(tempResource.getId());
+        return resourceData;
     }
 
     public void deleteResource(Long id) {

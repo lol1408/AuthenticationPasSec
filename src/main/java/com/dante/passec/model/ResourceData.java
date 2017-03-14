@@ -17,14 +17,14 @@ import static javax.persistence.GenerationType.*;
 public class ResourceData
 {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = IDENTITY)
     Long id;
 
-    @Column(name = "login", nullable = false)
+    @Column(name = "login")
     String login;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     String password;
 
     @ManyToOne(fetch = LAZY)
@@ -39,6 +39,12 @@ public class ResourceData
         this.login = login;
         this.password = password;
         this.user = user;
+    }
+    public ResourceData(ResourceData resource) {
+        this.id = resource.id;
+        this.login = resource.login;
+        this.password = resource.password;
+        this.user = resource.user;
     }
 
     public Long getId() {
@@ -98,7 +104,6 @@ public class ResourceData
     @Override
     public String toString() {
         return "ResourceData{" +
-                "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", user=" + user +
