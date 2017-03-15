@@ -7,7 +7,6 @@ import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.utils.ResourceDataManager;
 import com.dante.passec.utils.UserRestManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,15 +63,15 @@ public class TestResourceRest {
         this.mockMvc = standaloneSetup(controllerResource).build();/*webAppContextSetup(this.mac).dispatchOptions(true).build();*/
         userRest = UserRestManager.createUser("Hello world", "password");
         userRest.setId(1L);
-        resource1 = ResourceDataManager.createResourceData("login1", "password1", userRest);
-        resource2 = ResourceDataManager.createResourceData("login2", "password2", userRest);
+        resource1 = new ResourceData("login1", "password1", userRest);
+        resource2 = new ResourceData("login2", "password2", userRest);
         resource1.setId(1L);
         resource2.setId(2L);
         resources = Arrays.asList(resource1, resource2);
     }
 
     @Test
-    public void findAllResourcesByUser_should_be_success() throws Exception {
+    public void findAllResourcesByUserShouldBeSuccess() throws Exception {
         when(userRestService.userById(userRest.getId())).thenReturn(userRest);
         when(resourceDataService.getResourcesByUserId(userRest.getId())).thenReturn(resources);
         mockMvc.perform(get("/resource/", userRest.getId())).
@@ -90,7 +89,7 @@ public class TestResourceRest {
         verifyNoMoreInteractions(userRestService, resourceDataService);
     }
     @Test
-    public void findResourceById_should_be_success() throws Exception{
+    public void findResourceByIdShouldBeSuccess() throws Exception{
         when(resourceDataService.getResourceById(resource1.getId())).thenReturn(resource1);
         mockMvc.perform(get("/resource/{id}", resource1.getId())).
                 andExpect(status().isOk()).
@@ -103,7 +102,7 @@ public class TestResourceRest {
         verifyNoMoreInteractions(resourceDataService);
     }
     @Test
-    public void addResource_should_be_success() throws Exception{
+    public void addResourceShouldBeSuccess() throws Exception{
         resource1.setId(null);
         when(userRestService.userById(userRest.getId())).thenReturn(userRest);
         String json = toJson(resource1);
@@ -117,7 +116,7 @@ public class TestResourceRest {
     }
 
     @Test
-    public void updateResource_should_be_success() throws Exception{
+    public void updateResourceShouldDeSuccess() throws Exception{
         when(userRestService.userById(userRest.getId())).thenReturn(userRest);
         resource1.setId(1L);
         String json = toJson(resource1);

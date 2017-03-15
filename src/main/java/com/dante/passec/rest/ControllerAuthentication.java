@@ -21,7 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @RestController
 @RequestMapping("/")
-public class AuthenticationController {
+public class ControllerAuthentication {
 
     @Autowired
     UserRestService userService;
@@ -31,8 +31,10 @@ public class AuthenticationController {
     @RequestMapping(path = "login", method = GET)
     public Integer login(@RequestHeader(value = "login") String login,
                          @RequestHeader(value = "password") String password){
-        if(userService.userIsReal(login, password))
-            return sessionService.addSession(userService.userByLogin(login)).getToken();
+        if(userService.userIsReal(login, password)) {
+            Integer token = sessionService.addSession(userService.userByLogin(login)).getToken();
+            return token;
+        }
         else throw new UserNotFoundException();
     }
     @RequestMapping(path = "logout", method = GET)
