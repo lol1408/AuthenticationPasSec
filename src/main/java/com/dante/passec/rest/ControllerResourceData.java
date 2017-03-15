@@ -45,13 +45,12 @@ public class ControllerResourceData {
     public ResourceData saveResourceData(@RequestBody ResourceData resourceData,
                                                        @RequestHeader(value = "token") Integer token)
     {
-        ResponseBody<ResourceData> result = new ResponseBody<>();
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null){
+            resourceData.setUser(user);
+        }
+        else throw new UnauthorizedException();
         try {
-            UserRest user;
-            if((user=sessionService.sessionIsActual(token))!=null){
-                resourceData.setUser(user);
-            }
-            else throw new UnauthorizedException();
             return resourceDataService.addResource(resourceData);
         }catch (Exception e){
             throw new ForbiddenExcepion();
@@ -61,13 +60,12 @@ public class ControllerResourceData {
     public ResourceData changeResourceData(@RequestBody ResourceData resourceData,
                                                          @RequestHeader(value = "token") Integer token)
     {
-        ResponseBody<ResourceData> result = new ResponseBody<>();
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null){
+            resourceData.setUser(user);
+        }
+        else throw new UnauthorizedException();
         try {
-            UserRest user;
-            if((user=sessionService.sessionIsActual(token))!=null){
-                resourceData.setUser(user);
-            }
-            else throw new UnauthorizedException();
             return resourceDataService.update(resourceData);
         }catch (Exception e){
             throw new ForbiddenExcepion();
@@ -77,15 +75,14 @@ public class ControllerResourceData {
     public ResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id,
                                                      @RequestHeader(value = "token") Integer token){
         ResponseBody<ResourceData> result = new ResponseBody<>();
+        if(sessionService.sessionIsActual(token)!=null){
+            resourceDataService.deleteResource(id);
+        }
+        else throw new UnauthorizedException();
         try {
-            if(sessionService.sessionIsActual(token)!=null){
-                resourceDataService.deleteResource(id);
-            }
-            else throw new UnauthorizedException();
             result.setResponse("200", "Удаление прошло успешно");
         }catch (Exception e){
-            result.setResponse("202", "Ну удалось удалить запись");
-            e.printStackTrace();
+            throw new ForbiddenExcepion();
         }
         return result;
     }

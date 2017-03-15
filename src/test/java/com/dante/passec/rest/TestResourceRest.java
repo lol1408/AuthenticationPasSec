@@ -3,7 +3,9 @@ package com.dante.passec.rest;
 import com.dante.passec.config.HibernateConfig;
 import com.dante.passec.config.MainConfig;
 import com.dante.passec.config.WebConfig;
+import com.dante.passec.db.services.SessionService;
 import com.dante.passec.model.ResourceData;
+import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
@@ -44,14 +46,17 @@ public class TestResourceRest {
     private ControllerResourceData controllerResource;
 
     @Mock
-    private UserRestService userRestService;
+    private UserRestService userService;
     @Mock
-    private ResourceDataService resourceDataService;
+    private ResourceDataService resourceService;
+    @Mock
+    private SessionService sessionService;
 
     private MockMvc mockMvc;
     private UserRest userRest;
     private ResourceData resource1;
     private ResourceData resource2;
+    private Session session;
     List<ResourceData> resources;
 
     @Autowired
@@ -68,66 +73,149 @@ public class TestResourceRest {
         resource1.setId(1L);
         resource2.setId(2L);
         resources = Arrays.asList(resource1, resource2);
+        session = new Session(userRest);
     }
 
     @Test
-    public void findAllResourcesByUserShouldBeSuccess() throws Exception {
-        when(userRestService.userById(userRest.getId())).thenReturn(userRest);
-        when(resourceDataService.getResourcesByUserId(userRest.getId())).thenReturn(resources);
-        mockMvc.perform(get("/resource/", userRest.getId())).
-                andExpect(status().isOk()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
-                andDo(print()).
-                andExpect(jsonPath("$[0].id", is(1))).
-                andExpect(jsonPath("$[0].login", is("login1"))).
-                andExpect(jsonPath("$[0].password", is("password1"))).
-                andExpect(jsonPath("$[1].id", is(2))).
-        andExpect(jsonPath("$[1].login", is("login2"))).
-        andExpect(jsonPath("$[1].password", is("password2")));
-        verify(userRestService, times(1)).userById(userRest.getId());
-        verify(resourceDataService, times(1)).getResourcesByUserId(userRest.getId());
-        verifyNoMoreInteractions(userRestService, resourceDataService);
+    public void getResourceByUserShouldBeSuccess() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(resourceService.getResourcesByUserId(userRest.getId())).thenReturn(resources);
+
+        mockMvc.perform(get("/resources/")
+                .header("token", session.getToken()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].login", is("login1")))
+                .andExpect(jsonPath("$[0].password", is("password1")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].login", is("login2")))
+                .andExpect(jsonPath("$[1].password", is("password2")));
+
+        verify(sessionService, times(1)).sessionIsActual(session.getToken());
+        verify(resourceService, times(1)).getResourcesByUserId(userRest.getId());
+        verifyNoMoreInteractions(sessionService, resourceService);
     }
+
     @Test
-    public void findResourceByIdShouldBeSuccess() throws Exception{
-        when(resourceDataService.getResourceById(resource1.getId())).thenReturn(resource1);
-        mockMvc.perform(get("/resource/{id}", resource1.getId())).
-                andExpect(status().isOk()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)).
-                andDo(print()).
-                andExpect(jsonPath("$.id", is(1))).
-                andExpect(jsonPath("$.login", is("login1"))).
-                andExpect(jsonPath("$.password", is("password1")));
-        verify(resourceDataService, times(1)).getResourceById(resource1.getId());
-        verifyNoMoreInteractions(resourceDataService);
+    public void getResourceByUserShouldThrowUnauthorizedException() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+
+        mockMvc.perform(get("/resources/")
+                .header("token", 123123123))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+        verify(sessionService, times(1)).sessionIsActual(123123123);
+        verifyNoMoreInteractions(sessionService);
     }
+
     @Test
-    public void addResourceShouldBeSuccess() throws Exception{
-        resource1.setId(null);
-        when(userRestService.userById(userRest.getId())).thenReturn(userRest);
+    public void saveResourceShouldBeSuccess() throws Exception{
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(resourceService.addResource(resource1)).thenReturn(resource1);
+
         String json = toJson(resource1);
-        mockMvc.perform(post("/resource/{id}", userRest.getId()).contentType(MediaType.APPLICATION_JSON).
-        content(json)).andExpect(status().isOk()).andDo(print()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
-                andExpect(jsonPath("$.code", is("200")));
-        verify(userRestService, times(1)).userById(userRest.getId());
-        verify(resourceDataService, times(1)).addResource(resource1);
-        verifyNoMoreInteractions(userRestService, resourceDataService);
+        mockMvc.perform(post("/resources/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header("token", session.getToken()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.login", is("login1")))
+                .andExpect(jsonPath("$.password", is("password1")));
+
+        verify(sessionService, times(1))
+                .sessionIsActual(session.getToken());
+        verify(resourceService, times(1))
+                .addResource(resource1);
+        verifyNoMoreInteractions(sessionService, resourceService);
+    }
+    @Test
+    public void saveResourceShouldThrowUnauthorizedException() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+
+        String json = toJson(resource1);
+        mockMvc.perform(post("/resources/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header("token", 123123123))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+        verify(sessionService, times(1))
+                .sessionIsActual(123123123);
+        verifyNoMoreInteractions(sessionService, resourceService);
     }
 
     @Test
-    public void updateResourceShouldDeSuccess() throws Exception{
-        when(userRestService.userById(userRest.getId())).thenReturn(userRest);
-        resource1.setId(1L);
+    public void changeResourceShouldBeSuccess() throws Exception{
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(resourceService.update(resource1)).thenReturn(resource1);
         String json = toJson(resource1);
-        doNothing().when(resourceDataService).update(resource1);
-        mockMvc.perform(put("/resource/{id}", userRest.getId()).contentType(MediaType.APPLICATION_JSON).
-                content(json)).andExpect(status().isOk()).andDo(print()).
-                andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).
-                andExpect(jsonPath("$.code", is("200")));
-        verify(userRestService, times(1)).userById(userRest.getId());
-        verify(resourceDataService, times(1)).update(resource1);
-        verifyNoMoreInteractions(userRestService, resourceDataService);
-    }
 
+        mockMvc.perform(put("/resources/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header("token", session.getToken()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.login", is("login1")))
+                .andExpect(jsonPath("$.password", is("password1")));
+
+        verify(sessionService, times(1))
+                .sessionIsActual(session.getToken());
+        verify(resourceService, times(1)).update(resource1);
+        verifyNoMoreInteractions(sessionService, resourceService);
+    }
+    @Test
+    public void changeResourceShouldThrowUnauthorizedException() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        String json = toJson(resource1);
+
+        mockMvc.perform(put("/resources/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header("token", 12312313))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+        verify(sessionService, times(1))
+                .sessionIsActual(12312313);
+        verifyNoMoreInteractions(sessionService, resourceService);
+    }
+    @Test
+    public void deleteResourceShouldBeSuccess() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).
+                thenReturn(userRest);
+        doNothing().when(resourceService).deleteResource(resource1.getId());
+
+        mockMvc.perform(delete("/resources/{id}", resource1.getId())
+                .header("token", session.getToken()))
+                .andExpect(status().isOk());
+
+        verify(sessionService, times(1))
+                .sessionIsActual(session.getToken());
+        verify(resourceService, times(1))
+                .deleteResource(resource1.getId());
+        verifyNoMoreInteractions(sessionService, resourceService);
+
+    }
+    @Test
+    public void deleteResourceShouldThrowUnauthorizedException() throws Exception {
+        when(sessionService.sessionIsActual(session.getToken())).
+                thenReturn(userRest);
+
+        mockMvc.perform(delete("/resources/{id}", resource1.getId())
+                .header("token", 123123123))
+                .andExpect(status().isUnauthorized());
+
+        verify(sessionService, times(1))
+                .sessionIsActual(123123123);
+        verifyNoMoreInteractions(sessionService, resourceService);
+    }
 }

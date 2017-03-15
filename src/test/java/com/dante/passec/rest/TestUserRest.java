@@ -36,7 +36,7 @@ import static com.dante.passec.utils.Converter.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class, HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
-public class TestRest {
+public class TestUserRest {
 
     @InjectMocks
     private ControllerRestUser restUser;
