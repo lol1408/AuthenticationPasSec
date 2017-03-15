@@ -1,6 +1,7 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.configs.HibernateConfigT;
+import com.dante.passec.config.HibernateConfig;
+import com.dante.passec.config.MainConfig;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.Assert;
@@ -25,7 +26,7 @@ import static com.dante.passec.utils.UserRestManager.*;
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfigT.class})
+@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
 @Transactional
 public class SessionServiceTest extends Assert{
 

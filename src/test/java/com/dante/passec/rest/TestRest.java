@@ -1,7 +1,8 @@
 package com.dante.passec.rest;
 
+import com.dante.passec.config.HibernateConfig;
+import com.dante.passec.config.MainConfig;
 import com.dante.passec.config.WebConfig;
-import com.dante.passec.configs.HibernateConfigT;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.utils.UserRestManager;
@@ -33,7 +34,7 @@ import static com.dante.passec.utils.Converter.*;
  * Test class for restController
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebConfig.class, HibernateConfigT.class}, loader = AnnotationConfigWebContextLoader.class)
+@ContextConfiguration(classes = {WebConfig.class, HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
 public class TestRest {
 
