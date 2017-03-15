@@ -3,6 +3,7 @@ package com.dante.passec.db.services;
 import com.dante.passec.config.HibernateConfig;
 import com.dante.passec.config.MainConfig;
 import com.dante.passec.configs.HibernateConfigT;
+import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.UserRestManager;
 import org.junit.After;
@@ -44,41 +45,53 @@ public class UserRestServiceTest extends Assert {
         em = emf.createEntityManager();
         userRests = new ArrayList<>();
         userRests.add(UserRestManager.createUser("hello world", "worldes"));
+        userRests.add(UserRestManager.createUser("hello world olol", "worldasd"));
+
     }
+
     @After
     public void drop(){
-
+        try {
+            List<UserRest> allUsers = userService.allUsers();
+            for(UserRest user: allUsers){
+                userService.deleteUser(user.getId());
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        userRests = null;
     }
 
     @Test
-    public void testInsert(){
+    public void insertShouldBeSuccess(){
         userService.addUser(userRests.get(0));
         UserRest userRest = userService.userByLogin(userRests.get(0).getLogin());
         assertEquals(userRest.getLogin(), userRests.get(0).getLogin());
     }
+
     @Test(expected = JpaSystemException.class)
-    public void testInsertWithNullLogin(){
-        userRests.add(UserRestManager.createUser(null, "Hello null"));
-        userService.addUser(userRests.get(1));
+    public void insertShouldThrowJpaSystemException(){
+        UserRest user = new UserRest(null, "password");
+        userService.addUser(user);
     }
+
     @Test(expected = JpaSystemException.class)
-    public void testInsertWithNullPassword(){
-        userRests.add(UserRestManager.createUser("Hello null pass", null));
-        userService.addUser(userRests.get(1));
+    public void insertTwoSameLoginShouldThrowJpaSystemException(){
+        UserRest user = new UserRest("login first", "password");
+        UserRest second = new UserRest("login first", "password");
+        userService.addUser(user);
+        userService.addUser(second);
     }
-    @Test(expected = JpaSystemException.class)
-    public void testInsertTwoCopyLogin(){
-        userRests.add(UserRestManager.createUser("hello world", "password"));
-        userService.addUser(userRests.get(0));
-        userService.addUser(userRests.get(1));
-    }
+
     @Test
-    public void getById(){
+    public void getByIdShouldBeSuccess(){
         userService.addUser(userRests.get(0));
         System.out.println(userService.userById(1L));
     }
+
     @Test
-    public void getByLogin(){
+    public void getByLoginShouldBeSuccess(){
         userService.addUser(userRests.get(0));
         System.out.println(userService.userByLogin("hello world"));
     }

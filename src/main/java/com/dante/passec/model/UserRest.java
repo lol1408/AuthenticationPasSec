@@ -104,11 +104,9 @@ public class UserRest {
     public UserRest() {
     }
 
-    public UserRest(String login, String password, Set<ResourceData> resources) {
+    public UserRest(String login, String password) {
         this.login = login;
         this.password = password;
-        this.resources = resources;
-
     }
 }
 

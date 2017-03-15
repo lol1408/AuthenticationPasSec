@@ -31,7 +31,7 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     public UserRest addUser(UserRest user) {
-        return userRestDao.save(user);
+        return userRestDao.saveAndFlush(user);
     }
 
     public UserRest updateUser(UserRest user) {
