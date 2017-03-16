@@ -51,7 +51,6 @@ public class TestCrypt extends Assert{
 
     @Test
     public void testTwoEncrypt() throws Exception {
-
         String encryptString1, encryptString2;
         System.out.println(encryptString1 = cryptService.encrypt(passwrod));
         AES.copy();

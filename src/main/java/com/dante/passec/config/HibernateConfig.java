@@ -23,7 +23,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.dante.passec.db"}, excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
-@PropertySource({"classpath:app.properties"})
+@PropertySource({"classpath:application.properties"})
 @EnableJpaRepositories("com.dante.passec.db.dao")
 public class HibernateConfig {
     private static final String PROP_DATABASE_DRIVER = "db.driver";
@@ -41,7 +41,7 @@ public class HibernateConfig {
 
     /**
      * @return DataSource for hibernate.
-     * Properties for the DataSource saving in file app.properties.
+     * Properties for the DataSource saving in file application.properties.
      */
     @Bean
     DataSource dataSource(){
@@ -62,7 +62,7 @@ public class HibernateConfig {
      * @return EntityManager. set DataSource, PersistenceProvider, PackagesToScan and JpaProperties
      * It get DataSource from bean
      * It get PersistenceProvider from HibernatePersistenceProvider.class
-     * It get PackagesToScan from app.properties file
+     * It get PackagesToScan from application.properties file
      * It get JpaProperties from method of the class
      */
     @Bean
@@ -88,7 +88,7 @@ public class HibernateConfig {
 
     /**
      * @return  Properties for hibernate
-     * it takes properties for hibernate from 'app.properties' file
+     * it takes properties for hibernate from 'application.properties' file
      */
     public Properties hibernateProperties(){
         Properties properties = new Properties();

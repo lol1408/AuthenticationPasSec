@@ -31,11 +31,15 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     public UserRest addUser(UserRest user) {
-        return userRestDao.saveAndFlush(user);
+        UserRest tempUser = new UserRest(user);
+        userRestDao.saveAndFlush(tempUser);
+        user.setId(tempUser.getId());
+        return user;
     }
 
     public UserRest updateUser(UserRest user) {
-        return userRestDao.saveAndFlush(user);
+        UserRest tempUser = new UserRest(user);
+        return userRestDao.saveAndFlush(tempUser);
     }
 
     public void deleteUser(Long id) {
