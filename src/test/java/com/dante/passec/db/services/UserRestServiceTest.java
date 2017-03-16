@@ -2,8 +2,6 @@ package com.dante.passec.db.services;
 
 import com.dante.passec.config.HibernateConfig;
 import com.dante.passec.config.MainConfig;
-import com.dante.passec.configs.HibernateConfigT;
-import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.UserRestManager;
 import org.junit.After;

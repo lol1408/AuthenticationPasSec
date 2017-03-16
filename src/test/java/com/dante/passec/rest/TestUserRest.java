@@ -4,11 +4,10 @@ import com.dante.passec.config.HibernateConfig;
 import com.dante.passec.config.MainConfig;
 import com.dante.passec.config.WebConfig;
 import com.dante.passec.db.services.SessionService;
+import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.excaption.ForbiddenExcepion;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.utils.UserRestManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,15 +23,22 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.jws.soap.SOAPBinding;
-
-import static org.hamcrest.core.Is.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static com.dante.passec.utils.Converter.toJson;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static com.dante.passec.utils.Converter.*;
 /**
  * Test class for restController
  */
