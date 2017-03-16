@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -36,7 +37,9 @@ public class SessionServiceImpl implements SessionService {
         session.setIncluding(false);
         return dao.saveAndFlush(session);
     }
-
+    public List<Session> allSessions(){
+        return dao.findAll();
+    }
     public void deleteSession(Long id) {
         dao.delete(id);
     }

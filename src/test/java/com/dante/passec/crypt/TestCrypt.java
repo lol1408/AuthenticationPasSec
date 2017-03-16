@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import javax.crypto.SecretKey;
+import javax.crypto.IllegalBlockSizeException;
 
 /**
  * Test for CryptService
@@ -19,59 +19,36 @@ import javax.crypto.SecretKey;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainConfig.class, loader = AnnotationConfigContextLoader.class)
 public class TestCrypt extends Assert{
-    private String passwrod;
+    private String password;
+    private String encryptPassword;
 
     @Autowired
     private CryptService cryptService;
 
     @Before
-    public void setPassword(){
-        passwrod = "password";
+    public void setPassword() {
+        password = "password";
+        encryptPassword = "gNaeIeThhq4sTUtMw0ukuA==";
     }
 
     @Test
-    public void testEncryptWithRightParam() throws Exception {
-        String encryptString;
-        encryptString = cryptService.encrypt(passwrod);
-        System.out.println(encryptString);
+    public void encryptShouldBeSuccess() throws Exception {
+        String encrypt = cryptService.encrypt(password);
+        assertEquals(encrypt, encryptPassword);
     }
-
-    @Test
-    public void testDecryptWithRightParam() throws Exception {
-        String decryptString;
-        String encryptString;
-        String decryptString2;
-        encryptString = cryptService.encrypt(passwrod);
-        decryptString = cryptService.decrypt(encryptString);
-        decryptString2 = cryptService.decrypt(encryptString);
-        assertEquals(decryptString, decryptString2);
-        assertEquals(decryptString, passwrod);
-        System.out.println(encryptString + "\n" + decryptString);
-    }
-
-    @Test
-    public void testTwoEncrypt() throws Exception {
-        String encryptString1, encryptString2;
-        System.out.println(encryptString1 = cryptService.encrypt(passwrod));
-        AES.copy();
-        System.out.println(AES.memory);
-        System.out.println(encryptString2 = cryptService.encrypt(passwrod));
-    }
-
-    @Test
-    public void testKeyGeneration() throws Exception {
-        SecretKey rawKey = CryptUtils.getRawKey();
-        byte[] encoded = rawKey.getEncoded();
-        CryptDao cryptDao = new CryptDao();
-        String hello = cryptDao.encrypt("hello");
-        String hello2 = cryptDao.encrypt("hello");
-        System.out.print(hello + " " + hello2);
-        assertEquals(cryptDao.decrypt(hello),cryptDao.decrypt(hello2));
-    }
-
     @Test(expected = NullPointerException.class)
-    public void testEncryptWithNullParam() throws Exception {
-        String encryptString;
-        encryptString = cryptService.encrypt(null);
+    public void encryptShouldThrowNullPointerException() throws Exception {
+        cryptService.encrypt(null);
     }
+
+    @Test
+    public void decryptShouldBeSuccess() throws Exception {
+        String decrypt = cryptService.decrypt(encryptPassword);
+        assertEquals(decrypt, password);
+    }
+    @Test(expected = IllegalBlockSizeException.class)
+    public void decryptShouldBeException() throws Exception {
+        cryptService.decrypt(password);
+    }
+
 }
