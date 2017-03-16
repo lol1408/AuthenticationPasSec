@@ -104,6 +104,12 @@ public class UserRest {
     public UserRest() {
     }
 
+    public UserRest(UserRest user){
+        this.id = user.id;
+        this.login = user.login;
+        this.password = user.password;
+    }
+
     public UserRest(String login, String password) {
         this.login = login;
         this.password = password;
