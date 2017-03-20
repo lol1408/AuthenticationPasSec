@@ -17,9 +17,9 @@ import java.security.spec.InvalidParameterSpecException;
  * Factory class for SecretCey
  */
 public class CryptUtils {
+    private static final String KEY_TYPE = "AES";
     private static int iterations = 65536;
     private static int keySize = 256;
-    private static final String KEY_TYPE = "AES";
     private static byte[] seed = "MyNameIsDanteDeBraso".getBytes();
     public static SecretKey getRawKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String strToEncrypt = "hello world";

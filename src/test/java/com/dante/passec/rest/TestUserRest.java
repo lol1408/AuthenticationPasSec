@@ -47,21 +47,18 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 public class TestUserRest {
 
+    @Autowired
+    WebApplicationContext mac;
+    UserRest user;
+    Session session;
     @InjectMocks
     private ControllerRestUser restUser;
-
     @Mock
     private UserRestService userService;
     @Mock
     private SessionService sessionService;
-
     private MockMvc mockMvc;
 
-    @Autowired
-    WebApplicationContext mac;
-
-    UserRest user;
-    Session session;
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);

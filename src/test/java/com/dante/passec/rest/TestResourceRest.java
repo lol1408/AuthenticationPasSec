@@ -42,25 +42,22 @@ import static com.dante.passec.utils.Converter.*;
 @ContextConfiguration(classes = {WebConfig.class, HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigWebContextLoader.class)
 @WebAppConfiguration
 public class TestResourceRest {
+    List<ResourceData> resources;
+    @Autowired
+    WebApplicationContext mac;
     @InjectMocks
     private ControllerResourceData controllerResource;
-
     @Mock
     private UserRestService userService;
     @Mock
     private ResourceDataService resourceService;
     @Mock
     private SessionService sessionService;
-
     private MockMvc mockMvc;
     private UserRest userRest;
     private ResourceData resource1;
     private ResourceData resource2;
     private Session session;
-    List<ResourceData> resources;
-
-    @Autowired
-    WebApplicationContext mac;
 
     @Before
     public void setup(){

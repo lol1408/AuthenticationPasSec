@@ -3,11 +3,9 @@ package com.dante.passec.db.services;
 import com.dante.passec.crypt.CryptService;
 import com.dante.passec.db.dao.ResourceDataDao;
 import com.dante.passec.model.ResourceData;
-import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
