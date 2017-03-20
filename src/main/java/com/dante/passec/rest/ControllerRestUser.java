@@ -1,10 +1,10 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.excaption.ForbiddenExcepion;
-import com.dante.passec.excaption.UnauthorizedException;
-import com.dante.passec.excaption.UserAlreadyExistException;
-import com.dante.passec.excaption.UserNotFoundException;
+import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.UnauthorizedException;
+import com.dante.passec.exception.UserAlreadyExistException;
+import com.dante.passec.exception.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;

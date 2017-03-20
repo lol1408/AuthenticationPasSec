@@ -5,7 +5,7 @@ import com.dante.passec.config.MainConfig;
 import com.dante.passec.config.WebConfig;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.excaption.ForbiddenExcepion;
+import com.dante.passec.exception.ForbiddenExcepion;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package com.dante.passec.excaption;
+package com.dante.passec.exception;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 
