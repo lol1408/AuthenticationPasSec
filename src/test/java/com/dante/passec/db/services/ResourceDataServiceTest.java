@@ -33,17 +33,15 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
 public class ResourceDataServiceTest extends Assert{
+    List<UserRest> users;
+    List<ResourceData> resources;
     @Resource
     private EntityManagerFactory emf;
     private EntityManager em;
-
     @Resource
     private UserRestService userService;
     @Resource
     private ResourceDataService resourceDataService;
-
-    List<UserRest> users;
-    List<ResourceData> resources;
 
     @Before
     public void setUp(){
