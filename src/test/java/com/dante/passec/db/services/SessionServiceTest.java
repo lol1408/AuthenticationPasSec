@@ -17,13 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import static com.dante.passec.utils.SessionManager.*;
-import static com.dante.passec.utils.UserRestManager.*;
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,17 +26,16 @@ import static com.dante.passec.utils.UserRestManager.*;
 @Transactional
 public class SessionServiceTest extends Assert{
 
+    UserRest user;
     @Resource
     private EntityManagerFactory emf;
     private EntityManager em;
-
     @Resource
     private SessionService sessionService;
     @Resource
     private UserRestService userService;
-
     private Session session;
-    UserRest user;
+
     @Before
     public void setUp(){
         em = emf.createEntityManager();
