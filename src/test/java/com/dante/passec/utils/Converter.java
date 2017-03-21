@@ -10,6 +10,7 @@ import java.io.IOException;
  * Convert POJO objects to json objects
  */
 public class Converter {
+
     public static String toJson(Object o) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return  objectMapper.writeValueAsString(o);

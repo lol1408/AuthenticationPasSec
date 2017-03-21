@@ -32,11 +32,13 @@
             <artifactId>spring-web</artifactId>
             <version>${spring.ver}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.ver}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -59,6 +61,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.ver}</version>
         </dependency>
+             
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
