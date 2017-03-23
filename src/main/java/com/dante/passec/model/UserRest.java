@@ -1,9 +1,14 @@
 package com.dante.passec.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+
+import static javax.persistence.GenerationType.*;
 
 /**
  * Model for entity user_rest
@@ -16,11 +21,11 @@ import java.util.Set;
 public class UserRest {
 
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = IDENTITY)
     Long id;
 
-    @Column(name = "login", nullable = false, length = 30)
+    @Column(name = "login", nullable = false, length = 30, unique = true)
     @Size(min = 6)
     String login;
 
@@ -29,7 +34,9 @@ public class UserRest {
     String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<ResourceData> resources = new HashSet<>(0);
+
 
     public Set<ResourceData> getResources() {
         return resources;
@@ -78,16 +85,29 @@ public class UserRest {
 
         UserRest userRest = (UserRest) o;
 
-        if (!id.equals(userRest.id)) return false;
-        if (!login.equals(userRest.login)) return false;
-        return password.equals(userRest.password);
+        if (id != null ? !id.equals(userRest.id) : userRest.id != null) return false;
+        if (login != null ? !login.equals(userRest.login) : userRest.login != null) return false;
+        if (password != null ? !password.equals(userRest.password) : userRest.password != null) return false;
+        return resources != null ? resources.equals(userRest.resources) : userRest.resources == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + login.hashCode();
-        result = 31 * result + password.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+//        result = 31 * result + (resources != null ? resources.hashCode() : 0);
         return result;
     }
+
+    public UserRest() {
+    }
+
+    public UserRest(String login, String password, Set<ResourceData> resources) {
+        this.login = login;
+        this.password = password;
+        this.resources = resources;
+
+    }
 }
+

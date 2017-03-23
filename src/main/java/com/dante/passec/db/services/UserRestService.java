@@ -1,4 +1,4 @@
-package com.dante.passec.services;
+package com.dante.passec.db.services;
 
 import com.dante.passec.model.UserRest;
 
@@ -15,5 +15,6 @@ public interface UserRestService {
     UserRest addUser(UserRest user);
     UserRest updateUser(UserRest user);
     void deleteUser(Long id);
+    boolean userIsReal(String login, String  password);
 
 }

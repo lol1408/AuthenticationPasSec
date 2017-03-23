@@ -1,4 +1,4 @@
-package com.dante.passec.dao;
+package com.dante.passec.db.dao;
 
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;

@@ -1,5 +1,6 @@
 package com.dante.passec.config;
 
+import com.dante.passec.configs.HibernateConfigT;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {WebConfig.class}, loader = AnnotationConfigWebContextLoader.class)
+@ContextConfiguration(classes = {WebConfig.class, HibernateConfigT.class}, loader = AnnotationConfigWebContextLoader.class)
 public class TestConfig {
     @Test
     public void whenSpringContextIsInstantiated_thenNoExceptions(){

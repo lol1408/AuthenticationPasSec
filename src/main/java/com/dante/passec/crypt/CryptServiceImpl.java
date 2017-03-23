@@ -1,27 +1,26 @@
 package com.dante.passec.crypt;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Crypt service impl\
  * @author Dante de Braso
  * @version 1.1
  */
-public class CryptServiceImpl implements CryptService{
+@Service("cryptService")
+public class CryptServiceImpl implements CryptService {
 
-    public CryptServiceImpl() throws Exception {
-        AES.setSalt("salty avery body");
-    }
+    @Autowired
+    CryptDao cryptDao;
+
     @Override
     public String encrypt(String strEncrypt) throws Exception {
-        return AES.encrypt(strEncrypt);
+        return cryptDao.encrypt(strEncrypt);
     }
 
     @Override
     public String decrypt(String strDecrypt) throws Exception {
-        return AES.decrypt(strDecrypt);
-    }
-
-    @Override
-    public String decrypt(String strDecrypt, byte[] bytes) throws Exception {
-        return AES.decrypt(strDecrypt, bytes);
+        return cryptDao.decrypt(strDecrypt);
     }
 }
