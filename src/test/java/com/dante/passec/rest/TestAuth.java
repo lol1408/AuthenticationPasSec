@@ -37,20 +37,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @WebAppConfiguration
 public class TestAuth {
 
+    @Autowired
+    WebApplicationContext mac;
     @InjectMocks
     private ControllerAuthentication authentication;
-
     @Mock
     private UserRestService userService;
     @Mock
     private SessionService sessionService;
-
     private MockMvc mockMvc;
     private UserRest user;
     private Session session;
 
-    @Autowired
-    WebApplicationContext mac;
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);

@@ -30,14 +30,12 @@ import java.util.List;
 @ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
 @Transactional
 public class UserRestServiceTest extends Assert {
+    List<UserRest> users;
     @Resource
     private EntityManagerFactory emf;
     private EntityManager em;
-
     @Resource
     private UserRestService userService;
-
-    List<UserRest> users;
 
     @Before
     public void setUp(){

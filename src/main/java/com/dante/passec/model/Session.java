@@ -39,14 +39,6 @@ public class Session {
     @Column
     Boolean including;
 
-    public Boolean isIncluding() {
-        return including;
-    }
-
-    public void setIncluding(Boolean including) {
-        this.including = including;
-    }
-
     public Session(UserRest user) {
         this.user = user;
         this.including = true;
@@ -63,6 +55,15 @@ public class Session {
 
     public Session() {
     }
+
+    public Boolean isIncluding() {
+        return including;
+    }
+
+    public void setIncluding(Boolean including) {
+        this.including = including;
+    }
+
     public void setToken(){
         this.token = token;
     }

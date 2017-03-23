@@ -1,8 +1,8 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.excaption.ForbiddenExcepion;
-import com.dante.passec.excaption.UnauthorizedException;
+import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.db.services.ResourceDataService;

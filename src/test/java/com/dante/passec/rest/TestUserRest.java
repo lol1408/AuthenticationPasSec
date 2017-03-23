@@ -5,7 +5,7 @@ import com.dante.passec.config.MainConfig;
 import com.dante.passec.config.WebConfig;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.excaption.ForbiddenExcepion;
+import com.dante.passec.exception.ForbiddenExcepion;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.Before;
@@ -47,21 +47,18 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 public class TestUserRest {
 
+    @Autowired
+    WebApplicationContext mac;
+    UserRest user;
+    Session session;
     @InjectMocks
     private ControllerRestUser restUser;
-
     @Mock
     private UserRestService userService;
     @Mock
     private SessionService sessionService;
-
     private MockMvc mockMvc;
 
-    @Autowired
-    WebApplicationContext mac;
-
-    UserRest user;
-    Session session;
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
