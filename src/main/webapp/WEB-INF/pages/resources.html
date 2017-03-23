@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Your resources</title>
+    <script src="/resources/js/util/include.js"></script>
+    <script src="/resources/js/model/user.js"></script>
+    <script src="/resources/js/model/resource.js"></script>
+    <script src="/resources/js/util/query.util.js"></script>
+    <script src="/resources/js/util/sha1.js"></script>
+    <script src="/resources/js/util/cookie.js"></script>
+    <script src="/resources/js/auth/auth.js"></script>
+    <script src="/resources/js/service/resource.service.js"></script>
+
+    <script src="/resources/js/resources.js"></script>
+    <link rel="stylesheet" type="text/css" href="/resources/css/popup.css">
+</head>
+<body onload="fillTable();">
+<table id="res_table">
+    <tr>
+        <th>resource</th><th>password</th>
+    </tr>
+</table>
+<input type="text" placeholder="Write resource's login" id="res_login_field">
+<input type="text" placeholder="Write resource's password" id="res_pass_field">
+</br>
+<input type="button" value="add" onclick="addRes();">
+</br>
+</br>
+<input type="button" value="logout" onclick="logout()">
+<div class="popup" id="popupForMessage">
+    <div class="popup-content">
+        <input type="text" id="popup-login">
+        <input type="text" id="popup-password">
+        <input type="button" value="Изменить;)" onclick="changeResources()">
+        <input type="button" value="Отменить" onclick="closePopup();">
+        <input type="hidden" id="idPopupHidden">
+    </div>
+</div>
+</body>
+</html>

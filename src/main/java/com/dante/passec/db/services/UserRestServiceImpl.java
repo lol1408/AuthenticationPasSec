@@ -31,11 +31,15 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     public UserRest addUser(UserRest user) {
-        return userRestDao.save(user);
+        UserRest tempUser = new UserRest(user);
+        userRestDao.saveAndFlush(tempUser);
+        user.setId(tempUser.getId());
+        return user;
     }
 
     public UserRest updateUser(UserRest user) {
-        return userRestDao.saveAndFlush(user);
+        UserRest tempUser = new UserRest(user);
+        return userRestDao.saveAndFlush(tempUser);
     }
 
     public void deleteUser(Long id) {
@@ -46,5 +50,9 @@ public class UserRestServiceImpl implements UserRestService {
         UserRest user = userRestDao.getUserByLogin(login);
         if(user==null) return false;
         else return user.getPassword().equals(password);
+    }
+    public boolean checkAlreadyExist(String login){
+        if(userRestDao.getUserByLogin(login)!=null) return true;
+        else return false;
     }
 }

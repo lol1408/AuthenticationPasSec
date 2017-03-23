@@ -16,13 +16,14 @@ import java.security.SecureRandom;
  *  @version 1.0
  */
 public class AES {
+    public static byte[] memory;
     private static String salt;
 //    private static String key;
     private static byte[] ivBytes;
     private static int iterations = 65536;
     private static int keySize = 256;
     private static SecretKey secretKey;
-    public static byte[] memory;
+
     /**
      * @param strToEncrypt
      * @return encrypt String when set secret key was after

@@ -10,7 +10,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
  * Created by sergey on 09.01.17.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigContextLoader.class)
 public class TestHibernateConfig {
 
     @Test

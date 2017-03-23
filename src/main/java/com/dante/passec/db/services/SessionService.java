@@ -4,6 +4,7 @@ import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Service for Session Entity
@@ -13,11 +14,12 @@ import java.util.Date;
 public interface SessionService {
 
     Session findById(Long id);
+    List<Session> allSessions();
     Session findByToken(Integer token);
     Session addSession(UserRest user);
     Session setNotIncluding(Session session);
     void deleteSession(Long id);
-    boolean sessionIsActual(Integer token);
+    UserRest sessionIsActual(Integer token);
     boolean sessionIsActual(Integer token, Date currentDate);
     void deleteSessionByToken(Integer token);
 

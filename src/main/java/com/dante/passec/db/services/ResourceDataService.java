@@ -11,7 +11,7 @@ import java.util.List;
 public interface ResourceDataService {
 
     List<ResourceData> allResources();
-    List<ResourceData> getResourcesByUser(UserRest user);
+    List<ResourceData> getResourcesByUserId(Long id);
     ResourceData getResourceById(Long id);
     ResourceData addResource(ResourceData resourceData);
     ResourceData update(ResourceData resourceData);

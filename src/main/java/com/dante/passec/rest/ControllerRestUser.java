@@ -1,10 +1,11 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.excaption.UnauthorizedException;
-import com.dante.passec.excaption.UserNotFoundException;
+import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.UnauthorizedException;
+import com.dante.passec.exception.UserAlreadyExistException;
+import com.dante.passec.exception.UserNotFoundException;
 import com.dante.passec.model.ResponseBody;
-import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,66 +30,55 @@ public class ControllerRestUser {
 
     @RequestMapping(method = GET)
     public UserRest getUserCurrentUser(@RequestHeader("token") Integer token){
-        if(sessionService.sessionIsActual(token)){
-            Session session = sessionService.findByToken(token);
-            return session.getUser();
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null) {
+            return user;
         }
         else throw new UnauthorizedException();
     }
 
     @RequestMapping(method = POST)
-    public ResponseBody<UserRest> registration(@RequestBody UserRest user){
-        ResponseBody<UserRest> result = new ResponseBody<>();
+    public UserRest registration(@RequestBody UserRest user){
+        //Проверяем существует ли пользователь
+        if(userService.checkAlreadyExist(user.getLogin())) throw new UserAlreadyExistException();
         try {
-            userService.addUser(user);
-            result.setResponse("200", "Пользователь успешно добавлен");
-            result.setOneResult(user);
+            return userService.addUser(user);
         }catch (Exception e){
-            result.setResponse("202", "Не удалось добавить пользователя");
-            e.printStackTrace();
+            throw new ForbiddenExcepion();
         }
-        return result;
     }
     @RequestMapping(method = PUT)
-    public ResponseBody<UserRest> updateUser(@RequestBody UserRest user,
+    public UserRest updateUser(@RequestBody UserRest user,
                                              @RequestHeader(value = "token") Integer token)
     {
-        ResponseBody<UserRest> result = new ResponseBody<>();
         UserRest userInBase;
-        try {
-            if(sessionService.sessionIsActual(token))
-            {
-                Session session = sessionService.findByToken(token);
-                userInBase = session.getUser();
-            }
-            else throw new UnauthorizedException();
+        if((userInBase=sessionService.sessionIsActual(token))!=null){
             userInBase.setLogin(user.getLogin());
             userInBase.setPassword(user.getPassword());
-            userService.updateUser(userInBase);
-            result.setOneResult(userInBase);
-            result.setResponse("200", "Пользователь успешно изменен");
-        }catch (Exception e){
-            result.setResponse("202", "Не удалось изменить учутную запись пользователя");
-            e.printStackTrace();
         }
-        return result;
+        else throw new UnauthorizedException();
+        try {
+            return userService.updateUser(userInBase);
+        }catch (Exception e){
+            throw new ForbiddenExcepion();
+        }
     }
     @RequestMapping(method = DELETE)
     public ResponseBody<UserRest> deleteUser(@RequestHeader(value = "token") Integer token)
     {
         ResponseBody<UserRest> result = new ResponseBody<>();
-        try {
-            if(sessionService.sessionIsActual(token))
-            {
-                Session session = sessionService.findByToken(token);
-                userService.deleteUser(session.getUser().getId());
-            }
-            else throw new UserNotFoundException();
-            result.setResponse("200", "Учетная запись удалена");
-        }catch (Exception e){
-            result.setResponse("202", "Не удалось учетную запись пользователя");
-            e.printStackTrace();
+        UserRest user;
+        if((user=sessionService.sessionIsActual(token))!=null)
+        {
+            userService.deleteUser(user.getId());
         }
-        return result;
+        else throw new UserNotFoundException();
+
+        try {
+            result.setResponse("200", "Учетная запись удалена");
+            return result;
+        }catch (Exception e){
+            throw new ForbiddenExcepion();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.configs.HibernateConfigT;
+import com.dante.passec.config.HibernateConfig;
+import com.dante.passec.config.MainConfig;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.ResourceDataManager;
@@ -10,10 +11,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -21,57 +24,179 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
+
 /**
  * Tests for DataService
  */
-@DirtiesContext
+@DirtiesContext(classMode = AFTER_CLASS)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfigT.class})
-@Transactional
+@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
 public class ResourceDataServiceTest extends Assert{
+    List<UserRest> users;
+    List<ResourceData> resources;
     @Resource
     private EntityManagerFactory emf;
     private EntityManager em;
-
     @Resource
     private UserRestService userService;
     @Resource
     private ResourceDataService resourceDataService;
 
-    List<UserRest> userRests;
-    List<ResourceData> resourceDatas;
-
     @Before
     public void setUp(){
         em = emf.createEntityManager();
-        userRests = new ArrayList<>();
-        resourceDatas = new ArrayList<>();
-        userRests.add(UserRestManager.createUser("hello world", "worldes"));
-        resourceDatas.add(ResourceDataManager.createResourceData("mama", "I love you", userRests.get(0)));
+        users = new ArrayList<>();
+        resources = new ArrayList<>();
+
+        //Коллекции с юзерами и ресурсами
+        users.add(UserRestManager.createUser("hello world", "world123"));
+        resources.add(ResourceDataManager.createResourceData("mama", "I love you", users.get(0)));
+
+        userService.addUser(users.get(0));
+
+    }
+    //Первый юзер в базе
+    private UserRest getFirstUser(){
+        List<UserRest> users = userService.allUsers();
+        return users.get(0);
+    }
+
+    //Первый добавленный ресурс в базе
+    private ResourceData getFirstResource(){
+        List<ResourceData> resources = resourceDataService.allResources();
+        return resources.get(0);
     }
 
     @Test
-    public void insertTest(){
-        userService.addUser(userRests.get(0));
-        resourceDatas.get(0).setUser(userService.userByLogin("hello world"));
-        System.out.println(resourceDatas.get(0));
-        resourceDataService.addResource(resourceDatas.get(0));
+    public void insertShouldBeSuccess(){
+        ResourceData resource = resources.get(0);
+        resourceDataService.addResource(resource);
+        ResourceData firstResource = getFirstResource();
+        assertEquals(resource.getLogin(), firstResource.getLogin());
+        assertEquals(resource.getPassword(), firstResource.getPassword());
+        assertEquals(resource.getId(), firstResource.getId());
     }
+
     @Test
-    public void deleteTest(){
-        userService.addUser(userRests.get(0));
-        UserRest user = userService.userByLogin("hello world");
-        resourceDatas.get(0).setUser(user);
-        resourceDataService.addResource(resourceDatas.get(0));
-        List<ResourceData> resourcesByUser = resourceDataService.getResourcesByUser(user);
-        resourceDataService.deleteResource(resourcesByUser.get(0).getId());
+    public void deleteShouldBeSuccess(){
+        ResourceData resource = resources.get(0);
+        ResourceData save = resourceDataService.addResource(resource);
+        resourceDataService.deleteResource(save.getId());
+        assertNull(resourceDataService.getResourceById(save.getId()));
+    }
+
+    @Test
+    public void updateShouldBeSuccess(){
+        ResourceData resourceData = resourceDataService.addResource(resources.get(0));
+        //Создаем копию которую поменяем
+        ResourceData update = new ResourceData(resourceData);
+        update.setLogin("Not hello");
+        update.setPassword("Not password");
+        resourceDataService.update(update);
+        ResourceData firstResource = getFirstResource();
+
+        /*Первоначальная запись не должна совпадать с обновленной
+        совпадать должен долько Id*/
+        assertEquals(resourceData.getId(), firstResource.getId());
+        assertNotEquals(resourceData.getLogin(), firstResource.getLogin());
+        assertNotEquals(resourceData.getPassword(),firstResource.getPassword());
+        /*Первая запись в базе данных должна совпадать с объектом который
+        сохранялся в базу*/
+        assertEquals(update.getId(), firstResource.getId());
+        assertEquals(update.getLogin(), firstResource.getLogin());
+        assertEquals(update.getPassword(), firstResource.getPassword());
+
+    }
+
+    @Test
+    public void selectAllResourcesShouldBeSuccess(){
+        //Добавляем все в базу
+        for(ResourceData resource:resources){
+            resourceDataService.addResource(resource);
+        }
+        //Достаем из базы, заносим в новый лист
+        List<ResourceData> resourcesTemp = resourceDataService.allResources();
+        //Сравниваем коллекции
+        for(int i=0; i<resources.size(); i++){
+            ResourceData inParentList = resources.get(i);
+            ResourceData inBase = resources.get(i);
+
+            assertEquals(inParentList.getId(), inBase.getId());
+            assertEquals(inParentList.getLogin(), inBase.getLogin());
+            assertEquals(inParentList.getPassword(), inBase.getPassword());
+        }
+    }
+
+    @Test
+    public void selectByIdShouldBeSuccess(){
+        ResourceData resource = resourceDataService.addResource(resources.get(0));
+        ResourceData resourceById = resourceDataService.getResourceById(resource.getId());
+
+        assertEquals(resource.getId(), resourceById.getId());
+        assertEquals(resource.getLogin(), resourceById.getLogin());
+        assertEquals(resource.getPassword(), resourceById.getPassword());
+    }
+
+    @Test(expected = JpaSystemException.class)
+    public void insertShouldThrowJpaSystemException(){
+        ResourceData resourceData = new ResourceData("login", "password", null);
+        resourceDataService.addResource(resourceData);
+    }
+
+    @Test(expected = JpaSystemException.class)
+    public void updateShouldThrowJpaSystemException(){
+        ResourceData resourceData = resources.get(0);
+        resourceDataService.addResource(resourceData);
+        ResourceData update = new ResourceData(resourceData);
+        update.setUser(null);
+        resourceDataService.update(update);
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void deleteShouldThrowJpaSystemException(){
+        ResourceData resourceData = resources.get(0);
+        resourceDataService.addResource(resourceData);
+        resourceDataService.deleteResource(resourceData.getId()+1);
+    }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void getByIdShouldThrowJpaSystemException(){
+        ResourceData resourceData = resources.get(0);
+        resourceDataService.addResource(resourceData);
+        resourceDataService.getResourceById(null);
+    }
+
+    @Test
+    public void getAllShouldReturnListWithSize0(){
+        List<ResourceData> resourceDatas = resourceDataService.allResources();
+        assertEquals(resourceDatas.size(), 0);
+    }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void getByUserIdShouldThrowJpaSystemException(){
+        ResourceData resourceData = resources.get(0);
+        resourceDataService.addResource(resourceData);
+        resourceData.getUser().setId(null);
+        resourceDataService.getResourceById(resourceData.getUser().getId());
     }
 
 
     @After
     public void destroy(){
-        userRests = null;
-        resourceDatas = null;
+        List<UserRest> allUsers = userService.allUsers();
+        List<ResourceData> allResources = resourceDataService.allResources();
+
+        for(ResourceData resource: allResources){
+            resourceDataService.deleteResource(resource.getId());
+        }
+
+        for(UserRest user: allUsers){
+            userService.deleteUser(user.getId());
+        }
+
+        users = null;
+        resources = null;
     }
 
 }

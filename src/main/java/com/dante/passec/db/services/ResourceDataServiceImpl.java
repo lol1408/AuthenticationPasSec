@@ -3,7 +3,6 @@ package com.dante.passec.db.services;
 import com.dante.passec.crypt.CryptService;
 import com.dante.passec.db.dao.ResourceDataDao;
 import com.dante.passec.model.ResourceData;
-import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,14 +39,18 @@ public class ResourceDataServiceImpl implements ResourceDataService {
         return resourcesByUser;
     }
 
-    public List<ResourceData> getResourcesByUser(UserRest user) {
-        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUser(user);
+    public List<ResourceData> getResourcesByUserId(Long id) {
+        long start = System.nanoTime();
+        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUserId(id);
         decryptPasswords(resourcesByUser);
+        long end = System.nanoTime();
+        System.out.println("get resources by user: " + (end-start));
         return resourcesByUser;
     }
 
     public ResourceData getResourceById(Long id) {
         ResourceData one = resourceDataDao.findOne(id);
+        if(one==null) return null;
         try {
             one.setPassword(cryptService.decrypt(one.getPassword()));
         } catch (Exception e) {
@@ -57,21 +60,31 @@ public class ResourceDataServiceImpl implements ResourceDataService {
     }
 
     public ResourceData addResource(ResourceData resourceData) {
+        //Копируем переданный ресурс
+        ResourceData tempResource = new ResourceData(resourceData);
+        //Пытаемся зашифровать пароль и записать в базу
         try {
-            resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
+            tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return resourceDataDao.save(resourceData);
+        resourceDataDao.save(tempResource);
+        resourceData.setId(tempResource.getId());
+        return resourceData;
     }
 
     public ResourceData update(ResourceData resourceData) {
+        //Копируем переданный ресурс
+        ResourceData tempResource = new ResourceData(resourceData);
+        //Пытаемся зашифровать пароль и записать в базу
         try {
-            resourceData.setPassword(cryptService.encrypt(resourceData.getPassword()));
+            tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resourceDataDao.saveAndFlush(resourceData);
+        resourceDataDao.saveAndFlush(tempResource);
+        resourceData.setId(tempResource.getId());
+        return resourceData;
     }
 
     public void deleteResource(Long id) {

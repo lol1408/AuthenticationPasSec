@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -36,15 +37,22 @@ public class SessionServiceImpl implements SessionService {
         session.setIncluding(false);
         return dao.saveAndFlush(session);
     }
-
+    public List<Session> allSessions(){
+        return dao.findAll();
+    }
     public void deleteSession(Long id) {
         dao.delete(id);
     }
 
-    public boolean sessionIsActual(Integer token) {
+    public UserRest sessionIsActual(Integer token) {
+        long start = System.nanoTime();
         Session byToken = dao.findByToken(token);
+        long end = System.nanoTime();
+        System.out.println("is actual time: " + (end-start));
         Date date1 = new Date();
-        return date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding();
+        if(byToken!=null && date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding())
+            return byToken.getUser();
+        else return null;
     }
     public boolean sessionIsActual(Integer token, Date currentDate){
         Session byToken = dao.findByToken(token);

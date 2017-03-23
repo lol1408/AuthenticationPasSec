@@ -17,9 +17,9 @@ import java.security.spec.InvalidParameterSpecException;
  * Factory class for SecretCey
  */
 public class CryptUtils {
+    private static final String KEY_TYPE = "AES";
     private static int iterations = 65536;
     private static int keySize = 256;
-    private static final String KEY_TYPE = "AES";
     private static byte[] seed = "MyNameIsDanteDeBraso".getBytes();
     public static SecretKey getRawKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String strToEncrypt = "hello world";
@@ -30,8 +30,8 @@ public class CryptUtils {
         return skf.generateSecret(spec);
     }
     public static Cipher getCipher(int i) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance("AES");
-        SecretKeySpec secretKeySpec = new SecretKeySpec(getRawKey().getEncoded(), "AES");
+        Cipher cipher = Cipher.getInstance(KEY_TYPE);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(getRawKey().getEncoded(), KEY_TYPE);
         if(i==Cipher.ENCRYPT_MODE) {
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
         }else if(i==Cipher.DECRYPT_MODE){
