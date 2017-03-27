@@ -10,19 +10,100 @@
     <script src="/resources/js/validation/dist/jquery.validate.min.js"></script>
     <script src="/resources/js/util/sha1.js"></script>
     <script src="/resources/js/util/cookie.js"></script>
-
     <script src="/resources/js/registration.js"></script>
+    <script src="/resources/js/service/user.service.js"></script>
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICON STYLE  -->
+    <link href="/resources/css/font-awesome.css" rel="stylesheet" />
+    <!-- PRETTYPHOTO STYLE  -->
+    <link href="/resources/css/prettyPhoto.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <link href="/resources/css/style.css" rel="stylesheet" />
+    <link href="/resources/css/formstyle.css" rel="stylesheet" />
+
+    <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
+    <link href="assets/css/themes/light.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
 <body>
-<form id="form_reg">
-    <label>login:</label>
-    <input type="text" placeholder="Write your login" id="in_login" name="in_login">
-    <label>password:</label>
-    <input type="password" placeholder="Write your password" id="in_password" name="in_password">
-    <input type="password" placeholder="Write your pass again" id="in_password_two" name="in_password_two">
+<div class="navbar navbar-inverse navbar-fixed-top scrollclass">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/resources/img/logo.png"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#home-sec">Home</a></li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+            </ul>
+        </div>
 
-    <input type="submit" value="next">
+    </div>
+</div>
+<!--END NAB BAR SECTION-->
+<div id="home-sec">
+    <div class="overlay">
+        <div class="container">
+            <div class="col-md-8 two">
+                <form id="form_reg">
+                    <label>Логин:</label>
+                    <input type="text" placeholder="Введите ваш логин" id="in_login" name="in_login">
+                    <label>Пароль:</label>
+                    <input type="password" placeholder="Введите ваш пароль" id="in_password" name="in_password">
+                    <input type="password" placeholder="Введите пароль снова" id="in_password_two" name="in_password_two">
+                    <div id="lower">
+                        <div class="errors"></div>
+                        <input id="submit_reg" type="submit" value="Регистрация">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-</form>
+<section id="location-sec">
+    <div class="container">
+        <div class="row text-center min-set">
+            <div class="col-md-12">
+                <h2><mark class="head-glow">НАШИ </mark>КОНТАКТЫ</h2>
+                <hr class="sub-hr" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3><a href="http://sergey.king96@gmail.com"  target="_blank">sergey.king96@gmail.com</a></h3>
+                <h4><a href="http://vk.com/dante_de_braso"  target="_blank">vk.com/dante_de_braso</a></h4>
+                <h4>MTC: +38099446655444</h4>
+                <h4>Украина</h4>
+                <br />
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- END LOCATION  SECTION -->
+<!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+<!-- BOOTSTRAP SCRIPTS  -->
+<script src="/resources/js/view/bootstrap.js"></script>
+<!-- PRETTYPHOTO SCRIPTS -->
+<script src="/resources/js/view/jquery.prettyPhoto.js"></script>
+<!-- PORTFOLIO FILTER PLUGIN  -->
+<script src="/resources/js/view/jquery.mixitup.min.js"></script>
+<!-- NICE SCROLL SCRIPTS   -->
+<script src="/resources/js/view/jquery.nicescroll.min.js"></script>
+<!-- EASING SCROLL SCRIPTS   -->
+<script src="/resources/js/view/jquery.easing.min.js"></script>
+<!-- CUSTOM SCRIPTS  -->
+<script src="/resources/js/view/custom.js"></script>
 </body>
 </html>

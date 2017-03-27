@@ -31,8 +31,10 @@ function fillTable() {
                 var deleteMess = row.insertCell(3);
                 login.innerHTML = item.login;
                 password.innerHTML = item.password;
-                change.innerHTML = "<input type='button' id='chen"+item.id+"' value='Изменить' onclick='openPopup("+item.id+");'>";
-                deleteMess.innerHTML = "<input type='button' id='del"+item.id+ "' value='Удалить' onclick='deleteById("+item.id+");'>";
+                change.className = "change";
+                deleteMess.className = "delete";
+                change.innerHTML = "<input class='button' type='button' id='chen"+item.id+"' value='Изменить' onclick='openPopup("+item.id+");'>";
+                deleteMess.innerHTML = "<input class='button' type='button' id='del"+item.id+ "' value='Удалить' onclick='deleteById("+item.id+");'>";
                 mapIdToIndex[item.id] = i+1;
                 cacheResources[item.id] = item;
             });
@@ -67,8 +69,10 @@ function refresh(method, resource) {
         var deleteMess = row.insertCell(3);
         login.innerHTML = resource.login;
         password.innerHTML = resource.password;
-        change.innerHTML = "<input type='button' id='"+resource.id+"' value='Изменить' onclick='openPopup("+resource.id+");'>";
-        deleteMess.innerHTML = "<input type='button' id='"+resource.id+"' value='Удалить' onclick='deleteById("+resource.id+");'>";
+        change.className = "change";
+        deleteMess.className = "delete";
+        change.innerHTML = "<input class='button' type='button' id='"+resource.id+"' value='Изменить' onclick='openPopup("+resource.id+");'>";
+        deleteMess.innerHTML = "<input class='button' type='button' id='"+resource.id+"' value='Удалить' onclick='deleteById("+resource.id+");'>";
         mapIdToIndex[resource.id] = table.rows.length-1;
         cacheResources[resource.id] = resource;
     }else if(method==DELETE_METHOD){

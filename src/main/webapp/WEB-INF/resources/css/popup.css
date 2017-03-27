@@ -2,20 +2,25 @@
     font-family: Areal;
 }
 .popup{
-    width:100%;
-    min-height:100%;
+    margin: auto;
+    height: 50%;
+    width: 70%;
+    left: 15%;
     background-color: rgba(0,0,0,0.5);
     overflow:hidden;
-    position:fixed;
-    top:0px;
+    position:absolute;
+    top:120px;
     display: none;
 }
 .popup .popup-content{
-    margin:40px auto 0px auto;
-    width:200px;
+    top: 50%;
+    left: 50%;
+    margin: -75px 0 0 -125px;
+    width:250px;
     height: 150px;
     padding:10px;
     background-color: #c5c5c5;
-    border-radius:5px;
     box-shadow: 0px 0px 10px #000;
+    position:absolute;
+
 }

@@ -2,6 +2,7 @@
 /** Нужны подключенные файлы "query.util.js" **/
 function addUser(user) {
     var userJson = user.toStringJson();
+    var errors = document.getElementById("errors");
     fetch("/users/", {
         method: "POST",
         headers: {
@@ -12,10 +13,9 @@ function addUser(user) {
     })
         .then(status)
         .then(function () {
-            console.log("Request success");
             location.href = "/";
         })
         .catch(function (error) {
-            alert("user already exist");
+            errors.innerHTML = "user already exist";
         });
 }

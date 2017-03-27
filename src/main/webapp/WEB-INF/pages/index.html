@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/validation/dist/jquery.validate.min.js"></script>
     <script src="/resources/js/util/include.js"></script>
     <script src="/resources/js/util/query.util.js"></script>
     <script src="/resources/js/model/user.js"></script>
@@ -11,15 +13,90 @@
     <script src="/resources/js/auth/auth.js"></script>
 
     <script src="/resources/js/index.js"></script>
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICON STYLE  -->
+    <link href="/resources/css/font-awesome.css" rel="stylesheet" />
+    <!-- PRETTYPHOTO STYLE  -->
+    <link href="/resources/css/prettyPhoto.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <link href="/resources/css/style.css" rel="stylesheet" />
+    <link href="/resources/css/formstyle.css" rel="stylesheet" />
+
+    <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
+    <link href="/resources/css/themes/light.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
 <body>
-<form id="form_auth">
-    <label>login:</label>
-    <input type="text" placeholder="Write your login" id="in_login" name="in_login">
-    <label>password:</label>
-    <input type="password" placeholder="Write your password" id="in_password" name="in_password">
-    <input type="button" value="Send off" onclick="login();">
-</form>
-<a href="/registration">registration</a>
+<div class="navbar navbar-inverse navbar-fixed-top scrollclass">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/resources/img/logo.png"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<!--END NAB BAR SECTION-->
+<div id="home-sec">
+    <div class="overlay">
+        <div class="container">
+            <div class="col-md-8 pad-top scrollclass">
+                <!--Form for login-->
+                <form id="form_auth">
+                    <label>Логин:</label>
+                    <input type="text" placeholder="Введите ваш логиин" id="in_login" name="in_login">
+                    <label>Пароль:</label>
+                    <input type="password" placeholder="Введите ваш пароль" id="in_password" name="in_password">
+                    <div id="lower">
+                        <input type="submit" value="Войти">
+                        <div class="errors">
+                            <div id="error_message"></div>
+                            <p><a href="/registration">Регистрация</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    <section id="location-sec">
+        <div class="container">
+            <div class="row text-center min-set">
+                <div class="col-md-12">
+                    <h2><mark class="head-glow">НАШИ </mark>КОНТАКТЫ</h2>
+                    <hr class="sub-hr" />
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12 text-center">
+                    <h3><a href="http://sergey.king96@gmail.com"  target="_blank">sergey.king96@gmail.com</a></h3>
+                    <h4><a href="http://vk.com/dante_de_braso"  target="_blank">vk.com/dante_de_braso</a></h4>
+                    <h4>MTC: +38099446655444</h4>
+                    <h4>Украина</h4>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+    </section>
+
 </body>
 </html>

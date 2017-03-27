@@ -14,28 +14,110 @@
 
     <script src="/resources/js/resources.js"></script>
     <link rel="stylesheet" type="text/css" href="/resources/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/table.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css">
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICON STYLE  -->
+    <link href="/resources/css/font-awesome.css" rel="stylesheet" />
+    <!-- PRETTYPHOTO STYLE  -->
+    <link href="/resources/css/prettyPhoto.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <link href="/resources/css/style.css" rel="stylesheet" />
+    <link href="/resources/css/table.css" rel="stylesheet" />
+
+    <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
+    <link href="/resources/css/themes/light.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
 <body onload="fillTable();">
-<table id="res_table">
-    <tr>
-        <th>resource</th><th>password</th>
-    </tr>
-</table>
-<input type="text" placeholder="Write resource's login" id="res_login_field">
-<input type="text" placeholder="Write resource's password" id="res_pass_field">
-</br>
-<input type="button" value="add" onclick="addRes();">
-</br>
-</br>
-<input type="button" value="logout" onclick="logout()">
+<div class="navbar navbar-inverse navbar-fixed-top scrollclass">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/resources/img/logo.png"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li onclick="logout();">Выйти</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<!--Content begin-->
+<div id="home-sec">
+    <div class="overlay">
+        <div class="container">
+            <div class="content">
+                <table id="res_table">
+                    <tr>
+                        <th>Ресурсы</th><th>Пароль</th><th>Изменить</th><th>Удалить</th>
+                    </tr>
+                </table>
+                <div class="form_add_res">
+                    <input type="text" placeholder="URL или Имя ресурса" id="res_login_field">
+                    <input type="text" placeholder="Пароль ресурса" id="res_pass_field">
+                    <input class="button" type="submit" value="Добавить" onclick="addRes();">
+                </div>
+                </br>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="popup" id="popupForMessage">
     <div class="popup-content">
         <input type="text" id="popup-login">
         <input type="text" id="popup-password">
-        <input type="button" value="Изменить;)" onclick="changeResources()">
-        <input type="button" value="Отменить" onclick="closePopup();">
+        <input class="button" type="button" value="Изменить" onclick="changeResources()">
+        <input class="button" type="button" style="float: right" value="Отменить" onclick="closePopup();">
         <input type="hidden" id="idPopupHidden">
     </div>
 </div>
+<section id="location-sec">
+    <div class="container">
+        <div class="row text-center min-set">
+            <div class="col-md-12">
+                <h2><mark class="head-glow">НАШИ </mark>КОНТАКТЫ</h2>
+                <hr class="sub-hr" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3><a href="http://sergey.king96@gmail.com" target="_blank">sergey.king96@gmail.com</a></h3>
+                <h4><a href="http://vk.com/dante_de_braso" target="_blank">vk.com/dante_de_braso</a></h4>
+                <h4>MTC: +38099446655444</h4>
+                <h4>Украина</h4>
+                <br />
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- END LOCATION  SECTION -->
+<!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+<!-- BOOTSTRAP SCRIPTS  -->
+<script src="/resources/js/view/bootstrap.js"></script>
+<!-- PRETTYPHOTO SCRIPTS -->
+<script src="/resources/js/view/jquery.prettyPhoto.js"></script>
+<!-- PORTFOLIO FILTER PLUGIN  -->
+<script src="/resources/js/view/jquery.mixitup.min.js"></script>
+<!-- NICE SCROLL SCRIPTS   -->
+<script src="/resources/js/view/jquery.nicescroll.min.js"></script>
+<!-- EASING SCROLL SCRIPTS   -->
+<script src="/resources/js/view/jquery.easing.min.js"></script>
+<!-- CUSTOM SCRIPTS  -->
+<script src="/resources/js/view/custom.js"></script>
+</body>
+</html>
 </body>
 </html>

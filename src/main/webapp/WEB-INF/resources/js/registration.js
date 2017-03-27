@@ -1,5 +1,3 @@
-//JS отвечающий за registration.html
-include(path+"service/user.service.js");
 
 //Проверяем если аутентификация произошла то ридеректим
 //на /res
@@ -21,6 +19,21 @@ $(function () {
                required: true,
                equalTo: "#in_password"
            }
+       },
+       messages:{
+         in_login:{
+             required: "Поле не заполнено",
+             minlength: "Введите как миниму 6 символов"
+         },
+           in_password:{
+                required: "Поле не заполнено",
+                minlength: "Введите как миниму 6 символов"
+           },
+           in_password_two:{
+                required: "Поле не заполнено",
+                equalTo: "Пароль не совпадает с введенным ранее"
+           }
+
        },
        submitHandler: function () {
            sendUser();

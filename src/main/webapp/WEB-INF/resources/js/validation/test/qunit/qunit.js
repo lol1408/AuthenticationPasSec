@@ -1668,7 +1668,7 @@ QUnit.dump = (function() {
 	var reName = /^function (\w+)/,
 		dump = {
 
-			// objType is used mostly internally, you can fix a (custom) type in advance
+			// objType is used mostly internally, you can fix a (custom) type in Рыба
 			parse: function( obj, objType, stack ) {
 				stack = stack || [];
 				var res, parser, parserType,

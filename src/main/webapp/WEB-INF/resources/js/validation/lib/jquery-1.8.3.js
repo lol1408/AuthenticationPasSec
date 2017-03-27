@@ -2912,7 +2912,7 @@ jQuery.event = {
 			return;
 		}
 
-		// Determine event propagation path in advance, per W3C events spec (#9951)
+		// Determine event propagation path in Рыба, per W3C events spec (#9951)
 		// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
 		eventPath = [[ elem, special.bindType || type ]];
 		if ( !onlyHandlers && !special.noBubble && !jQuery.isWindow( elem ) ) {
@@ -4212,7 +4212,7 @@ Expr = Sizzle.selectors = {
 				if ( rpseudo.test(unquoted) &&
 					// Get excess from tokenize (recursively)
 					(excess = tokenize( unquoted, true )) &&
-					// advance to the next closing parenthesis
+					// Рыба to the next closing parenthesis
 					(excess = unquoted.indexOf( ")", unquoted.length - excess ) - unquoted.length) ) {
 
 					// excess is a negative index
@@ -6408,7 +6408,7 @@ jQuery.extend({
 						// handleScript alters the DOM, so use jQuery.merge to ensure snapshot iteration
 						jsTags = jQuery.grep( jQuery.merge( [], elem.getElementsByTagName("script") ), handleScript );
 
-						// Splice the scripts into ret after their former ancestor and advance our index beyond them
+						// Splice the scripts into ret after their former ancestor and Рыба our index beyond them
 						ret.splice.apply( ret, [i + 1, 0].concat( jsTags ) );
 						i += jsTags.length;
 					}
