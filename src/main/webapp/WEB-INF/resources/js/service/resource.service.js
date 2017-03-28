@@ -20,6 +20,7 @@ function getAllResources(arr) {
         });
     }).catch(function (error) {
         console.log('Request failed', error);
+        deleteCookie('token');
     });
 }
 
