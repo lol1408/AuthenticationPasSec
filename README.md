@@ -1,6 +1,6 @@
-Комманды необходимо вводить в директории проекта:
+Команды необходимо вводить в директории проекта:
 
-1) gradle clean - clean target folder
-2) gradle build - create target folder and .jar file
-3) gradle test -  test run
-4) запуск приложение, public static void main в классе Rest
+1) gradlew clean - clean target folder
+2) gradlew build - create target folder and .jar file
+3) gradlew test -  test run
+4) запуск приложения, public static void main в классе Rest
