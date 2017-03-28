@@ -1,8 +1,5 @@
 package com.dante.passec.rest;
 
-import com.dante.passec.config.HibernateConfig;
-import com.dante.passec.config.MainConfig;
-import com.dante.passec.config.WebConfig;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.exception.ForbiddenExcepion;
@@ -15,10 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,8 +38,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 /**
  * Test class for restController
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebConfig.class, HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigWebContextLoader.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @WebAppConfiguration
 public class TestUserRest {
 

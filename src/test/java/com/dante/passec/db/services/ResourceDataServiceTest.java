@@ -1,7 +1,5 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.config.HibernateConfig;
-import com.dante.passec.config.MainConfig;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.ResourceDataManager;
@@ -11,12 +9,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -24,14 +21,12 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 
 /**
  * Tests for DataService
  */
-@DirtiesContext(classMode = AFTER_CLASS)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ResourceDataServiceTest extends Assert{
     List<UserRest> users;
     List<ResourceData> resources;
@@ -138,13 +133,13 @@ public class ResourceDataServiceTest extends Assert{
         assertEquals(resource.getPassword(), resourceById.getPassword());
     }
 
-    @Test(expected = JpaSystemException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void insertShouldThrowJpaSystemException(){
         ResourceData resourceData = new ResourceData("login", "password", null);
         resourceDataService.addResource(resourceData);
     }
 
-    @Test(expected = JpaSystemException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void updateShouldThrowJpaSystemException(){
         ResourceData resourceData = resources.get(0);
         resourceDataService.addResource(resourceData);

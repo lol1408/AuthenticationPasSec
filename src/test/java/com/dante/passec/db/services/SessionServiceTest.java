@@ -1,7 +1,5 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.config.HibernateConfig;
-import com.dante.passec.config.MainConfig;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.After;
@@ -9,9 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -20,9 +17,8 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Calendar;
 import java.util.List;
 
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @Transactional
 public class SessionServiceTest extends Assert{
 

@@ -1,8 +1,5 @@
 package com.dante.passec.rest;
 
-import com.dante.passec.config.HibernateConfig;
-import com.dante.passec.config.MainConfig;
-import com.dante.passec.config.WebConfig;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.Session;
@@ -17,10 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -28,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.hamcrest.core.Is.*;
 import static org.mockito.Mockito.*;
@@ -38,9 +37,9 @@ import static com.dante.passec.utils.Converter.*;
 /**
  * Test class for restController
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebConfig.class, HibernateConfig.class, MainConfig.class}, loader = AnnotationConfigWebContextLoader.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureMockMvc
 public class TestResourceRest {
     List<ResourceData> resources;
     @Autowired
@@ -53,6 +52,7 @@ public class TestResourceRest {
     private ResourceDataService resourceService;
     @Mock
     private SessionService sessionService;
+    @Autowired
     private MockMvc mockMvc;
     private UserRest userRest;
     private ResourceData resource1;

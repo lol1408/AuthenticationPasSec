@@ -1,7 +1,5 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.config.HibernateConfig;
-import com.dante.passec.config.MainConfig;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.utils.UserRestManager;
 import org.junit.After;
@@ -9,11 +7,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -25,9 +22,8 @@ import java.util.List;
 /**
  * Tests for userRestService
  */
-@DirtiesContext
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HibernateConfig.class, MainConfig.class})
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @Transactional
 public class UserRestServiceTest extends Assert {
     List<UserRest> users;
@@ -71,13 +67,13 @@ public class UserRestServiceTest extends Assert {
         assertEquals(userRest.getLogin(), users.get(0).getLogin());
     }
 
-    @Test(expected = JpaSystemException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void insertShouldThrowJpaSystemException(){
         UserRest user = new UserRest(null, "password");
         userService.addUser(user);
     }
 
-    @Test(expected = JpaSystemException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void insertTwoSameLoginShouldThrowJpaSystemException(){
         UserRest user = new UserRest("login first", "password");
         UserRest second = new UserRest("login first", "password");
@@ -132,7 +128,7 @@ public class UserRestServiceTest extends Assert {
         совпадать с первой записью в базе*/
         assertEquals(update, firstRecord);
     }
-    @Test(expected = JpaSystemException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void updateUserShouldThrowJpaSystemException(){
         UserRest user = users.get(0);
         userService.addUser(user);
