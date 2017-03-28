@@ -1,7 +1,7 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.ForbiddenException;
 import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.exception.UserAlreadyExistException;
 import com.dante.passec.exception.UserNotFoundException;
@@ -44,7 +44,7 @@ public class ControllerRestUser {
         try {
             return userService.addUser(user);
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
     }
     @RequestMapping(method = PUT)
@@ -60,7 +60,7 @@ public class ControllerRestUser {
         try {
             return userService.updateUser(userInBase);
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
     }
     @RequestMapping(method = DELETE)
@@ -78,7 +78,7 @@ public class ControllerRestUser {
             result.setResponse("200", "Учетная запись удалена");
             return result;
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
     }
 }

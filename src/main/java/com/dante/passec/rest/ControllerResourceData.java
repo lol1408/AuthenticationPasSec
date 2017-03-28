@@ -1,7 +1,7 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.ForbiddenException;
 import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.ResponseBody;
 import com.dante.passec.model.ResourceData;
@@ -53,7 +53,7 @@ public class ControllerResourceData {
         try {
             return resourceDataService.addResource(resourceData);
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
     }
     @RequestMapping(method = PUT)
@@ -68,7 +68,7 @@ public class ControllerResourceData {
         try {
             return resourceDataService.update(resourceData);
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
     }
     @RequestMapping(value = "/{id}", method = DELETE)
@@ -82,7 +82,7 @@ public class ControllerResourceData {
         try {
             result.setResponse("200", "Удаление прошло успешно");
         }catch (Exception e){
-            throw new ForbiddenExcepion();
+            throw new ForbiddenException();
         }
         return result;
     }

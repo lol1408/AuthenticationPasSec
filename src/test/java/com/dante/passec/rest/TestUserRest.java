@@ -2,7 +2,7 @@ package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.exception.ForbiddenExcepion;
+import com.dante.passec.exception.ForbiddenException;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.Before;
@@ -115,7 +115,7 @@ public class TestUserRest {
     @Test
     public void registrationShouldThrowForbiddenException() throws Exception {
         when(userService.checkAlreadyExist(user.getLogin())).thenReturn(false);
-        when(userService.addUser(user)).thenThrow(ForbiddenExcepion.class);
+        when(userService.addUser(user)).thenThrow(ForbiddenException.class);
         String json = toJson(user);
         mockMvc.perform(post("/users/")
                 .contentType(MediaType.APPLICATION_JSON)
