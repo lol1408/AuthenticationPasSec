@@ -29,6 +29,7 @@ jar {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.5.2.RELEASE")
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
     compile("com.h2database:h2")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     testCompile("org.springframework.boot:spring-boot-starter-test")

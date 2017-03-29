@@ -92,7 +92,7 @@ var QUnit,
 QUnit = {};
 
 /**
- * Config object: Maintain internal state
+ * config object: Maintain internal state
  * Later exposed as QUnit.config
  * `config` initialized at top of scope
  */
