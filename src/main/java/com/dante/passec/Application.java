@@ -32,6 +32,7 @@ public class Application extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+    /**Bean sets suffix for views pages**/
     @Bean
     public ViewResolver getViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -39,6 +40,7 @@ public class Application extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".html");
         return resolver;
     }
+    /**The method watch where to find static resources**/
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
@@ -50,6 +52,8 @@ public class Application extends WebMvcConfigurerAdapter {
             DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
+    /**Begin block for redirect to https**/
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
@@ -81,5 +85,5 @@ public class Application extends WebMvcConfigurerAdapter {
 
         return connector;
     }
-
+    /**End block for redirect to https**/
 }
