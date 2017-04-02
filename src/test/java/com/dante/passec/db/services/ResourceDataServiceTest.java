@@ -45,7 +45,7 @@ public class ResourceDataServiceTest extends Assert{
         resources = new ArrayList<>();
 
         //Коллекции с юзерами и ресурсами
-        users.add(UserRestManager.createUser("hello world", "world123"));
+        users.add(UserRestManager.createUser("hello world", "world123", "mail"));
         resources.add(ResourceDataManager.createResourceData("mama", "I love you", users.get(0)));
 
         userService.addUser(users.get(0));

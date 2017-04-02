@@ -3,7 +3,7 @@ package com.dante.passec.model;
 /**
  * Class customer response.
  */
-public class ResponseBody<T> {
+public class CustomResponseBody<T> {
 
     String msg;
     String code;

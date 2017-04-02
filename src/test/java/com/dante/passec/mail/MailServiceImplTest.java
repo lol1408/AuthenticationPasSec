@@ -13,12 +13,12 @@ import static org.junit.Assert.*;
 public class MailServiceImplTest {
 
     @Autowired
-    MailServiceImpl mailService;
+    MailService mailService;
 
     @Test
     public void sendMessageShouldReturnTrue(){
 
-        assertTrue(mailService.sendMail(12345, "sergey.king96@mail.ru"));
+        assertTrue(mailService.sendMail(12345, "Sergey","sergey.king96@mail.ru"));
 
     }
 }

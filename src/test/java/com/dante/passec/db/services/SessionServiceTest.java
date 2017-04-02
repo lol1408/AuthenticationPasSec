@@ -35,7 +35,7 @@ public class SessionServiceTest extends Assert{
     @Before
     public void setUp(){
         em = emf.createEntityManager();
-        user = new UserRest("login1","password1");
+        user = new UserRest("login1","password1","sergey.king96@mail.ru",true);
         userService.addUser(user);
     }
     @After
@@ -59,10 +59,17 @@ public class SessionServiceTest extends Assert{
         Session session = firstSession();
         assertEquals(newSession, session);
     }
+    @Test
+    public void addSessionShouldBeReturnNull(){
+        UserRest user = new UserRest("login1", "password", "sergey.king96@mail.ru", false);
+        assertNull(sessionService.addSession(user));
+    }
+
     @Test(expected = NullPointerException.class)
     public void addSessionShouldThrowNullPointerException(){
         sessionService.addSession(null);
     }
+
     @Test
     public void deleteSessionByTokenShouldBeSuccess(){
         Session session = sessionService.addSession(user);

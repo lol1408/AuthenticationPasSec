@@ -3,7 +3,7 @@ package com.dante.passec.rest;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.exception.ForbiddenException;
 import com.dante.passec.exception.UnauthorizedException;
-import com.dante.passec.model.ResponseBody;
+import com.dante.passec.model.CustomResponseBody;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
@@ -72,9 +72,9 @@ public class ControllerResourceData {
         }
     }
     @RequestMapping(value = "/{id}", method = DELETE)
-    public ResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id,
-                                                     @RequestHeader(value = "token") Integer token){
-        ResponseBody<ResourceData> result = new ResponseBody<>();
+    public CustomResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id,
+                                                           @RequestHeader(value = "token") Integer token){
+        CustomResponseBody<ResourceData> result = new CustomResponseBody<>();
         if(sessionService.sessionIsActual(token)!=null){
             resourceDataService.deleteResource(id);
         }

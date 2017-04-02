@@ -18,6 +18,10 @@ $(function () {
            in_password_two: {
                required: true,
                equalTo: "#in_password"
+           },
+           in_mail:{
+               required: true,
+               email: true
            }
        },
        messages:{
@@ -32,6 +36,10 @@ $(function () {
            in_password_two:{
                 required: "Поле не заполнено",
                 equalTo: "Пароль не совпадает с введенным ранее"
+           },
+           in_mail:{
+             required: "Поле не заполнено",
+               email: "Email указан не верно"
            }
 
        },
@@ -43,8 +51,12 @@ $(function () {
 
 //Отправка пользователя
 function sendUser() {
-    var login = document.getElementById("in_login").value;
-    var password = sha1(document.getElementById("in_password").value);
-    let user = new User(login, password);
+    let login = document.getElementById("in_login").value;
+    let mail = document.getElementById("in_mail").value;
+    let password = sha1(document.getElementById("in_password").value);
+    let user = new User(login, password, mail);
     addUser(user);
+}
+function toHome() {
+    location.href = "/";
 }

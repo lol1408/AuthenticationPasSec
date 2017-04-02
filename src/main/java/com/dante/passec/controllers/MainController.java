@@ -18,4 +18,8 @@ public class MainController {
     }
     @RequestMapping(value = {"res"}, method = GET)
     public String resPage(){return "resources";}
+    @RequestMapping(value = {"/forget"}, method = GET)
+    public String forget(){return "forget";}
+    @RequestMapping(value = {"/me"}, method = GET)
+    public String me(){return "me";}
 }

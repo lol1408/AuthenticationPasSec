@@ -24,6 +24,7 @@
     <link href="/resources/css/formstyle.css" rel="stylesheet" />
     <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
     <link href="assets/css/themes/light.css" rel="stylesheet" />
+    <link href="resources/css/popup.css" rel="stylesheet">
     <!-- GOOGLE FONT -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
@@ -40,7 +41,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#home-sec">Home</a></li>
+                <li><a href="/">Главная Иринка</a></li>
                 <li>Рыба</li>
                 <li>Рыба</li>
                 <li>Рыба</li>
@@ -54,20 +55,29 @@
 <div id="home-sec">
     <div class="overlay">
         <div class="container">
-            <div class="col-md-8 two">
+            <div class="col-md-8 two" id="block form">
                 <form id="form_reg">
-                    <label>Логин:</label>
+                    <label class="title">Логин:</label>
                     <input type="text" placeholder="Введите ваш логин" id="in_login" name="in_login">
-                    <label>Пароль:</label>
+                    <label class="title">Email:</label>
+                    <input type="text" placeholder="Введите ваш Email" id="in_mail" name="in_mail">
+                    <label class="title">Пароль:</label>
                     <input type="password" placeholder="Введите ваш пароль" id="in_password" name="in_password">
                     <input type="password" placeholder="Введите пароль снова" id="in_password_two" name="in_password_two">
                     <div id="lower">
-                        <div class="errors"></div>
+                        <div class="errors" id="errors"></div>
                         <input class="button" id="submit_reg" type="submit" value="Регистрация">
                     </div>
                 </form>
             </div>
         </div>
+    </div>
+</div>
+<div class="popup" id="popupForMessage">
+    <div class="popup-content">
+        <div>Спасибо за регистрацию. а ваш почтовый адрес отправлено письмо с подтверждением</div>
+        <input class="button" type="button" style="float: right" value="Ок" onclick="toHome();">
+        <input type="hidden" id="idPopupHidden">
     </div>
 </div>
 <section id="location-sec">

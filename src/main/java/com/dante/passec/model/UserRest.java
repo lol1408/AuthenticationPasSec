@@ -38,6 +38,12 @@ public class UserRest {
     @Size(min = 6)
     String password;
 
+    @Column(name = "mail", nullable = false, length = 150, unique = true)
+    String mail;
+
+    @Column(name = "active")
+    Boolean active;
+
     @OneToMany(mappedBy = "user", fetch = LAZY)
     @JsonIgnore
     private Set<ResourceData> resources = new HashSet<>(0);
@@ -50,11 +56,15 @@ public class UserRest {
         this.id = user.id;
         this.login = user.login;
         this.password = user.password;
+        this.active = user.active;
+        this.mail = user.mail;
     }
 
-    public UserRest(String login, String password) {
+    public UserRest(String login, String password, String mail, Boolean active) {
         this.login = login;
         this.password = password;
+        this.mail = mail;
+        this.active = active;
     }
 
     public Set<ResourceData> getResources() {
@@ -87,6 +97,22 @@ public class UserRest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override

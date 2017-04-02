@@ -1,6 +1,7 @@
 package com.dante.passec.db.services;
 
 import com.dante.passec.db.dao.SessionDao;
+import com.dante.passec.exception.LockedException;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class SessionServiceImpl implements SessionService {
     }
 
     public Session addSession(UserRest user) {
+        if(user.getActive()==false)
+            return null;
         Session session = new Session(user);
         return dao.save(session);
     }

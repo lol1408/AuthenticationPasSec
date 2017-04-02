@@ -63,7 +63,7 @@ public class TestResourceRest {
     public void setup(){
         MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(controllerResource).build();/*webAppContextSetup(this.mac).dispatchOptions(true).build();*/
-        userRest = UserRestManager.createUser("Hello world", "password");
+        userRest = UserRestManager.createUser("Hello world", "password", "mail");
         userRest.setId(1L);
         resource1 = new ResourceData("login1", "password1", userRest);
         resource2 = new ResourceData("login2", "password2", userRest);
@@ -185,6 +185,7 @@ public class TestResourceRest {
                 .sessionIsActual(12312313);
         verifyNoMoreInteractions(sessionService, resourceService);
     }
+
     @Test
     public void deleteResourceShouldBeSuccess() throws Exception {
         when(sessionService.sessionIsActual(session.getToken())).

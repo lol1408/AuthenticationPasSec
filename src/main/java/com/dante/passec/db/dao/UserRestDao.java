@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRestDao extends JpaRepository<UserRest, Long> {
 
     UserRest getUserByLogin(String login);
-
+    UserRest getUserByMail(String mail);
 }

@@ -32,6 +32,7 @@ public class TestCrypt extends Assert{
     @Test
     public void encryptShouldBeSuccess() throws Exception {
         String encrypt = cryptService.encrypt(password);
+        System.out.println(encrypt);
         assertEquals(encrypt, encryptPassword);
     }
     @Test(expected = NullPointerException.class)

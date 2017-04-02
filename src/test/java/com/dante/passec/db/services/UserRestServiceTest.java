@@ -37,8 +37,8 @@ public class UserRestServiceTest extends Assert {
     public void setUp(){
         em = emf.createEntityManager();
         users = new ArrayList<>();
-        users.add(UserRestManager.createUser("hello world", "worldes"));
-        users.add(UserRestManager.createUser("hello world olol", "worldasd"));
+        users.add(UserRestManager.createUser("hello world", "worldes", "mail"));
+        users.add(UserRestManager.createUser("hello world olol", "worldasd", "mail2"));
 
     }
 
@@ -69,14 +69,14 @@ public class UserRestServiceTest extends Assert {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertShouldThrowJpaSystemException(){
-        UserRest user = new UserRest(null, "password");
+        UserRest user = new UserRest(null, "password", "sergey.king96@mail.ru", true);
         userService.addUser(user);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertTwoSameLoginShouldThrowJpaSystemException(){
-        UserRest user = new UserRest("login first", "password");
-        UserRest second = new UserRest("login first", "password");
+        UserRest user = new UserRest("login first", "password", "sergey.king96@mail.ru", true);
+        UserRest second = new UserRest("login first", "password", "sergey.king96@mail.ru", true);
         userService.addUser(user);
         userService.addUser(second);
     }
@@ -98,6 +98,12 @@ public class UserRestServiceTest extends Assert {
         UserRest userRest = userService.addUser(users.get(0));
         UserRest byLogin = userService.userByLogin(userRest.getLogin());
         assertEquals(userRest, byLogin);
+    }
+    @Test
+    public void getByMailShouldBeSuccess(){
+        UserRest userRest = userService.addUser(users.get(0));
+        UserRest byMail = userService.userByMail(userRest.getMail());
+        assertEquals(userRest, byMail);
     }
     @Test
     public void getAllShouldBeSuccess(){
@@ -161,14 +167,14 @@ public class UserRestServiceTest extends Assert {
         assertFalse(userService.userIsReal("login", "password"));
     }
     @Test
-    public void checkAlreadyExistShouldReturnTrue(){
+    public void checkAlreadyExistShouldReturn1(){
         UserRest user = users.get(0);
         userService.addUser(user);
-        assertTrue(userService.checkAlreadyExist(user.getLogin()));
+        assertTrue(userService.checkAlreadyExist(user.getLogin(), user.getMail())==1);
     }
     @Test
-    public void checkAlreadyExistShouldReturnFalse(){
-        assertFalse(userService.checkAlreadyExist("login"));
+    public void checkAlreadyExistShouldReturn3(){
+        assertTrue(userService.checkAlreadyExist("login", "mail")==3);
     }
 
 }

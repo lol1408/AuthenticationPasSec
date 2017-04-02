@@ -11,10 +11,11 @@ public interface UserRestService {
 
     List<UserRest> allUsers();
     UserRest userByLogin(String login);
+    UserRest userByMail(String mail);
     UserRest userById(Long id);
     UserRest addUser(UserRest user);
     UserRest updateUser(UserRest user);
     void deleteUser(Long id);
     boolean userIsReal(String login, String  password);
-    boolean checkAlreadyExist(String login);
+    int checkAlreadyExist(String login, String mail);
 }

@@ -13,10 +13,8 @@ public class UserRestManager {
      * @param password
      * @return UserRest object
      */
-    public static UserRest createUser(String login, String password){
-        UserRest userRest = new UserRest();
-        userRest.setLogin(login);
-        userRest.setPassword(password);
+    public static UserRest createUser(String login, String password, String mail){
+        UserRest userRest = new UserRest(login, password, mail, true);
         return userRest;
     }
 }

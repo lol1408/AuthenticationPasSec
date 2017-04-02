@@ -1,23 +1,21 @@
 'use strict';
 //Класс Узер
 class User{
-
-    constructor(login, password){
+    constructor(login, password, mail){
         this.login = login;
         this.password = password;
+        this.mail = mail;
     }
 
     toJson(){
         return {
             login: this.login,
-            password: this.password
+            password: this.password,
+            mail: this.mail
         }
     }
     toStringJson(){
-        var json = {
-            login: this.login,
-            password: this.password
-        };
+        let json = this.toJson();
         return JSON.stringify(json);
     }
     getLogin(){
@@ -25,5 +23,8 @@ class User{
     }
     getPassword(){
         return this.password;
+    }
+    getMail(){
+        return this.mail;
     }
 }

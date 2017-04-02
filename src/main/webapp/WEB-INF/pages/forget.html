@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Восстановление</title>
+    <link rel="shortcut icon" href="/resources/img/locked.ico" type="image/x-icon">
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
+    <link href="resources/css/popup.css" rel="stylesheet">
+    <!-- FONT AWESOME ICON STYLE  -->
+    <script src="/resources/js/util/cookie.js"></script>
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/validation/dist/jquery.validate.min.js"></script>
+    <link href="/resources/css/font-awesome.css" rel="stylesheet" />
+    <link href="/resources/css/formstyle.css" rel="stylesheet" />
+    <!-- PRETTYPHOTO STYLE  -->
+    <link href="/resources/css/prettyPhoto.css" rel="stylesheet" />
+    <script src="/resources/js/forget.js"></script>
+    <!-- CUSTOM STYLE CSS -->
+    <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
+    <link href="/resources/css/themes/light.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href="/resources/css/style.css" rel="stylesheet" />
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top scrollclass">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/resources/img/logo.png"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Главная Иринка</a></li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+                <li>Рыба</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--Content begin-->
+<div id="home-sec">
+    <div class="overlay">
+        <div class="container">
+                <div class="col-md-8 forget">
+                <form id="form_send">
+                    <label>Email:</label>
+                    <input type="text" placeholder="Введите ваш mail" id="in_mail" name="in_mail">
+                    <div id="lower">
+                        <input class="button" type="submit" value="Отправить">
+                    </div>
+                </form>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="popup" id="popupForMessage">
+    <div class="popup-content">
+        <div>Ваш временный пароль отправлен вам на почту</div>
+        <input class="button" type="button" style="float: right" value="Ок" onclick="toHome();">
+        <input type="hidden" id="idPopupHidden">
+    </div>
+</div>
+<section id="location-sec">
+    <div class="container">
+        <div class="row text-center min-set">
+            <div class="col-md-12">
+                <h2><mark class="head-glow">НАШИ </mark>КОНТАКТЫ</h2>
+                <hr class="sub-hr" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3><a href="https://sergey.king96@gmail.com" target="_blank">sergey.king96@gmail.com</a></h3>
+                <h4><a href="https://vk.com/dante_de_braso" target="_blank">vk.com/dante_de_braso</a></h4>
+                <h4>MTC: +38099446655444</h4>
+                <h4>Украина</h4>
+                <br />
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

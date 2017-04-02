@@ -47,7 +47,7 @@ public class TestAuth {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(authentication).build();
-        user = new UserRest("login", "password");
+        user = new UserRest("login", "password", "sergey.king96@mail.ry", true);
         session = new Session(user);
     }
 
@@ -79,7 +79,7 @@ public class TestAuth {
         mockMvc.perform(get("/login")
                 .header("login", "not login")
                 .header("password", user.getPassword()))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isNotFound())
                 .andDo(print());
 
         verify(userService, times(1)).userIsReal("not login", user.getPassword());

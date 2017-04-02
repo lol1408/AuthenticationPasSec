@@ -2,20 +2,22 @@
 /** Нужны подключенные файлы "query.util.js" **/
 function addUser(user) {
     var userJson = user.toStringJson();
-    var errors = document.getElementById("errors");
     fetch("/users/", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: userJson
     })
         .then(status)
         .then(function () {
-            location.href = "/";
+            document.getElementById("form_reg").style.display = "none";
+            document.getElementById("popupForMessage").style.display = "block";
+            console.log("hello");
         })
         .catch(function (error) {
-            errors.innerHTML = "user already exist";
+            let errors = document.getElementById("errors");
+            errors.innerHTML = "Пользователь уже создан";
         });
 }

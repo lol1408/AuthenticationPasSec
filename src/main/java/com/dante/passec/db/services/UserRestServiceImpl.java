@@ -26,6 +26,10 @@ public class UserRestServiceImpl implements UserRestService {
         return userRestDao.getUserByLogin(login);
     }
 
+    public UserRest userByMail(String mail) {
+        return userRestDao.getUserByMail(mail);
+    }
+
     public UserRest userById(Long id) {
         return userRestDao.findOne(id);
     }
@@ -48,11 +52,18 @@ public class UserRestServiceImpl implements UserRestService {
 
     public boolean userIsReal(String login, String password) {
         UserRest user = userRestDao.getUserByLogin(login);
-        if(user==null) return false;
-        else return user.getPassword().equals(password);
+        if(user==null)
+            user = userRestDao.getUserByMail(login);
+        if(user==null)
+            return false;
+        else
+            return user.getPassword().equals(password);
     }
-    public boolean checkAlreadyExist(String login){
-        if(userRestDao.getUserByLogin(login)!=null) return true;
-        else return false;
+    public int checkAlreadyExist(String login, String mail){
+        if(userRestDao.getUserByLogin(login)!=null)
+            return 1;
+        else if(userRestDao.getUserByMail(mail)!=null)
+            return 2;
+        else return 3;
     }
 }
