@@ -2,6 +2,7 @@ package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.NotFoundException;
 import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.exception.UserAlreadyExistException;
 import com.dante.passec.mail.MailService;
@@ -10,7 +11,6 @@ import com.dante.passec.model.CustomResponseBody;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -66,6 +66,23 @@ public class ControllerRestUser {
         if((userInBase=sessionService.sessionIsActual(token))!=null){
             userInBase.setLogin(user.getLogin());
             userInBase.setPassword(user.getPassword());
+        }
+        else throw new UnauthorizedException();
+        try {
+            return userService.updateUser(userInBase);
+        }catch (Exception e){
+            throw new ForbiddenException();
+        }
+    }
+    @RequestMapping(method = PUT, value = "/password")
+    public UserRest updatePassoword(@RequestBody String password,
+                                    @RequestHeader(value = "token") Integer token,
+                                    @RequestHeader(value = "oldpassword") String oldPassword)
+    {
+        UserRest userInBase;
+        if((userInBase=sessionService.sessionIsActual(token))!=null){
+            if(!userInBase.getPassword().equals(oldPassword)) throw new NotFoundException();
+            userInBase.setPassword(password);
         }
         else throw new UnauthorizedException();
         try {

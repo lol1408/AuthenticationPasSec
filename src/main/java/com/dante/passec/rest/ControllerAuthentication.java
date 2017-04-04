@@ -63,6 +63,7 @@ public class ControllerAuthentication {
         UserRest userRest;
         try {
             userRest = userService.userByMail(email);
+            if(userRest==null) throw new NotFoundException();
             Random random = new Random();
             Integer randomPassword = (random.nextInt(899999))+100000;
             userRest.setPassword(toSha1(randomPassword));
@@ -72,8 +73,6 @@ public class ControllerAuthentication {
         }catch (Exception e){
             logger.error("User not found: " + e.getStackTrace());
             e.getStackTrace();
-            throw new NotFoundException();
         }
-
     }
 }

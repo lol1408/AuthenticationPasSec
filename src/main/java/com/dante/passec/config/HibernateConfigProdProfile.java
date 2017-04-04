@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 
-@Profile(value = "proxd")
+@Profile(value = "prod")
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfigProdProfile {

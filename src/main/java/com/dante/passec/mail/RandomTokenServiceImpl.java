@@ -1,6 +1,5 @@
 package com.dante.passec.mail;
 
-import com.dante.passec.model.UserRest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
