@@ -47,10 +47,9 @@ function logout() {
         }
     })
         .then(status)
-        .then(json)
         .then(function(data) {
             deleteCookie("token");
-            location.href = "/"
+            location.href = "/";
         })
         .catch(function (error) {
             console.log("Request failed", error);

@@ -1,13 +1,9 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.exception.ForbiddenException;
-import com.dante.passec.exception.NotFoundException;
-import com.dante.passec.exception.UnauthorizedException;
-import com.dante.passec.exception.UserAlreadyExistException;
+import com.dante.passec.exception.*;
 import com.dante.passec.mail.MailService;
 import com.dante.passec.mail.RandomTokenService;
-import com.dante.passec.model.CustomResponseBody;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +44,7 @@ public class ControllerRestUser {
         //Проверяем существует ли пользователь
         int i = userService.checkAlreadyExist(user.getLogin(), user.getMail());
         if(i==1) throw new UserAlreadyExistException();
-        else if(i==2) throw new ForbiddenException();
+        else if(i==2) throw new UserWithEmailAlreadyExistException();
         try {
             user.setActive(false);
             UserRest userRest = userService.addUser(user);
@@ -58,7 +54,11 @@ public class ControllerRestUser {
             throw new ForbiddenException();
         }
     }
-    @RequestMapping(method = PUT)
+    /**
+     * Changing the user is not properly handled, there may be problems.
+     * The functional can be added after revision.
+     **/
+/*    @RequestMapping(method = PUT)
     public UserRest updateUser(@RequestBody UserRest user,
                                              @RequestHeader(value = "token") Integer token)
     {
@@ -73,11 +73,11 @@ public class ControllerRestUser {
         }catch (Exception e){
             throw new ForbiddenException();
         }
-    }
+    }*/
     @RequestMapping(method = PUT, value = "/password")
-    public UserRest updatePassoword(@RequestBody String password,
-                                    @RequestHeader(value = "token") Integer token,
-                                    @RequestHeader(value = "oldpassword") String oldPassword)
+    public UserRest updatePassword(@RequestBody String password,
+                                   @RequestHeader(value = "token") Integer token,
+                                   @RequestHeader(value = "oldpassword") String oldPassword)
     {
         UserRest userInBase;
         if((userInBase=sessionService.sessionIsActual(token))!=null){
@@ -91,7 +91,11 @@ public class ControllerRestUser {
             throw new ForbiddenException();
         }
     }
-    @RequestMapping(method = DELETE)
+    /**
+     * Delete the user is not properly handled, there may be problems.
+     * The functional can be added after revision.
+     **/
+   /* @RequestMapping(method = DELETE)
     public CustomResponseBody<UserRest> deleteUser(@RequestHeader(value = "token") Integer token)
     {
         CustomResponseBody<UserRest> result = new CustomResponseBody<>();
@@ -108,5 +112,5 @@ public class ControllerRestUser {
         }catch (Exception e){
             throw new ForbiddenException();
         }
-    }
+    }*/
 }

@@ -49,13 +49,10 @@ public class ControllerAuthentication {
         else throw new NotFoundException();
     }
     @RequestMapping(path = "logout", method = GET)
-    public CustomResponseBody<Session> logout(@RequestHeader(value = "token") Integer token){
-        CustomResponseBody<Session> responseBody = new CustomResponseBody<>();
+    public void logout(@RequestHeader(value = "token") Integer token){
         if(sessionService.sessionIsActual(token)!=null)
         {
             sessionService.setNotIncluding(sessionService.findByToken(token));
-            responseBody.setResponse("Вы успешно вышли", "200");
-            return responseBody;
         }else throw new UnauthorizedException();
     }
     @RequestMapping(path = "getnewpass", method = GET)

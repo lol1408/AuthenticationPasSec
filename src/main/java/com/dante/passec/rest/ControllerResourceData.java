@@ -72,19 +72,16 @@ public class ControllerResourceData {
         }
     }
     @RequestMapping(value = "/{id}", method = DELETE)
-    public CustomResponseBody<ResourceData> deleteResource(@PathVariable("id") Long id,
+    public void deleteResource(@PathVariable("id") Long id,
                                                            @RequestHeader(value = "token") Integer token){
-        CustomResponseBody<ResourceData> result = new CustomResponseBody<>();
         if(sessionService.sessionIsActual(token)!=null){
-            resourceDataService.deleteResource(id);
         }
         else throw new UnauthorizedException();
         try {
-            result.setResponse("200", "Удаление прошло успешно");
+            resourceDataService.deleteResource(id);
         }catch (Exception e){
             throw new ForbiddenException();
         }
-        return result;
     }
 }
 
