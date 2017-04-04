@@ -1,0 +1,49 @@
+//Авторизация
+URL : https://domain/login
+    Request:
+        METHOD: GET,
+        HEADERS:
+        {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'login' : '${login}',
+            'password' : '${encrypt_password}'
+        }
+    Response:
+        //Если вход прошел успешно, P.S. token - целочисленный
+        STATUS: 200
+        BODY : ${token}
+        //Если аккаунт не активна
+        STATUS: 423
+        //Если аккаунт не найден
+        STATUS: 404
+//Выход, закрытие сессии
+URL : https://domain/logout
+    Request:
+        METHOD: GET,
+        HEADERS:
+        {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'token':'${auth_token}'
+        }
+    Response:
+        //Если выход прошел успешно P.S. Хочу убрать BODY и оставить только status
+        status: 200
+        //Если пользователь по переданному токену не найден или сессия уже не активна
+        status:
+//Восстановление пароля, отправка письма для с измененным временным паролем
+URL : https://domain/getnewpass
+    Request:
+        METHOD: GET,
+        HEADERS:
+        {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'email':'${email}'
+        }
+    Response:
+        //Если письмо было отправлено
+        STATUS: 200
+        //Если пользователь с нужным email не найден
+        STATUS: 404

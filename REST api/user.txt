@@ -1,0 +1,66 @@
+//Получить учетную запись по токену сессии
+URL : https://domain/users
+    Request:
+        METHOD: GET,
+        HEADERS:
+        {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'token' : '${auth_token}'
+        }
+    Response:
+        //Если все прошло успешно
+        STATUS: 200,
+        BODY: 'user': {
+                    'id': '{$id}',
+                    'login': '{$login}',
+                    'password': '{$password}',
+                    'mail': '${email}',
+                    'active': '${active}'
+                     },
+        //Если пользователь по текущему токену сессии не найден
+        STATUS: 401
+//Регистрация новой учетной записи
+URL : https://domain/users
+    Request:
+        METHOD: POST,
+        BODY: {
+            'login' : '${login}',
+            'password' : '${password}',
+            'mail' : '${mail}'
+        }
+    Response:
+        //Если регистрация прошла успешна
+        STATUS: 200
+        //Если пользователь с таким логином уже существует
+        STATUS: 409
+        //Если пользователь с таки email уже существует
+        STATUS: 406
+        //Если произошла непредвиденная ошибка при добавлении пользователя
+        STATUS: 403
+//Изменение пароля
+URL : https://domain/users/password
+    Request:
+        METHOD: PUT,
+        HEADERS:
+        {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'token' : '${auth_token}',
+            'oldpassword' : '${old_password}'
+        }
+        BODY: '${password}'
+    Response:
+        //Если изменение пароля прошло успешно
+        STATUS: 200,
+        BODY: 'user': {
+                    'id': '{$id}',
+                    'login': '{$login}',
+                    'password': '{$password}',
+                    'mail': '${email}',
+                    'active': '${active}'
+                    }
+        //Если пользователь по переданному токену не найден или сессия уже не активна
+        STATUS: 401
+        //Если произошла ошибка при обновлении пароля
+        STATUS: 403

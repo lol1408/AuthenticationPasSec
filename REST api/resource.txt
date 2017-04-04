@@ -1,0 +1,82 @@
+    /**
+    * Небольшой фейл, поле 'login' в body лучше переименовать на 'url' или 'name'
+    **/
+//Получить все записи по токену сессии
+URL : https://domain/resources
+    Request:
+        METHOD: GET,
+        HEADERS:
+        {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'token' : '${auth_token}'
+        }
+    Response:
+        //Если все прошло успешно
+        STATUS: 200,
+        BODY: 'resources': [{
+            'id':'${id_1res}',
+            'login':'${login_1res}',
+            'password':'${password_1res}'
+        },{
+            'id':'id_2res',
+            'login':'${login_2res}',
+            'password':'${password_2res}'
+        }]
+        //Если пользователь по текущему токену сессии не найден
+        STATUS: 401
+//Добавление записи
+        URL : https://domain/resources
+            Request:
+                METHOD: POST,
+                HEADERS:
+                {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    'token' : '${auth_token}'
+                },
+                BODY:
+                {
+                    'login' : '${login}',
+                    'password' '${password}'
+                }
+            Response:
+                //Если все прошло успешно
+                STATUS: 200,
+                BODY: 'resources': {
+                    'id':'${id}',
+                    'login':'${login}',
+                    'password':'${password}'
+                }
+                //Если пользователь по текущему токену сессии не найден
+                STATUS: 401
+                //Если произошла ошибка при добавлении в базу данных
+                STATUS: 403
+//Изменение записи
+        URL : https://domain/resources
+                Request:
+                    METHOD: PUT,
+                    HEADER:
+                    {
+                        'Accept' : 'application/json',
+                        'Content-Type' : 'application/json',
+                        'token' : '${auth_token}'
+                    },
+                    BODY:
+                    {
+                        'id' : '${id}'
+                        'login' : '${login}',
+                        'password' : '${password}'
+                    }
+                Response:
+                    //Если все прошло успешно
+                    STATUS: 200,
+                    BODY: 'resources': {
+                        'id':'${id}',
+                        'login':'${login}',
+                        'password':'${password}'
+                    }
+                    //Если пользователь по текущему токену сессии не найден
+                    STATUS: 401
+                    //Если произошла ошибка при изменении записи
+                    STATUS: 403
