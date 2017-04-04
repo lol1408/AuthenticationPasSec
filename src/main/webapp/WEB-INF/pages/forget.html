@@ -9,6 +9,7 @@
     <link href="resources/css/popup.css" rel="stylesheet">
     <!-- FONT AWESOME ICON STYLE  -->
     <script src="/resources/js/util/cookie.js"></script>
+    <script src="/resources/js/util/query.util.js"></script>
     <script src="/resources/js/jquery.min.js"></script>
     <script src="/resources/js/validation/dist/jquery.validate.min.js"></script>
     <link href="/resources/css/font-awesome.css" rel="stylesheet" />
@@ -37,11 +38,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Главная Иринка</a></li>
-                <li>Рыба</li>
-                <li>Рыба</li>
-                <li>Рыба</li>
-                <li>Рыба</li>
+                <li><a href="/">Главная</a></li>
             </ul>
         </div>
     </div>
@@ -54,6 +51,7 @@
                 <form id="form_send">
                     <label>Email:</label>
                     <input type="text" placeholder="Введите ваш mail" id="in_mail" name="in_mail">
+                    <label class="error" id="errors" for='in_mail'></label>
                     <div id="lower">
                         <input class="button" type="submit" value="Отправить">
                     </div>

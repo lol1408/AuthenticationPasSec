@@ -40,7 +40,8 @@ function sendMail() {
         })
         .catch(function (error) {
             let errors = document.getElementById("errors");
-            errors.innerHTML = "Пользователь уже создан";
+            errors.style.display = 'block';
+            errors.innerHTML = "Пользователь не найден";
         });
 }
 function toHome() {

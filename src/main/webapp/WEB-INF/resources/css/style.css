@@ -84,6 +84,7 @@ label.error{
     margin-bottom: 0;
     font-size: 11px;
     float: right;
+    color: #e00500;
 }
 label.title{
     float: left;

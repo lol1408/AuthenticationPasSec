@@ -2,9 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Кабинет</title>
+    <title>Me</title>
+    <link rel="shortcut icon" href="/resources/img/locked.ico" type="image/x-icon">
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="/resources/css/bootstrap.css" rel="stylesheet" />
+    <script src="/resources/js/auth/auth.js"></script>
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/validation/dist/jquery.validate.min.js"></script>
+    <script src="/resources/js/util/query.util.js"></script>
+    <script src="/resources/js/util/cookie.js"></script>
+    <script src="/resources/js/util/sha1.js"></script>
+    <script src="/resources/js/me.js"></script>
+    <!-- FONT AWESOME ICON STYLE  -->
+    <link href="/resources/css/font-awesome.css" rel="stylesheet" />
+    <!-- PRETTYPHOTO STYLE  -->
+    <link href="/resources/css/prettyPhoto.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <!-- CUSTOM THEME COLOR -- YOU CAN USE LIGHT & DARK THEMES  -->
+    <link href="/resources/css/themes/light.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href="/resources/css/style.css" rel="stylesheet" />
+    <link href="/resources/css/popup.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
-<body>
+<body onload="onload();">
+<div class="navbar navbar-inverse navbar-fixed-top scrollclass">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/resources/img/logo.png"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Главная</a></li>
+                <li onclick="logout();">Выйти</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--Content begin-->
+<div id="home-sec">
+    <div class="overlay">
+        <div class="container">
+            <div class="content">
+                <label>Логин:</label>
+                <label id='lab_login'>PasSec</label>
+                <br/>
+                <label>Email:</label>
+                <label id="lab_email">Your email</label>
+                <br/>
+                <input class="button" type="button" id="but_pass" value="Поменять пароль" onclick="open_popup();">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="popup" id="popupForMessage">
+    <div class="popup-content" id='popup_content'>
+        <div id="old_div">
+            <label>Введите ваш старый пароль</label>
+            <input type='password' id='in_oldpass'>
+            <input class="button" type="button" value="Отмена" onclick="closePopup();">
+            <input class="button" type="button" style="float: right" value="Далее" onclick="checkPassword();">
 
+            <input type="hidden" id='hid_pass'>
+        </div>
+        <div id='new_div' style='display: none'>
+            <form id='form'>
+                <label>Введите новый пароль два раза</label>
+                <input type="password" id='in_newpass_first' name='in_newpass_first'>
+                <input type="password" id='in_newpass_second' name='in_newpass_second'>
+                <input class="button" type="button" value="Отмена" onclick="closePopup();">
+                <input class="button" type="submit" style="float: right" value="Изменить">
+            </form>
+        </div>
+            <div id="error" class='errors' style='color: red'>
+        </div>
+    </div>
+</div>
+<section id="location-sec">
+    <div class="container">
+        <div class="row text-center min-set">
+            <div class="col-md-12">
+                <h2><mark class="head-glow">НАШИ </mark>КОНТАКТЫ</h2>
+                <hr class="sub-hr" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3><a href="https://sergey.king96@gmail.com" target="_blank">sergey.king96@gmail.com</a></h3>
+                <h4><a href="https://vk.com/dante_de_braso" target="_blank">vk.com/dante_de_braso</a></h4>
+                <h4>MTC: +38099446655444</h4>
+                <h4>Украина</h4>
+                <br />
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

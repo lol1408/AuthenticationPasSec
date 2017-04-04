@@ -1,5 +1,6 @@
 //Проверяем статус ответа от сервера
 function status(response) {
+    console.log(response.status);
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response)
     } else {
