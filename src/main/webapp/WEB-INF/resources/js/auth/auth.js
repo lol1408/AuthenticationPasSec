@@ -6,8 +6,9 @@ $(function () {
         }
     });
 });
-//GET запрос для попытки аутентификации
+//GET request, try authentication
 function login() {
+    document.getElementById("download").style.display = 'block';
     var login = document.getElementById("in_login").value;
     var password = document.getElementById("in_password").value;
     var error_message = document.getElementById("error_message");
@@ -34,6 +35,7 @@ function login() {
         .catch(function (error) {
             error_message.innerHTML = "Пользователь не найден";
             console.log("Request failed", error);
+            document.getElementById("download").style.display = 'none';
         });
 }
 

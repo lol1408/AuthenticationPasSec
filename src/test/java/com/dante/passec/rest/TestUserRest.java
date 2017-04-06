@@ -3,6 +3,7 @@ package com.dante.passec.rest;
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.mail.MailService;
 import com.dante.passec.mail.RandomTokenService;
 import com.dante.passec.model.Session;
@@ -23,12 +24,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.dante.passec.utils.Converter.toJson;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -103,7 +102,7 @@ public class TestUserRest {
     }
     @Test
     public void registrationShouldBeSuccess() throws Exception {
-        when(userService.checkAlreadyExist(user.getLogin(), user.getMail())).thenReturn(3);
+        when(userService.checkAlreadyExist(user.getLogin(), user.getMail())).thenReturn(true);
         user.setActive(false);
         when(userService.addUser(user)).thenReturn(user);
         when(randomTokenService.getRandomToken(user.getMail())).thenReturn(12345);
@@ -121,7 +120,7 @@ public class TestUserRest {
     }
     @Test
     public void registrationShouldThrowForbiddenException() throws Exception {
-        when(userService.checkAlreadyExist(user.getLogin(), user.getMail())).thenReturn(3);
+        when(userService.checkAlreadyExist(user.getLogin(), user.getMail())).thenReturn(true);
         when(userService.addUser(user)).thenThrow(ForbiddenException.class);
         String json = toJson(user);
         mockMvc.perform(post("/users/")
@@ -136,19 +135,19 @@ public class TestUserRest {
     @Test
     public void updateShouldBeSuccess() throws Exception{
         when(sessionService.sessionIsActual(session.getToken())).thenReturn(user);
-        UserRest newUser = new UserRest("new login", "new password", "sergey.king96@mail.ru", true);
+        UserRest newUser = new UserRest(user);
         when(userService.updateUser(newUser)).thenReturn(newUser);
-        newUser.setId(user.getId());
-        String json = toJson(newUser);
+        newUser.setPassword("new password");
 
-        mockMvc.perform(put("/users/")
+        mockMvc.perform(put("/users/password")
                 .header("token", session.getToken())
+                .header("oldpassword", user.getPassword())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(content().
-                        contentType(MediaType.APPLICATION_JSON_UTF8))
+                .content(newUser.getPassword()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.login", is("new login")))
+                .andExpect(jsonPath("$.login", is("Hello world")))
                 .andExpect(jsonPath("$.password", is("new password")));
 
         verify(sessionService, times(1)).
@@ -157,48 +156,22 @@ public class TestUserRest {
         verifyNoMoreInteractions(sessionService, userService);
     }
     @Test
-    public void updateShouldThrowUnauthorizedException() throws Exception{
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(user);
-        UserRest newUser = new UserRest("new login", "new password", "sergey.king96@mail.ru", true);
-        newUser.setId(user.getId());
-        String json = toJson(newUser);
+    public void updatePasswordThrowUnauthorizedException() throws Exception{
+        when(sessionService.sessionIsActual(session.getToken())).thenThrow(UnauthorizedException.class);
+        UserRest userRest = new UserRest(user);
+        userRest.setPassword("new password");
+        String json = toJson(userRest);
 
-        mockMvc.perform(put("/users/")
-                .header("token", 123123123)
+        mockMvc.perform(put("/users/password")
+                .header("token", session.getToken())
+                .header("oldpassword", user.getPassword())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isUnauthorized());
 
         verify(sessionService, times(1)).
-                sessionIsActual(123123123);
+                sessionIsActual(session.getToken());
         verifyNoMoreInteractions(sessionService, userService);
     }
-    @Test
-    public void deleteUserShouldBeSuccess() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(user);
-        doNothing().when(userService).deleteUser(user.getId());
 
-        mockMvc.perform(delete("/users/")
-                .header("token", session.getToken()))
-                .andExpect(status().isOk());
-
-        verify(sessionService, times(1))
-                .sessionIsActual(session.getToken());
-        verify(userService, times(1)).
-                deleteUser(user.getId());
-        verifyNoMoreInteractions(userService);
-    }
-    @Test
-    public void deleteUserShouldThrowUnauthorizedException() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(user);
-        doNothing().when(userService).deleteUser(user.getId());
-
-        mockMvc.perform(delete("/users/")
-                .header("token", 123123123))
-                .andExpect(status().isUnauthorized());
-
-        verify(sessionService, times(1))
-                .sessionIsActual(123123123);
-        verifyNoMoreInteractions(userService);
-    }
 }

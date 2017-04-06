@@ -2,7 +2,10 @@ package com.dante.passec.db.services;
 
 import com.dante.passec.crypt.CryptService;
 import com.dante.passec.db.dao.ResourceDataDao;
+import com.dante.passec.exception.ForbiddenException;
 import com.dante.passec.model.ResourceData;
+import com.dante.passec.model.UserRest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import java.util.List;
 @Service
 public class ResourceDataServiceImpl implements ResourceDataService {
 
+    private final static Logger logger = Logger.getLogger(ResourceDataServiceImpl.class);
     @Autowired
     ResourceDataDao resourceDataDao;
     @Autowired
@@ -28,66 +32,68 @@ public class ResourceDataServiceImpl implements ResourceDataService {
                 resource = resourceData.get(i);
                 resource.setPassword(cryptService.decrypt(resource.getPassword()));
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
 
-    public List<ResourceData> allResources() {
-        List<ResourceData> resourcesByUser = resourceDataDao.findAll();
-        decryptPasswords(resourcesByUser);
-        return resourcesByUser;
-    }
-
-    public List<ResourceData> getResourcesByUserId(Long id) {
+    public List<ResourceData> getResourcesByUser(UserRest user) {
         long start = System.nanoTime();
-        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUserId(id);
+        List<ResourceData> resourcesByUser = resourceDataDao.getResourcesByUser(user);
         decryptPasswords(resourcesByUser);
         long end = System.nanoTime();
-        System.out.println("get resources by user: " + (end-start));
+        logger.info("get resources by user id= " + user + ":" + (end-start));
         return resourcesByUser;
     }
 
     public ResourceData getResourceById(Long id) {
-        ResourceData one = resourceDataDao.findOne(id);
-        if(one==null) return null;
         try {
+            ResourceData one = resourceDataDao.findOne(id);
+            if(one==null) return null;
             one.setPassword(cryptService.decrypt(one.getPassword()));
+            return one;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("decrypt password is failed: ", e);
+            throw new ForbiddenException();
         }
-        return one;
     }
 
     public ResourceData addResource(ResourceData resourceData) {
-        //Копируем переданный ресурс
+        //Copy received resource
         ResourceData tempResource = new ResourceData(resourceData);
-        //Пытаемся зашифровать пароль и записать в базу
+        //Try encrypt password and write to baseу
         try {
             tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
+            resourceDataDao.save(tempResource);
+            resourceData.setId(tempResource.getId());
+            return resourceData;
         }catch (Exception ex){
-            ex.printStackTrace();
+            logger.equals("add resource is failed");
+            throw new ForbiddenException();
         }
-        resourceDataDao.save(tempResource);
-        resourceData.setId(tempResource.getId());
-        return resourceData;
     }
 
     public ResourceData update(ResourceData resourceData) {
-        //Копируем переданный ресурс
+        //Copy received resource
         ResourceData tempResource = new ResourceData(resourceData);
-        //Пытаемся зашифровать пароль и записать в базу
+        //Try encrypt password and write to base
         try {
             tempResource.setPassword(cryptService.encrypt(tempResource.getPassword()));
+            resourceDataDao.saveAndFlush(tempResource);
+            resourceData.setId(tempResource.getId());
+            return resourceData;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("change resource is failed: ", e);
+            throw new ForbiddenException();
         }
-        resourceDataDao.saveAndFlush(tempResource);
-        resourceData.setId(tempResource.getId());
-        return resourceData;
     }
 
     public void deleteResource(Long id) {
-        resourceDataDao.delete(id);
+        try {
+            resourceDataDao.delete(id);
+        }catch (Exception ex){
+            logger.error("delete resource is failed");
+            throw new ForbiddenException();
+        }
     }
 }

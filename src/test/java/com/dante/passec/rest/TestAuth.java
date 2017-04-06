@@ -2,6 +2,7 @@ package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
 import com.dante.passec.db.services.UserRestService;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.Before;
@@ -47,14 +48,14 @@ public class TestAuth {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(authentication).build();
-        user = new UserRest("login", "password", "sergey.king96@mail.ry", true);
+        user = new UserRest("url", "password", "sergey.king96@mail.ry", true);
         session = new Session(user);
     }
 
     @Test
     public void loginWillBeSuccess() throws Exception {
-        when(userService.userIsReal(user.getLogin(), user.getPassword())).thenReturn(true);
-        when(userService.userByLogin("login")).thenReturn(user);
+        when(userService.authentication(user.getLogin(), user.getPassword())).thenReturn(true);
+        when(userService.userByLogin("url")).thenReturn(user);
         when(sessionService.addSession(user)).thenReturn(session);
 
         mockMvc.perform(get("/login")
@@ -65,8 +66,8 @@ public class TestAuth {
                 .andDo(print())
                 .andExpect(jsonPath("$", is(session.getToken())));
 
-        verify(userService, times(1)).userIsReal(user.getLogin(), user.getPassword());
-        verify(userService, times(1)).userByLogin("login");
+        verify(userService, times(1)).authentication(user.getLogin(), user.getPassword());
+        verify(userService, times(1)).userByLogin("url");
         verify(sessionService, times(1)).addSession(user);
         verifyNoMoreInteractions(userService, sessionService);
 
@@ -74,7 +75,7 @@ public class TestAuth {
 
     @Test
     public void loginWillThrowUserNotFoundException() throws Exception {
-        when(userService.userIsReal(user.getLogin(), user.getPassword())).thenReturn(true);
+        when(userService.authentication(user.getLogin(), user.getPassword())).thenReturn(true);
 
         mockMvc.perform(get("/login")
                 .header("login", "not login")
@@ -82,7 +83,7 @@ public class TestAuth {
                 .andExpect(status().isNotFound())
                 .andDo(print());
 
-        verify(userService, times(1)).userIsReal("not login", user.getPassword());
+        verify(userService, times(1)).authentication("not login", user.getPassword());
         verifyNoMoreInteractions(userService, sessionService);
     }
     @Test
@@ -94,7 +95,6 @@ public class TestAuth {
         mockMvc.perform(get("/logout")
                 .header("token", session.getToken()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
                 .andDo(print());
 
         verify(sessionService, times(1)).sessionIsActual(session.getToken());
@@ -104,7 +104,7 @@ public class TestAuth {
     }
     @Test
     public void logoutWillThrowUnauthorizedException() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(user);
+        when(sessionService.sessionIsActual(123123123)).thenThrow(UnauthorizedException.class);
 
         mockMvc.perform(get("/logout")
                 .header("token", 123123123))

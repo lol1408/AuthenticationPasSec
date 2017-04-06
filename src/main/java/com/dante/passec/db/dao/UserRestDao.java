@@ -10,4 +10,6 @@ public interface UserRestDao extends JpaRepository<UserRest, Long> {
 
     UserRest getUserByLogin(String login);
     UserRest getUserByMail(String mail);
+    UserRest getUserByLoginOrMail(String login, String mail);
+    void deleteUserByLogin(String login);
 }

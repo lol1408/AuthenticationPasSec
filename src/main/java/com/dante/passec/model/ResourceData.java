@@ -8,7 +8,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 
 /**
- * @model for Users' resources. It save id->long, login->String, password-> String, user->UserRest
+ * @model for Users' resources. It save id->long, url->String, password-> String, user->UserRest
  * @author Makarenko Sergey
  * @version 1.0
  */
@@ -21,8 +21,8 @@ public class ResourceData
     @GeneratedValue(strategy = IDENTITY)
     Long id;
 
-    @Column(name = "login")
-    String login;
+    @Column(name = "url")
+    String url;
 
     @Column(name = "password")
     String password;
@@ -36,13 +36,13 @@ public class ResourceData
     }
 
     public ResourceData(String login, String password, UserRest user) {
-        this.login = login;
+        this.url = login;
         this.password = password;
         this.user = user;
     }
     public ResourceData(ResourceData resource) {
         this.id = resource.id;
-        this.login = resource.login;
+        this.url = resource.url;
         this.password = resource.password;
         this.user = resource.user;
     }
@@ -55,12 +55,12 @@ public class ResourceData
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getPassword() {
@@ -87,7 +87,7 @@ public class ResourceData
         ResourceData that = (ResourceData) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         return user != null ? user.equals(that.user) : that.user == null;
     }
@@ -95,7 +95,7 @@ public class ResourceData
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
@@ -104,7 +104,7 @@ public class ResourceData
     @Override
     public String toString() {
         return "ResourceData{" +
-                ", login='" + login + '\'' +
+                ", url='" + url + '\'' +
                 ", password='" + password + '\'' +
                 ", user=" + user +
                 '}';

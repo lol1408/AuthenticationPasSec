@@ -1,15 +1,16 @@
 package com.dante.passec.db.services;
 
+import com.dante.passec.exception.EmailIsBusyException;
+import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.LoginIsBusyException;
 import com.dante.passec.model.UserRest;
-import com.dante.passec.utils.UserRestManager;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import java.util.List;
 @Transactional
 public class UserRestServiceTest extends Assert {
     List<UserRest> users;
+    private static final Logger logger = Logger.getLogger(UserRestServiceTest.class);
     @Resource
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -37,47 +39,61 @@ public class UserRestServiceTest extends Assert {
     public void setUp(){
         em = emf.createEntityManager();
         users = new ArrayList<>();
-        users.add(UserRestManager.createUser("hello world", "worldes", "mail"));
-        users.add(UserRestManager.createUser("hello world olol", "worldasd", "mail2"));
-
+        users.add(new UserRest("hello world", "worldes", "mail", true));
+        users.add(new UserRest("hello world olol", "worldasd", "mail2", true));
     }
-
     @After
     public void drop(){
-        try {
-            List<UserRest> allUsers = userService.allUsers();
-            for(UserRest user: allUsers){
-                userService.deleteUser(user.getId());
+        for (int i = 0; i < users.size(); i++) {
+            try {
+                userService.deleteUserByLogin(users.get(i).getLogin());
+            }catch (Exception ex){
+                logger.info("oops");
             }
         }
-        catch (Exception ex){
-        }
         users = null;
-    }
-    private UserRest firstUserRest(){
-        List<UserRest> allUsers = userService.allUsers();
-        if(allUsers.size()==0) return null;
-        else return allUsers.get(0);
     }
 
     @Test
     public void insertShouldBeSuccess(){
-        userService.addUser(users.get(0));
-        UserRest userRest = firstUserRest();
+        UserRest addedUser = userService.addUser(users.get(0));
+        UserRest userRest = userService.userByLoginOrMail(addedUser.getLogin(), null);
         assertEquals(userRest.getLogin(), users.get(0).getLogin());
     }
-
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test
+    public void selectByLogAndMailWhereMailIsNull(){
+        UserRest addedUser = userService.addUser(users.get(0));
+        UserRest userRest = userService.userByLoginOrMail("hello world", null);
+        assertEquals(addedUser, userRest);
+    }
+    @Test
+    public void selectByLogAndMailWhereMailIsFail(){
+        UserRest addedUser = userService.addUser(users.get(0));
+        UserRest userRest = userService.userByLoginOrMail("hello world", "FAIL");
+        assertEquals(userRest, addedUser);
+    }
+    @Test
+    public void selectByLogAndMailWhereLoginIsNull(){
+        UserRest addedUser = userService.addUser(users.get(0));
+        UserRest userRest = userService.userByLoginOrMail(null, "mail");
+        assertEquals(userRest, addedUser);
+    }
+    @Test
+    public void selectByLogAndMailShouldReturnNull(){
+        userService.addUser(users.get(0));
+        UserRest userRest = userService.userByLoginOrMail("asd", "qwe");
+        assertNull(userRest);
+    }
+    @Test(expected = ForbiddenException.class)
     public void insertShouldThrowJpaSystemException(){
         UserRest user = new UserRest(null, "password", "sergey.king96@mail.ru", true);
         userService.addUser(user);
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = ForbiddenException.class)
     public void insertTwoSameLoginShouldThrowJpaSystemException(){
-        UserRest user = new UserRest("login first", "password", "sergey.king96@mail.ru", true);
-        UserRest second = new UserRest("login first", "password", "sergey.king96@mail.ru", true);
-        userService.addUser(user);
+        UserRest second = new UserRest(users.get(0));
+        userService.addUser(users.get(0));
         userService.addUser(second);
     }
 
@@ -106,35 +122,16 @@ public class UserRestServiceTest extends Assert {
         assertEquals(userRest, byMail);
     }
     @Test
-    public void getAllShouldBeSuccess(){
-        for (UserRest userRest : users) {
-            userService.addUser(userRest);
-        }
-        List<UserRest> allUsers = userService.allUsers();
-        for (int i=0; i<allUsers.size(); i++) {
-            assertEquals(allUsers.get(i), users.get(i));
-        }
-    }
-    @Test
     public void updateUserShouldBeSuccess(){
-        UserRest user = users.get(0);
-        userService.addUser(user);
-        UserRest update = new UserRest(user);
-        update.setLogin("new login");
-        update.setPassword("new password");
-        userService.updateUser(update);
-        UserRest firstRecord = firstUserRest();
-        /*Первоначальная запись не должна совпадать с первой
-        записью в базе, кроме id         */
-        assertEquals(user.getId(), firstRecord.getId());
-        assertNotEquals(user.getLogin(), firstRecord.getLogin());
-        assertNotEquals(user.getPassword(), firstRecord.getPassword());
+        UserRest addedUser = userService.addUser(users.get(0));
+        addedUser.setLogin("new login");
+        addedUser.setMail("new mail");
+        userService.updateUser(addedUser);
 
-        /*Обновленная переменная должна полностью
-        совпадать с первой записью в базе*/
-        assertEquals(update, firstRecord);
+        assertNull(userService.userByLoginOrMail(users.get(0).getLogin(), users.get(0).getMail()));
+        assertEquals(userService.userByLoginOrMail(addedUser.getLogin(), ""), addedUser);
     }
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = ForbiddenException.class)
     public void updateUserShouldThrowJpaSystemException(){
         UserRest user = users.get(0);
         userService.addUser(user);
@@ -142,39 +139,45 @@ public class UserRestServiceTest extends Assert {
         update.setId(0L);
         userService.updateUser(update);
     }
+
     @Test
     public void deleteUserShouldBeSuccess(){
         UserRest user = users.get(0);
-        userService.addUser(user);
+        UserRest addedUser = userService.addUser(user);
         userService.deleteUser(user.getId());
-        UserRest userRest = firstUserRest();
+        UserRest userRest = userService.userByLoginOrMail(addedUser.getLogin(), addedUser.getMail());
         assertNull(userRest);
     }
-    @Test(expected = EmptyResultDataAccessException.class)
+
+    @Test(expected = ForbiddenException.class)
     public void deleteUserShouldThrowEmptyResultDataAccessException(){
         userService.deleteUser(1L);
     }
+
     @Test
     public void userIsRealShouldReturnTrue(){
         UserRest user = users.get(0);
         userService.addUser(user);
-        assertTrue(userService.userIsReal(user.getLogin(),user.getPassword()));
+        assertTrue(userService.authentication(user.getLogin(),user.getPassword()));
     }
+
     @Test
     public void userIsRealShouldReturnFalse(){
         UserRest user = users.get(0);
         userService.addUser(user);
-        assertFalse(userService.userIsReal("login", "password"));
+        assertFalse(userService.authentication("login", "password"));
     }
-    @Test
-    public void checkAlreadyExistShouldReturn1(){
+    @Test(expected = LoginIsBusyException.class)
+    public void checkAlreadyExistShouldThrowLoginIsBusyExceptinon(){
         UserRest user = users.get(0);
         userService.addUser(user);
-        assertTrue(userService.checkAlreadyExist(user.getLogin(), user.getMail())==1);
+        assertTrue(userService.checkAlreadyExist(user.getLogin(), user.getMail()));
     }
-    @Test
-    public void checkAlreadyExistShouldReturn3(){
-        assertTrue(userService.checkAlreadyExist("login", "mail")==3);
+    @Test(expected = EmailIsBusyException.class)
+    public void checkAlreadyExistShouldReturnEmailIsBusyExceptinon(){
+        UserRest user = users.get(0);
+        userService.addUser(user);
+        assertTrue(userService.checkAlreadyExist("login", "mail"));
     }
 
 }

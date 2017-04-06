@@ -13,7 +13,7 @@ function onload() {
             let loginHtml = document.getElementById('lab_login');
             let emailHtml = document.getElementById('lab_email');
             let passwordHidden = document.getElementById('hid_pass');
-            loginHtml.innerHTML = data.login;
+            loginHtml.innerHTML = data.url;
             emailHtml.innerHTML = data.mail;
             passwordHidden.value = data.password;
         })

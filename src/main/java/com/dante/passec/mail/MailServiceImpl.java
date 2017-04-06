@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,13 +14,12 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class MailServiceImpl implements MailService {
 
-    Logger logger = Logger.getLogger(MailServiceImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(MailServiceImpl.class.getName());
+    @Value("${server.port}")
+    Integer port;
 
     @Autowired
     private JavaMailSenderImpl mailSender;
-
-    @Value("${server.port}")
-    Integer port;
 
     public Boolean sendMail(Integer token, String userName, String to) {
         try {
@@ -43,10 +40,10 @@ public class MailServiceImpl implements MailService {
             return true;
         }
         catch (MailException ex) {
-            logger.error("Error sending message: " + ex.getStackTrace());
+            logger.error("Error sending message: " + ex);
             return false;
         } catch (MessagingException e) {
-            logger.error("Error sending message: " + e.getStackTrace());
+            logger.error("Error sending message: " + e);
             return false;
         }
     }
@@ -66,10 +63,10 @@ public class MailServiceImpl implements MailService {
             return true;
         }
         catch (MailException ex) {
-            logger.error("Error sending message: " + ex.getStackTrace());
+            logger.error("Error sending message: " + ex);
             return false;
         } catch (MessagingException e) {
-            logger.error("Error sending message: " + e.getStackTrace());
+            logger.error("Error sending message: " + e);
             return false;
         }
     }

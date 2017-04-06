@@ -1,5 +1,7 @@
 package com.dante.passec.db.services;
 
+import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.junit.After;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class SessionServiceTest extends Assert{
     @Resource
     private UserRestService userService;
     private Session session;
+    ArrayList<Integer> tokens = new ArrayList<>();
 
     @Before
     public void setUp(){
@@ -41,28 +45,24 @@ public class SessionServiceTest extends Assert{
     @After
     public void drop(){
         session = null;
-        List<Session> sessions = sessionService.allSessions();
-        for (Session current : sessions) {
-            sessionService.deleteSessionByToken(current.getToken());
+        for (Integer token : tokens) {
+            sessionService.deleteSessionByToken(token);
         }
-    }
-
-    private Session firstSession(){
-        List<Session> sessions = sessionService.allSessions();
-        if(sessions.size()==0) return null;
-        return sessions.get(0);
+        tokens = null;
     }
 
     @Test
     public void addSessionShouldBeSuccessAddSession(){
         Session newSession = sessionService.addSession(user);
-        Session session = firstSession();
+        Integer token = newSession.getToken();
+        tokens.add(token);
+        Session session = sessionService.findByToken(token);
         assertEquals(newSession, session);
     }
-    @Test
-    public void addSessionShouldBeReturnNull(){
+    @Test(expected = ForbiddenException.class)
+    public void addSessionShouldThrowForbiddenExceptin(){
         UserRest user = new UserRest("login1", "password", "sergey.king96@mail.ru", false);
-        assertNull(sessionService.addSession(user));
+        sessionService.addSession(user);
     }
 
     @Test(expected = NullPointerException.class)
@@ -73,12 +73,13 @@ public class SessionServiceTest extends Assert{
     @Test
     public void deleteSessionByTokenShouldBeSuccess(){
         Session session = sessionService.addSession(user);
-        sessionService.deleteSessionByToken(session.getToken());
-        Session firstSession = firstSession();
+        Integer token = session.getToken();
+        sessionService.deleteSessionByToken(token);
+        Session firstSession = sessionService.findByToken(token);
         assertNull(firstSession);
     }
-    @Test
-    public void sessionShouldBeNotActual(){
+    @Test(expected = UnauthorizedException.class)
+    public void sessionShouldBeThrowUnauthorizedException(){
         Session session = sessionService.addSession(user);
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(session.getDate());
@@ -97,7 +98,5 @@ public class SessionServiceTest extends Assert{
         sessionService.setNotIncluding(session);
         assertFalse(session.isIncluding());
     }
-
-
 
 }

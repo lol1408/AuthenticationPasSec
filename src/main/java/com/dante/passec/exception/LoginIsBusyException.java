@@ -4,6 +4,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static org.springframework.http.HttpStatus.*;
 
-@ResponseStatus(value = NOT_FOUND, reason = "user is not real")
-public class NotFoundException extends RuntimeException {
+@ResponseStatus(value = BAD_REQUEST, reason = "Login is busy") //400
+public class LoginIsBusyException extends RuntimeException {
 }

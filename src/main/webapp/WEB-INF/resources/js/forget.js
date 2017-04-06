@@ -22,7 +22,7 @@ $(function () {
     });
 });
 function sendMail() {
-
+    document.getElementById("download").style.display = 'block';
     fetch("/getnewpass", {
         method: "GET",
         headers: {
@@ -33,12 +33,16 @@ function sendMail() {
     })
         .then(status)
         .then(function () {
+            //Close download div
+            document.getElementById("download").style.display = 'none';
+            //Close form send
             document.getElementById("form_send").style.display = "none";
-            document.getElementById("popupForMessage").style.display = "block";
+            //Open popup message
             document.getElementById("popupForMessage").style.display = "block";
             console.log("hello");
         })
         .catch(function (error) {
+            document.getElementById("download").style.display = 'none';
             let errors = document.getElementById("errors");
             errors.style.display = 'block';
             errors.innerHTML = "Пользователь не найден";

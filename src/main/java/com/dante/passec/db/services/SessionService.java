@@ -13,12 +13,9 @@ import java.util.List;
  */
 public interface SessionService {
 
-    Session findById(Long id);
-    List<Session> allSessions();
     Session findByToken(Integer token);
     Session addSession(UserRest user);
     Session setNotIncluding(Session session);
-    void deleteSession(Long id);
     UserRest sessionIsActual(Integer token);
     boolean sessionIsActual(Integer token, Date currentDate);
     void deleteSessionByToken(Integer token);

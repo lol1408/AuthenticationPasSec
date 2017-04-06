@@ -10,9 +10,10 @@ if(getCookie("token")==undefined) {
 //JS отвечающий за resources.js
 //Заполняем таблицу
 
-
 function fillTable() {
     //Получаем все ресурсы пользователя
+    document.getElementById("download").style.display = "block";
+
     var allResources = [];
     getAllResources(allResources).
         then(function () {
@@ -29,7 +30,7 @@ function fillTable() {
                 var password = row.insertCell(1);
                 var change = row.insertCell(2);
                 var deleteMess = row.insertCell(3);
-                login.innerHTML = item.login;
+                login.innerHTML = item.url;
                 password.innerHTML = item.password;
                 change.className = "change";
                 deleteMess.className = "delete";
@@ -67,7 +68,7 @@ function refresh(method, resource) {
         var password = row.insertCell(1);
         var change = row.insertCell(2);
         var deleteMess = row.insertCell(3);
-        login.innerHTML = resource.login;
+        login.innerHTML = resource.url;
         password.innerHTML = resource.password;
         change.className = "change";
         deleteMess.className = "delete";
@@ -84,23 +85,23 @@ function refresh(method, resource) {
         console.log(resource);
     }else if(method==UPDATE_METHOD){
         var indexRow = mapIdToIndex[resource.id];
-        table.rows[indexRow].cells[0].innerHTML = resource.login;
+        table.rows[indexRow].cells[0].innerHTML = resource.url;
         table.rows[indexRow].cells[1].innerHTML = resource.password;
     }
     console.log(mapIdToIndex);
     console.log(cacheResources);
 }
 function changeResources() {
-    var login = document.getElementById("popup-login").value;
+    var login = document.getElementById("popup-url").value;
     var password = document.getElementById("popup-password").value;
     var id = document.getElementById("idPopupHidden").value;
     let resource = new Resource(login, password);
     resource.setId(id);
-    refresh(UPDATE_METHOD, resource);
     updateResource(resource).then(function () {
         var popup = document.getElementById("popupForMessage");
         popup.style.display = "none";
         cacheResources[id] = resource;
+        refresh(UPDATE_METHOD, resource);
     }).catch(function (error) {
         alert("Error, resource cannot be updated")
     });
@@ -116,10 +117,10 @@ function openPopup(id) {
 }
 //Заполняем поля формы текущим элементом
 function fillPopup(resource){
-    var textBoxForLogin = document.getElementById("popup-login");
+    var textBoxForLogin = document.getElementById("popup-url");
     var textBoxForPassword = document.getElementById("popup-password");
     var idHidden = document.getElementById("idPopupHidden");
-    textBoxForLogin.value = resource.login;
+    textBoxForLogin.value = resource.url;
     textBoxForPassword.value = resource.password;
     idHidden.value = resource.id;
 }

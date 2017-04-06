@@ -1,7 +1,8 @@
 package com.dante.passec.db.services;
 
 import com.dante.passec.db.dao.SessionDao;
-import com.dante.passec.exception.LockedException;
+import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
 
 /**
  * SessionServiceImpl with JpaRepository.
@@ -21,17 +21,13 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     SessionDao dao;
 
-    public Session findById(Long id) {
-        return dao.findOne(id);
-    }
-
     public Session findByToken(Integer token) {
         return dao.findByToken(token);
     }
 
     public Session addSession(UserRest user) {
         if(user.getActive()==false)
-            return null;
+            throw new ForbiddenException();
         Session session = new Session(user);
         return dao.save(session);
     }
@@ -39,12 +35,6 @@ public class SessionServiceImpl implements SessionService {
     public Session setNotIncluding(Session session) {
         session.setIncluding(false);
         return dao.saveAndFlush(session);
-    }
-    public List<Session> allSessions(){
-        return dao.findAll();
-    }
-    public void deleteSession(Long id) {
-        dao.delete(id);
     }
 
     public UserRest sessionIsActual(Integer token) {
@@ -55,12 +45,13 @@ public class SessionServiceImpl implements SessionService {
         Date date1 = new Date();
         if(byToken!=null && date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding())
             return byToken.getUser();
-        else return null;
+        else throw new UnauthorizedException();
     }
     public boolean sessionIsActual(Integer token, Date currentDate){
         Session byToken = dao.findByToken(token);
         Date date1 = currentDate;
-        return date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding();
+        if(date1.getTime() < byToken.getDate().getTime() && byToken.isIncluding()) return true;
+        else throw new UnauthorizedException();
     }
 
     public void deleteSessionByToken(Integer token) {

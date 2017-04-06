@@ -33,15 +33,6 @@ public class RandomTokenServiceImplTest {
         assertTrue(randomTokenService.confirmRandomToken(randomToken));
         assertFalse(randomTokenService.confirmRandomToken(randomToken));
     }
-    @Test
-    public void reGetRandomTokenShouldBeSuccess(){
-        UserRest user = newUser("third@mail.ru");
-        Integer randomToken = randomTokenService.getRandomToken(user.getMail());
-        Integer newRandomToken = randomTokenService.reGetRandomToken(user.getMail());
-        assertNotEquals(randomToken, newRandomToken);
-        assertFalse(randomTokenService.confirmRandomToken(randomToken));
-        assertTrue(randomTokenService.confirmRandomToken(newRandomToken));
-    }
 
     private UserRest newUser(String mail){
         UserRest user = new UserRest("login1", "password1", mail, false);

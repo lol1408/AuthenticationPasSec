@@ -1,12 +1,12 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
+import com.dante.passec.exception.UnauthorizedException;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.model.Session;
 import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
-import com.dante.passec.utils.UserRestManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -63,10 +61,10 @@ public class TestResourceRest {
     public void setup(){
         MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(controllerResource).build();/*webAppContextSetup(this.mac).dispatchOptions(true).build();*/
-        userRest = UserRestManager.createUser("Hello world", "password", "mail");
+        userRest = new UserRest("Hello world", "password", "mail", true);
         userRest.setId(1L);
-        resource1 = new ResourceData("login1", "password1", userRest);
-        resource2 = new ResourceData("login2", "password2", userRest);
+        resource1 = new ResourceData("url", "password", userRest);
+        resource2 = new ResourceData("url2", "password2", userRest);
         resource1.setId(1L);
         resource2.setId(2L);
         resources = Arrays.asList(resource1, resource2);
@@ -76,7 +74,7 @@ public class TestResourceRest {
     @Test
     public void getResourceByUserShouldBeSuccess() throws Exception {
         when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
-        when(resourceService.getResourcesByUserId(userRest.getId())).thenReturn(resources);
+        when(resourceService.getResourcesByUser(userRest)).thenReturn(resources);
 
         mockMvc.perform(get("/resources/")
                 .header("token", session.getToken()))
@@ -84,27 +82,27 @@ public class TestResourceRest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].login", is("login1")))
-                .andExpect(jsonPath("$[0].password", is("password1")))
+                .andExpect(jsonPath("$[0].url", is("url")))
+                .andExpect(jsonPath("$[0].password", is("password")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].login", is("login2")))
+                .andExpect(jsonPath("$[1].url", is("url2")))
                 .andExpect(jsonPath("$[1].password", is("password2")));
 
         verify(sessionService, times(1)).sessionIsActual(session.getToken());
-        verify(resourceService, times(1)).getResourcesByUserId(userRest.getId());
+        verify(resourceService, times(1)).getResourcesByUser(userRest);
         verifyNoMoreInteractions(sessionService, resourceService);
     }
 
     @Test
     public void getResourceByUserShouldThrowUnauthorizedException() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(sessionService.sessionIsActual(session.getToken())).thenThrow(UnauthorizedException.class);
 
         mockMvc.perform(get("/resources/")
-                .header("token", 123123123))
+                .header("token", session.getToken()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
 
-        verify(sessionService, times(1)).sessionIsActual(123123123);
+        verify(sessionService, times(1)).sessionIsActual(session.getToken());
         verifyNoMoreInteractions(sessionService);
     }
 
@@ -122,8 +120,8 @@ public class TestResourceRest {
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.login", is("login1")))
-                .andExpect(jsonPath("$.password", is("password1")));
+                .andExpect(jsonPath("$.url", is("url")))
+                .andExpect(jsonPath("$.password", is("password")));
 
         verify(sessionService, times(1))
                 .sessionIsActual(session.getToken());
@@ -133,18 +131,18 @@ public class TestResourceRest {
     }
     @Test
     public void saveResourceShouldThrowUnauthorizedException() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(sessionService.sessionIsActual(session.getToken())).thenThrow(UnauthorizedException.class);
 
         String json = toJson(resource1);
         mockMvc.perform(post("/resources/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .header("token", 123123123))
+                .header("token", session.getToken()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
 
         verify(sessionService, times(1))
-                .sessionIsActual(123123123);
+                .sessionIsActual(session.getToken());
         verifyNoMoreInteractions(sessionService, resourceService);
     }
 
@@ -160,9 +158,10 @@ public class TestResourceRest {
                 .header("token", session.getToken()))
                 .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.login", is("login1")))
-                .andExpect(jsonPath("$.password", is("password1")));
+                .andExpect(jsonPath("$.url", is("url")))
+                .andExpect(jsonPath("$.password", is("password")));
 
         verify(sessionService, times(1))
                 .sessionIsActual(session.getToken());
@@ -171,18 +170,18 @@ public class TestResourceRest {
     }
     @Test
     public void changeResourceShouldThrowUnauthorizedException() throws Exception {
-        when(sessionService.sessionIsActual(session.getToken())).thenReturn(userRest);
+        when(sessionService.sessionIsActual(session.getToken())).thenThrow(UnauthorizedException.class);
         String json = toJson(resource1);
 
         mockMvc.perform(put("/resources/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .header("token", 12312313))
+                .header("token", session.getToken()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
 
         verify(sessionService, times(1))
-                .sessionIsActual(12312313);
+                .sessionIsActual(session.getToken());
         verifyNoMoreInteractions(sessionService, resourceService);
     }
 
@@ -206,14 +205,14 @@ public class TestResourceRest {
     @Test
     public void deleteResourceShouldThrowUnauthorizedException() throws Exception {
         when(sessionService.sessionIsActual(session.getToken())).
-                thenReturn(userRest);
+                thenThrow(UnauthorizedException.class);
 
         mockMvc.perform(delete("/resources/{id}", resource1.getId())
-                .header("token", 123123123))
+                .header("token", session.getToken()))
                 .andExpect(status().isUnauthorized());
 
         verify(sessionService, times(1))
-                .sessionIsActual(123123123);
+                .sessionIsActual(session.getToken());
         verifyNoMoreInteractions(sessionService, resourceService);
     }
 }

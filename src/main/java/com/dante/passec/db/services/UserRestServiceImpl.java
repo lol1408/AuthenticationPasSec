@@ -1,11 +1,13 @@
 package com.dante.passec.db.services;
 
 import com.dante.passec.db.dao.UserRestDao;
+import com.dante.passec.exception.EmailIsBusyException;
+import com.dante.passec.exception.ForbiddenException;
+import com.dante.passec.exception.LoginIsBusyException;
 import com.dante.passec.model.UserRest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Implements for UserRestService interface
@@ -14,13 +16,9 @@ import java.util.List;
  */
 @Service
 public class UserRestServiceImpl implements UserRestService {
-
+    private static final Logger logger = Logger.getLogger(UserRestService.class);
     @Autowired
     UserRestDao userRestDao;
-
-    public List<UserRest> allUsers() {
-        return userRestDao.findAll();
-    }
 
     public UserRest userByLogin(String login) {
         return userRestDao.getUserByLogin(login);
@@ -30,27 +28,47 @@ public class UserRestServiceImpl implements UserRestService {
         return userRestDao.getUserByMail(mail);
     }
 
+    public UserRest userByLoginOrMail(String login, String mail) {
+        return userRestDao.getUserByLoginOrMail(login, mail);
+    }
+
     public UserRest userById(Long id) {
         return userRestDao.findOne(id);
     }
 
     public UserRest addUser(UserRest user) {
         UserRest tempUser = new UserRest(user);
-        userRestDao.saveAndFlush(tempUser);
+        try {
+            userRestDao.saveAndFlush(tempUser);
+        }catch (Exception ex){
+            throw new ForbiddenException();
+        }
         user.setId(tempUser.getId());
-        return user;
+        return tempUser;
     }
 
     public UserRest updateUser(UserRest user) {
         UserRest tempUser = new UserRest(user);
-        return userRestDao.saveAndFlush(tempUser);
+        try {
+            return userRestDao.saveAndFlush(tempUser);
+        }catch (Exception ex){
+            throw new ForbiddenException();
+        }
     }
 
     public void deleteUser(Long id) {
-        userRestDao.delete(id);
+        try {
+            userRestDao.delete(id);
+        }catch (Exception ex){
+            throw new ForbiddenException();
+        }
     }
 
-    public boolean userIsReal(String login, String password) {
+    public void deleteUserByLogin(String login) {
+        userRestDao.deleteUserByLogin(login);
+    }
+
+    public boolean authentication(String login, String password) {
         UserRest user = userRestDao.getUserByLogin(login);
         if(user==null)
             user = userRestDao.getUserByMail(login);
@@ -59,11 +77,11 @@ public class UserRestServiceImpl implements UserRestService {
         else
             return user.getPassword().equals(password);
     }
-    public int checkAlreadyExist(String login, String mail){
+    public boolean checkAlreadyExist(String login, String mail){
         if(userRestDao.getUserByLogin(login)!=null)
-            return 1;
+            throw new LoginIsBusyException();
         else if(userRestDao.getUserByMail(mail)!=null)
-            return 2;
-        else return 3;
+            throw new EmailIsBusyException();
+        else return true;
     }
 }

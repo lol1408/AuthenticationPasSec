@@ -1,6 +1,5 @@
 package com.dante.passec;
 
-import org.apache.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

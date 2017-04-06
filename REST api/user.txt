@@ -13,7 +13,7 @@ URL : https://domain/users
         STATUS: 200,
         BODY: 'user': {
                     'id': '{$id}',
-                    'login': '{$login}',
+                    'url': '{$url}',
                     'password': '{$password}',
                     'mail': '${email}',
                     'active': '${active}'
@@ -25,7 +25,7 @@ URL : https://domain/users
     Request:
         METHOD: POST,
         BODY: {
-            'login' : '${login}',
+            'url' : '${url}',
             'password' : '${password}',
             'mail' : '${mail}'
         }
@@ -33,9 +33,9 @@ URL : https://domain/users
         //Если регистрация прошла успешна
         STATUS: 200
         //Если пользователь с таким логином уже существует
-        STATUS: 409
+        STATUS: 400 msg='' //сообщения пока нету
         //Если пользователь с таки email уже существует
-        STATUS: 406
+        STATUS: 400 msg='' //сообщения пока нету
         //Если произошла непредвиденная ошибка при добавлении пользователя
         STATUS: 403
 //Изменение пароля
@@ -55,12 +55,14 @@ URL : https://domain/users/password
         STATUS: 200,
         BODY: 'user': {
                     'id': '{$id}',
-                    'login': '{$login}',
+                    'url': '{$url}',
                     'password': '{$password}',
                     'mail': '${email}',
                     'active': '${active}'
                     }
         //Если пользователь по переданному токену не найден или сессия уже не активна
         STATUS: 401
+        //Если старый пароль не равен паролю в базе
+        STATUS: 404
         //Если произошла ошибка при обновлении пароля
         STATUS: 403

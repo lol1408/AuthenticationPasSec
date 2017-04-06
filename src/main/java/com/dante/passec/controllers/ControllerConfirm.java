@@ -1,8 +1,8 @@
-package com.dante.passec.rest;
+package com.dante.passec.controllers;
 
 import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.exception.ForbiddenException;
-import com.dante.passec.exception.NotFoundException;
+import com.dante.passec.exception.UserNotFoundException;
 import com.dante.passec.mail.MailService;
 import com.dante.passec.mail.RandomTokenService;
 import com.dante.passec.model.UserRest;
@@ -34,7 +34,7 @@ public class ControllerConfirm {
             userRest.setActive(true);
             userService.updateUser(userRest);
             return "info-confirm";
-        }else throw new NotFoundException();
+        }else throw new UserNotFoundException();
     }
 
     @RequestMapping(method = GET, value = "/annulment/{token}")
@@ -53,8 +53,8 @@ public class ControllerConfirm {
     public String reGetRandomToken(@RequestHeader(value = "mail") String mail){
         UserRest userRest = userService.userByMail(mail);
         if(userRest == null)
-            throw new NotFoundException();
-        Integer randomToken = tokenService.reGetRandomToken(mail);
+            throw new UserNotFoundException();
+        Integer randomToken = tokenService.getRandomToken(mail);
         mailService.sendMail(randomToken, userRest.getLogin(), mail);
         return "info-get-token";
     }

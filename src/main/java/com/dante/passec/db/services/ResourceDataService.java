@@ -10,8 +10,7 @@ import java.util.List;
  */
 public interface ResourceDataService {
 
-    List<ResourceData> allResources();
-    List<ResourceData> getResourcesByUserId(Long id);
+    List<ResourceData> getResourcesByUser(UserRest id);
     ResourceData getResourceById(Long id);
     ResourceData addResource(ResourceData resourceData);
     ResourceData update(ResourceData resourceData);

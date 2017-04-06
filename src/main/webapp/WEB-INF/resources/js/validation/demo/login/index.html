@@ -19,12 +19,12 @@
 
 		$("#forgotpassword").click(function() {
 			$("#password").removeClass("required");
-			$("#login").submit();
+			$("#url").submit();
 			$("#password").addClass("required");
 			return false;
 		});
 
-		$("#login").validate()
+		$("#url").validate()
 	});
 	</script>
 </head>
@@ -35,7 +35,7 @@
 	</div>
 	<div id="content">
 		<p id="status"></p>
-		<form action="" method="get" id="login">
+		<form action="" method="get" id="url">
 			<fieldset>
 				<legend>User details</legend>
 				<ul>

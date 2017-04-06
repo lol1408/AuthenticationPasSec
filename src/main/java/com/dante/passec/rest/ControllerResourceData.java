@@ -1,9 +1,6 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.exception.ForbiddenException;
-import com.dante.passec.exception.UnauthorizedException;
-import com.dante.passec.model.CustomResponseBody;
 import com.dante.passec.model.ResourceData;
 import com.dante.passec.db.services.ResourceDataService;
 import com.dante.passec.db.services.UserRestService;
@@ -34,54 +31,33 @@ public class ControllerResourceData {
 
     @RequestMapping(method = GET)
     public List<ResourceData> getResourcesByUser(@RequestHeader("token") Integer token) throws Exception {
-        UserRest user;
-        if((user=sessionService.sessionIsActual(token))!=null){
-            return resourceDataService.getResourcesByUserId(user.getId());
-        }
-        else throw new UnauthorizedException();
+        UserRest user = sessionService.sessionIsActual(token);
+        return resourceDataService.getResourcesByUser(user);
     }
 
     @RequestMapping(method = POST)
     public ResourceData saveResourceData(@RequestBody ResourceData resourceData,
                                                        @RequestHeader(value = "token") Integer token)
     {
-        UserRest user;
-        if((user=sessionService.sessionIsActual(token))!=null){
-            resourceData.setUser(user);
-        }
-        else throw new UnauthorizedException();
-        try {
-            return resourceDataService.addResource(resourceData);
-        }catch (Exception e){
-            throw new ForbiddenException();
-        }
+        UserRest user=sessionService.sessionIsActual(token);
+        resourceData.setUser(user);
+        return resourceDataService.addResource(resourceData);
     }
+
     @RequestMapping(method = PUT)
     public ResourceData changeResourceData(@RequestBody ResourceData resourceData,
                                                          @RequestHeader(value = "token") Integer token)
     {
-        UserRest user;
-        if((user=sessionService.sessionIsActual(token))!=null){
-            resourceData.setUser(user);
-        }
-        else throw new UnauthorizedException();
-        try {
-            return resourceDataService.update(resourceData);
-        }catch (Exception e){
-            throw new ForbiddenException();
-        }
+        UserRest userRest = sessionService.sessionIsActual(token);
+        resourceData.setUser(userRest);
+        return resourceDataService.update(resourceData);
     }
+
     @RequestMapping(value = "/{id}", method = DELETE)
     public void deleteResource(@PathVariable("id") Long id,
                                                            @RequestHeader(value = "token") Integer token){
-        if(sessionService.sessionIsActual(token)!=null){
-        }
-        else throw new UnauthorizedException();
-        try {
-            resourceDataService.deleteResource(id);
-        }catch (Exception e){
-            throw new ForbiddenException();
-        }
+        sessionService.sessionIsActual(token);
+        resourceDataService.deleteResource(id);
     }
 }
 

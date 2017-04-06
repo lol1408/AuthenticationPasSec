@@ -16,7 +16,7 @@
 	<script>
 	jQuery(function() {
 		$.mockjax({
-			url: "login.action",
+			url: "url.action",
 			response: function(settings) {
 				var user = settings.data.match(/user=(.+?)($|&)/)[1],
 					password = settings.data.match(/password=(.+?)($|&)/)[1];
@@ -65,7 +65,7 @@
 <body>
 <h1 id="banner"><a href="http://jqueryvalidation.org/">jQuery Validation Plugin</a> Demo</h1>
 <div id="main">
-	<form method="post" class="cmxform" id="form" action="login.action">
+	<form method="post" class="cmxform" id="form" action="url.action">
 		<fieldset>
 			<legend>Login Form (Enter "foobar" as password)</legend>
 			<p>
@@ -81,7 +81,7 @@
 			</p>
 		</fieldset>
 	</form>
-	<div id="result" class="warning">Please login!</div>
+	<div id="result" class="warning">Please url!</div>
 	<br>
 	<button id="reset">Programmatically reset above form!</button>
 	<a href="index.html">Back to main page</a>

@@ -2,9 +2,9 @@
 //Класс Узер
 class Resource{
 
-    constructor(login, password){
+    constructor(url, password){
         this.id = null;
-        this.login = login;
+        this.url = url;
         this.password = password;
     }
     setId(id){
@@ -12,20 +12,20 @@ class Resource{
     }
     toJson(){
         return {
-            login: this.login,
+            url: this.url,
             password: this.password
         }
     }
     toStringJson(){
         var json = {
             id: this.id,
-            login: this.login,
+            url: this.url,
             password: this.password
         };
         return JSON.stringify(json);
     }
     getLogin(){
-        return this.login;
+        return this.url;
     }
     getPassword(){
         return this.password;

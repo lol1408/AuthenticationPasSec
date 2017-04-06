@@ -9,13 +9,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class MainController {
 
     @RequestMapping(value = {"/", "/home"}, method = GET)
-    public String homePage(){
-        return "index";
-    }
+    public String homePage(){return "index";}
     @RequestMapping(value = {"/registration"}, method = GET)
-    public String regPage(){
-        return "registration";
-    }
+    public String regPage(){return "registration";}
     @RequestMapping(value = {"res"}, method = GET)
     public String resPage(){return "resources";}
     @RequestMapping(value = {"/forget"}, method = GET)

@@ -14,13 +14,15 @@ function getAllResources(arr) {
     then(function (data) {
         console.log('Request success');
         data.forEach(function (item, i, data) {
-            arr[i] = new Resource(item.login, item.password);
+            arr[i] = new Resource(item.url, item.password);
             arr[i].setId(item.id);
-            console.log(item.login + " " + item.password)
+            console.log(item.url + " " + item.password)
         });
+        document.getElementById("download").style.display = "none";
     }).catch(function (error) {
         console.log('Request failed', error);
         deleteCookie('token');
+        document.getElementById("download").style.display = "none";
     });
 }
 

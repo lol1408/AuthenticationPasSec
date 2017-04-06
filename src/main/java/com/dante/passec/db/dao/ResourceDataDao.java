@@ -1,6 +1,7 @@
 package com.dante.passec.db.dao;
 
 import com.dante.passec.model.ResourceData;
+import com.dante.passec.model.UserRest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface ResourceDataDao extends JpaRepository<ResourceData, Long>{
     @Transactional(readOnly = true)
-    List<ResourceData> getResourcesByUserId(Long id);
+    List<ResourceData> getResourcesByUser(UserRest user);
 }

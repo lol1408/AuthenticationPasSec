@@ -1,5 +1,5 @@
     /**
-    * Небольшой фейл, поле 'login' в body лучше переименовать на 'url' или 'name'
+    * Небольшой фейл, поле 'url' в body лучше переименовать на 'url' или 'name'
     **/
 //Получить все записи по токену сессии
 URL : https://domain/resources
@@ -16,11 +16,11 @@ URL : https://domain/resources
         STATUS: 200,
         BODY: 'resources': [{
             'id':'${id_1res}',
-            'login':'${login_1res}',
+            'url':'${login_1res}',
             'password':'${password_1res}'
         },{
             'id':'id_2res',
-            'login':'${login_2res}',
+            'url':'${login_2res}',
             'password':'${password_2res}'
         }]
         //Если пользователь по текущему токену сессии не найден
@@ -37,7 +37,7 @@ URL : https://domain/resources
                 },
                 BODY:
                 {
-                    'login' : '${login}',
+                    'url' : '${url}',
                     'password' '${password}'
                 }
             Response:
@@ -45,7 +45,7 @@ URL : https://domain/resources
                 STATUS: 200,
                 BODY: 'resources': {
                     'id':'${id}',
-                    'login':'${login}',
+                    'url':'${url}',
                     'password':'${password}'
                 }
                 //Если пользователь по текущему токену сессии не найден
@@ -65,7 +65,7 @@ URL : https://domain/resources
                     BODY:
                     {
                         'id' : '${id}'
-                        'login' : '${login}',
+                        'url' : '${url}',
                         'password' : '${password}'
                     }
                 Response:
@@ -73,7 +73,7 @@ URL : https://domain/resources
                     STATUS: 200,
                     BODY: 'resources': {
                         'id':'${id}',
-                        'login':'${login}',
+                        'url':'${url}',
                         'password':'${password}'
                     }
                     //Если пользователь по текущему токену сессии не найден

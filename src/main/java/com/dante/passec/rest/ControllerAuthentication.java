@@ -1,12 +1,8 @@
 package com.dante.passec.rest;
 
 import com.dante.passec.db.services.SessionService;
-import com.dante.passec.exception.LockedException;
-import com.dante.passec.exception.UnauthorizedException;
-import com.dante.passec.exception.NotFoundException;
+import com.dante.passec.exception.UserNotFoundException;
 import com.dante.passec.mail.MailService;
-import com.dante.passec.model.CustomResponseBody;
-import com.dante.passec.model.Session;
 import com.dante.passec.db.services.UserRestService;
 import com.dante.passec.model.UserRest;
 import org.apache.log4j.Logger;
@@ -29,7 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 @RequestMapping("/")
 public class ControllerAuthentication {
-    Logger logger = Logger.getLogger(ControllerAuthentication.class);
+    private static final Logger logger = Logger.getLogger(ControllerAuthentication.class);
     @Autowired
     UserRestService userService;
     @Autowired
@@ -40,36 +36,30 @@ public class ControllerAuthentication {
     @RequestMapping(path = "login", method = GET)
     public Integer login(@RequestHeader(value = "login") String login,
                          @RequestHeader(value = "password") String password){
-        if(userService.userIsReal(login, password)) {
+        if(userService.authentication(login, password)) {
             Integer token = sessionService.addSession(userService.userByLogin(login)).getToken();
-            if(token == null)
-                throw new LockedException();
             return token;
         }
-        else throw new NotFoundException();
+        else throw new UserNotFoundException();
     }
+
     @RequestMapping(path = "logout", method = GET)
     public void logout(@RequestHeader(value = "token") Integer token){
-        if(sessionService.sessionIsActual(token)!=null)
-        {
-            sessionService.setNotIncluding(sessionService.findByToken(token));
-        }else throw new UnauthorizedException();
+        sessionService.sessionIsActual(token);
+        sessionService.setNotIncluding(sessionService.findByToken(token));
     }
+
     @RequestMapping(path = "getnewpass", method = GET)
     public void forget(@RequestHeader(value = "email") String email){
         UserRest userRest;
-        try {
-            userRest = userService.userByMail(email);
-            if(userRest==null) throw new NotFoundException();
-            Random random = new Random();
-            Integer randomPassword = (random.nextInt(899999))+100000;
-            userRest.setPassword(toSha1(randomPassword));
-            userService.updateUser(userRest);
-            String password = randomPassword.toString();
-            mailService.sendPassword(password, userRest.getLogin(), email);
-        }catch (Exception e){
-            logger.error("User not found: " + e.getStackTrace());
-            e.getStackTrace();
-        }
+        userRest = userService.userByMail(email);
+        if(userRest==null) throw new UserNotFoundException();
+        Random random = new Random();
+        Integer randomPassword = (random.nextInt(899999))+100000;
+        userRest.setPassword(toSha1(randomPassword));
+        userService.updateUser(userRest);
+        String password = randomPassword.toString();
+        mailService.sendPassword(password, userRest.getLogin(), email);
+
     }
 }
