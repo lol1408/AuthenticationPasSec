@@ -3,16 +3,17 @@ package com.dante.passec.mail;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class RandomTokenServiceImpl implements RandomTokenService {
 
     private static final Logger logger = Logger.getLogger(RandomTokenServiceImpl.class);
 
-    private HashMap<Integer, String> cacheTokens = new HashMap<>();
-    private HashMap<String, Integer> backCacheTokens = new HashMap<>();
+    private Map<Integer, String> cacheTokens = new ConcurrentHashMap<>();
+    private Map<String, Integer> backCacheTokens = new ConcurrentHashMap<>();
 
     public String getMailByToken(Integer token) {
         return cacheTokens.get(token);
