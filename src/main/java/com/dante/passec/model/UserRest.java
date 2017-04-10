@@ -53,11 +53,11 @@ public class UserRest {
     }
 
     public UserRest(UserRest user) {
-        if(user.id != null) this.id = new Long(user.id);
-        if(user.login != null) this.login = new String(user.login);
-        if(user.password != null) this.password = new String(user.password);
-        if(user.active != null) this.active = new Boolean(user.active);
-        if(user.mail != null) this.mail = new String(user.mail);
+        this.id = user.id;
+        this.login = user.login;
+        this.password = user.password;
+        this.active = user.active;
+        this.mail = user.mail;
     }
 
     public UserRest(String login, String password, String mail, Boolean active) {
