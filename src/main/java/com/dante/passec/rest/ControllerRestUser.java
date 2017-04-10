@@ -8,13 +8,15 @@ import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.http.HttpStatus.*;
+
 
 /**
  * RestController for RestUser
@@ -34,7 +36,7 @@ public class ControllerRestUser {
     RandomTokenService randomTokenService;
     @Autowired
     MailService mailService;
-    @RequestMapping(method = GET)
+    @GetMapping
     public UserRest getUserCurrentUser(@RequestHeader("token") Integer token){
         UserRest user;
         if((user=sessionService.sessionIsActual(token))!=null) {
@@ -42,7 +44,7 @@ public class ControllerRestUser {
         }
         else throw new UnauthorizedException();
     }
-    @RequestMapping(method = POST)
+    @PostMapping
     public void registration(@RequestBody UserRest user) throws LoginIsBusyException{
         userService.checkAlreadyExist(user.getLogin(), user.getMail());
         user.setActive(false);
@@ -51,7 +53,7 @@ public class ControllerRestUser {
         mailService.sendMail(randomToken, userRest.getLogin(), userRest.getMail());
     }
 
-    @RequestMapping(method = PUT, value = "/password")
+    @PutMapping(value = "/password")
     public UserRest updatePassword(@RequestBody String password,
                                    @RequestHeader(value = "token") Integer token,
                                    @RequestHeader(value = "oldpassword") String oldPassword)
@@ -60,11 +62,6 @@ public class ControllerRestUser {
         if(!userInBase.getPassword().equals(oldPassword)) throw new UserNotFoundException();
             userInBase.setPassword(password);
             return userService.updateUser(userInBase);
-    }
-
-    @ExceptionHandler(LoginIsBusyException.class)
-    public void handleException(HttpServletResponse response, LoginIsBusyException ex) throws IOException {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Login is busy");
     }
 
 }

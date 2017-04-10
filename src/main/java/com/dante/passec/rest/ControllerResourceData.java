@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * RestController for ResourceData
@@ -29,13 +28,13 @@ public class ControllerResourceData {
     @Autowired
     SessionService sessionService;
 
-    @RequestMapping(method = GET)
+    @GetMapping
     public List<ResourceData> getResourcesByUser(@RequestHeader("token") Integer token) throws Exception {
         UserRest user = sessionService.sessionIsActual(token);
         return resourceDataService.getResourcesByUser(user);
     }
 
-    @RequestMapping(method = POST)
+    @PostMapping
     public ResourceData saveResourceData(@RequestBody ResourceData resourceData,
                                                        @RequestHeader(value = "token") Integer token)
     {
@@ -44,7 +43,7 @@ public class ControllerResourceData {
         return resourceDataService.addResource(resourceData);
     }
 
-    @RequestMapping(method = PUT)
+    @PutMapping
     public ResourceData changeResourceData(@RequestBody ResourceData resourceData,
                                                          @RequestHeader(value = "token") Integer token)
     {
@@ -53,7 +52,7 @@ public class ControllerResourceData {
         return resourceDataService.update(resourceData);
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE)
+    @DeleteMapping(value = "/{id}")
     public void deleteResource(@PathVariable("id") Long id,
                                                            @RequestHeader(value = "token") Integer token){
         sessionService.sessionIsActual(token);
