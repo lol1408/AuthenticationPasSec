@@ -8,14 +8,7 @@ import com.dante.passec.model.UserRest;
 import com.dante.passec.db.services.UserRestService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
-import static org.springframework.http.HttpStatus.*;
 
 
 /**
@@ -45,7 +38,7 @@ public class ControllerRestUser {
         else throw new UnauthorizedException();
     }
     @PostMapping
-    public void registration(@RequestBody UserRest user) throws LoginIsBusyException{
+    public void registration(@RequestBody UserRest user) throws LoginAlreadyUseException {
         userService.checkAlreadyExist(user.getLogin(), user.getMail());
         user.setActive(false);
         UserRest userRest = userService.addUser(user);

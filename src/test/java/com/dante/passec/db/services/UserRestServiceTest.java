@@ -1,8 +1,8 @@
 package com.dante.passec.db.services;
 
-import com.dante.passec.exception.EmailIsBusyException;
+import com.dante.passec.exception.EmailAlreadyUseException;
 import com.dante.passec.exception.ForbiddenException;
-import com.dante.passec.exception.LoginIsBusyException;
+import com.dante.passec.exception.LoginAlreadyUseException;
 import com.dante.passec.model.UserRest;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -167,13 +167,13 @@ public class UserRestServiceTest extends Assert {
         userService.addUser(user);
         assertFalse(userService.authentication("login", "password"));
     }
-    @Test(expected = LoginIsBusyException.class)
+    @Test(expected = LoginAlreadyUseException.class)
     public void checkAlreadyExistShouldThrowLoginIsBusyExceptinon(){
         UserRest user = users.get(0);
         userService.addUser(user);
         assertTrue(userService.checkAlreadyExist(user.getLogin(), user.getMail()));
     }
-    @Test(expected = EmailIsBusyException.class)
+    @Test(expected = EmailAlreadyUseException.class)
     public void checkAlreadyExistShouldReturnEmailIsBusyExceptinon(){
         UserRest user = users.get(0);
         userService.addUser(user);

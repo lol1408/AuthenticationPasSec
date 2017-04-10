@@ -1,9 +1,9 @@
 package com.dante.passec.db.services;
 
 import com.dante.passec.db.dao.UserRestDao;
-import com.dante.passec.exception.EmailIsBusyException;
+import com.dante.passec.exception.EmailAlreadyUseException;
 import com.dante.passec.exception.ForbiddenException;
-import com.dante.passec.exception.LoginIsBusyException;
+import com.dante.passec.exception.LoginAlreadyUseException;
 import com.dante.passec.model.UserRest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +79,9 @@ public class UserRestServiceImpl implements UserRestService {
     }
     public boolean checkAlreadyExist(String login, String mail){
         if(userRestDao.getUserByLogin(login)!=null)
-            throw new LoginIsBusyException();
+            throw new LoginAlreadyUseException();
         else if(userRestDao.getUserByMail(mail)!=null)
-            throw new EmailIsBusyException();
+            throw new EmailAlreadyUseException();
         else return true;
     }
 }
