@@ -25,7 +25,7 @@ URL : https://domain/users
     Request:
         METHOD: POST,
         BODY: {
-            'url' : '${url}',
+            'login' : '${login}',
             'password' : '${password}',
             'mail' : '${mail}'
         }

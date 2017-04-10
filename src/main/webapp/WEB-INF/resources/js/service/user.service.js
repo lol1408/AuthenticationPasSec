@@ -12,16 +12,23 @@ function addUser(user) {
         body: userJson
     })
         .then(status)
-        .then(function (response) {
+        .then(function (data) {
             document.getElementById("download").style.display = 'none';
             document.getElementById("form_reg").style.display = "none";
             document.getElementById("popupForMessage").style.display = "block";
             console.log("hello");
         })
         .catch(function (error) {
-            document.getElementById("download").style.display = 'none';
+            const message = error.message;
             let errors = document.getElementById("errors");
-            console.log(error.message);
-            errors.innerHTML = "Пользователь уже создан";
+            document.getElementById("download").style.display = 'none';
+            if (message.localeCompare('Login already use')==0)
+                errors.innerHTML = 'Логин занят';
+            else if (message.localeCompare('Email already use')==0)
+                errors.innerHTML = "Email занят";
+            else
+                errors.innerHTML = "Неизвестная ошибка";
+
+            console.log(message);
         });
 }
